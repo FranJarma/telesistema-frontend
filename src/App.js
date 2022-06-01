@@ -220,6 +220,17 @@ function App() {
               </Route>
 
               <Route
+              path="/caratula-user"
+              element={
+                <AuthRoute roles={["Jefe", "Admin"]}>
+                  <Suspense fallback={<Cargando/>}>
+                    <CaratulaUser/>
+                  </Suspense>
+                </AuthRoute>
+              }>
+              </Route>
+
+              <Route
               path="/caratula-user/:UserId"
               element={
                 <AuthRoute roles={["Jefe", "Admin"]}>
