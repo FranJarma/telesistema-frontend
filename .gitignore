@@ -1,5 +1,5 @@
 node_modules
 .env
-variables.js
+# variables.js
 build
 .vercel
