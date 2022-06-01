@@ -6,7 +6,6 @@ import DateFnsUtils from '@date-io/date-fns';
 import esLocale from 'date-fns/locale/es';
 import AppState from './context/appState';
 import Login from'./views/components/auth/Login';
-import Home from'./views/components/Home';
 import ListaPagos from './views/components/pagos/ListaPagos';
 import ListaServicios from './views/components/servicios/ListaServicios';
 import ListaAbonadosActivos from './views/components/abonados/ListaAbonadosActivos';
@@ -35,11 +34,11 @@ if (token) {
   tokenAuthHeaders(token);
 }
 
-// const Home = lazy(() => {
-//   return new Promise(resolve => setTimeout(resolve, 4000)).then(
-//     () => import('./views/components/Home')
-//   );  
-// });
+const Home = lazy(() => {
+  return new Promise(resolve => setTimeout(resolve, 1000)).then(
+    () => import('./views/components/Home')
+  );  
+});
 
 const CaratulaAbonado = lazy(() => {
   return new Promise(resolve => setTimeout(resolve, 4000)).then(
