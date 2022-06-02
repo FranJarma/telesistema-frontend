@@ -5,13 +5,12 @@ import olinet from './../../../assets/images/olinet.png';
 import useStyles from './../Styles';
 import AppContext from '../../../context/appContext';
 import { useNavigate } from 'react-router-dom';
-import { LoadingButton } from '@mui/lab';
 
 const Login = () => {
     const styles = useStyles();
     const navigate = useNavigate();
     const appContext = useContext(AppContext);
-    const { cargando, usuarioAutenticado, iniciarSesion } = appContext;
+    const { usuarioAutenticado, iniciarSesion } = appContext;
     const [AuthInfo, setAuthInfo] = useState({
       NombreUsuario: '',
       Contraseña: ''
@@ -29,7 +28,7 @@ const Login = () => {
     };
     useEffect(()=>{
       if(usuarioAutenticado){
-        // navigate('/home');
+        navigate('/home');
       }
     },[usuarioAutenticado, navigate]);
     return (
