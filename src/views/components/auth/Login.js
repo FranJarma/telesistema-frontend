@@ -28,7 +28,9 @@ const Login = () => {
     };
     useEffect(()=>{
       if(usuarioAutenticado){
-        navigate('/home');
+        setTimeout(()=> {
+          navigate('/home');
+        }, 1500);
       }
     },[usuarioAutenticado, navigate]);
     return (
