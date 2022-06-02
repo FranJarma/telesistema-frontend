@@ -5,12 +5,13 @@ import olinet from './../../../assets/images/olinet.png';
 import useStyles from './../Styles';
 import AppContext from '../../../context/appContext';
 import { useNavigate } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 
 const Login = () => {
     const styles = useStyles();
     const navigate = useNavigate();
     const appContext = useContext(AppContext);
-    const { usuarioAutenticado, iniciarSesion } = appContext;
+    const { cargando, usuarioAutenticado, iniciarSesion } = appContext;
     const [AuthInfo, setAuthInfo] = useState({
       NombreUsuario: '',
       Contraseña: ''
@@ -28,7 +29,7 @@ const Login = () => {
     };
     useEffect(()=>{
       if(usuarioAutenticado){
-        navigate('/home');
+        // navigate('/home');
       }
     },[usuarioAutenticado, navigate]);
     return (
@@ -83,7 +84,9 @@ const Login = () => {
                     </TextField>
                     </Grid>
                 </Grid>
-                <Button color='secondary' type="submit" fullWidth className={styles.botonIniciarSesion} variant="contained">Iniciar sesión</Button>
+                {!usuarioAutenticado ?
+                  <Button color='secondary' type="submit" fullWidth className={styles.botonIniciarSesion} variant="contained">Iniciar sesión</Button>
+                : <Button startIcon={<i className="bx bx-loader bx-spin"></i>} disabled fullWidth className={styles.botonIniciarSesion} variant="contained">Espere por favor...</Button>}
             </CardContent>
         </Card>
     </div>

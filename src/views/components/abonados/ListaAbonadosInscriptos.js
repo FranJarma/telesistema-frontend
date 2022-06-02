@@ -12,7 +12,6 @@ import useStyles from '../Styles';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
-import generarRecibo from '../../../helpers/GenerarRecibo';
 import SpanServicio from '../../../helpers/SpanServicio';
 import formatDocumento from '../../../helpers/FormatDocumento';
 import GetUserId from './../../../helpers/GetUserId';
@@ -201,14 +200,6 @@ const columnasInscripcion = [
         "selector": row => row["MedioPagoNombre"],
         "wrap": true,
         "sortable": true,
-    },
-    {
-        cell: (data) =>
-        <Tooltip title="Generar Recibo">
-        <Typography onClick={() => generarRecibo(data)} style={{color: 'grey'}}>
-        <i className='bx bx-file bx-xs'></i>
-        </Typography>
-        </Tooltip>
     }
 ]
     const ExpandedComponent = ({ data }) =>

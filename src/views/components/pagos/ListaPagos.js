@@ -32,16 +32,15 @@ const ListaPagos = () => {
         PagoId: null,
         PagoMes: null,
         PagoAño: null,
-        UserId: location.state.UserId,
+        UserId: null,
         PagoRecargo: null,
-        PagoTotal: location.state.ServicioPrecioUnitario,
+        PagoTotal: null,
         DetallePagoId: '',
-        DetallePagoFecha: new Date(),
         DetallePagoMonto: '',
         PagoObservaciones: '',
-        createdBy: GetUserId(),
+        createdBy: null,
         updatedAt: null,
-        updatedBy: GetUserId(),
+        updatedBy: null,
         deletedBy: null,
         deletedAt: null,
         PagoConceptoId: 2 //por defecto
@@ -109,6 +108,8 @@ const ListaPagos = () => {
             Año: data.PagoAño,
             Mes: data.PagoMes,
             DetallePagoMonto: data.PagoSaldo,
+            createdAt: new Date(),
+            createdBy: GetUserId()
         });
     }
     const handleChangeModalRecargoPago = (data) => {

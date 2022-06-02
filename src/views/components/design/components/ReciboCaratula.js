@@ -147,55 +147,6 @@ const ReciboCaratula = ({data}) => (
           </View>
         </View>
       </View>
-      <View style={styles.divisor}>
-      <View style={styles.row} fixed>
-          <View style={styles.column}>
-            <View style={styles.row}>
-              <Image style={styles.logo} src={logo}/>
-              <Image style={styles.logo} src={logo2}/>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.column}>
-                <Text style={styles.description}>Domicilio: Av. Jujuy 428 B° Juan M. de Rosas</Text>
-              </View>
-            </View>
-            <View style={styles.row}>
-              <View style={styles.column}>
-                <Text style={styles.description}>Teléfono: 4913742</Text>
-              </View>           
-            </View>
-          </View>
-          <View style={styles.column}>
-          <Text style={styles.subtitle}>Recibo N°: <Text style={styles.subtitleSpan}>{data.ReciboId}</Text></Text>
-            <Text style={styles.subtitle}>Fecha de emisión: <Text style={styles.subtitleSpan}>{convertirAFecha(data.createdAt)}</Text></Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <Text style={styles.subtitle}>Recibimos del Sr: <Text style={styles.subtitleSpan}>{data.ApellidoAbonado}, {data.NombreAbonado}</Text></Text>
-            <Text style={styles.subtitle}>CUIL: <Text style={styles.subtitleSpan}>{data.Cuit}</Text></Text>
-            <Text style={styles.subtitle}>Municipio: <Text style={styles.subtitleSpan}>{data.MunicipioNombre}</Text></Text>
-          </View>
-          <View style={styles.column}>
-            <Text style={styles.subtitle}>N°: <Text style={styles.subtitleSpan}>{data.AbonadoNumero}</Text></Text>
-            <Text style={styles.subtitle}>Domicilio: <Text style={styles.subtitleSpan}>{data.DomicilioCalle}, {data.DomicilioNumero}</Text></Text>
-            <Text style={styles.subtitle}>Barrio: <Text style={styles.subtitleSpan}>{data.BarrioNombre}</Text></Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.subtitle}>En concepto de: <Text style={styles.subtitleSpan}>{data.MovimientoConceptoNombre}</Text></Text>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <Text style={styles.subtitle}>Son: <Text style={styles.subtitleSpan}>$ {data.MovimientoCantidad}</Text></Text>
-          </View>
-          <View style={styles.column}>
-            <View style={styles.firma}>
-              <Text style={styles.firmaSpan}>Firma</Text>
-            </View>
-          </View>
-        </View>
-      </View>
     </Page>
   </Document>
 );
