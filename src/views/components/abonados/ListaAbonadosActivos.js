@@ -15,6 +15,7 @@ import SpanVencimientoServicio from '../../../helpers/SpanVencimientoServicio';
 import SpanServicio from '../../../helpers/SpanServicio';
 import formatDocumento from '../../../helpers/FormatDocumento';
 import GetUserId from './../../../helpers/GetUserId';
+import SpanAlquiler from '../../../helpers/SpanAlquiler';
 
 const ListaAbonadosActivos = () => {
     const appContext = useContext(AppContext);
@@ -104,8 +105,8 @@ const ListaAbonadosActivos = () => {
     },
     {
         "name": <TooltipForTable name="Domicilio" />,
-        "selector": row => row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
-        "wrap": true,
+        "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
+        : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],        "wrap": true,
         "sortable": true
     },
     {

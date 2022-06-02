@@ -463,6 +463,11 @@ export default (state, action) => {
                 ...state,
                 cajas: []
         }
+        case TYPES.TAREA_CAMBIO_DOMICILIO:
+            return {
+                ...state,
+                tareaCambioDomicilio: action.payload
+        }
         default:
             return state;
     }

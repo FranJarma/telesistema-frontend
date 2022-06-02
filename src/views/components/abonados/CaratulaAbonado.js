@@ -72,6 +72,7 @@ const CaratulaAbonado = () => {
     const [Tecnico, setTecnico] = useState(null);
     const [OtObservacionesResponsableEmision, setOtObservacionesResponsableEmision] = useState(null);
     const [RequiereFactura, setRequiereFactura] = useState(false);
+    const [EsAlquiler, setEsAlquiler] = useState(false);
 
     const onInputChangeObservacionesOt = (e) => {
         setOtObservacionesResponsableEmision(e.target.value);
@@ -97,11 +98,17 @@ const CaratulaAbonado = () => {
         setMedioPago(e.target.value);
         setPagoInfo({
             ...PagoInfo,
-            Total: (Servicio.ServicioInscripcion + (Servicio.ServicioInscripcion*e.target.value.MedioPagoInteres / 100)).toFixed(2)
+            Total: !EsAlquiler ? (Servicio.ServicioInscripcion + (Servicio.ServicioInscripcion*e.target.value.MedioPagoInteres / 100)).toFixed(2) : (Servicio.ServicioPrecioUnitario + Servicio.ServicioInscripcion + (Servicio.ServicioInscripcion*e.target.value.MedioPagoInteres / 100)).toFixed(2)
         })
     }
     const handleChangeRequiereFactura = () => {
         setRequiereFactura(!RequiereFactura)
+    }
+    const handleChangeEsAlquiler = () => {
+        setEsAlquiler(!EsAlquiler);
+        setMedioPago(null);
+        setPagoInfo(null);
+        setServicio(null);
     }
     useEffect(() => {
         traerProvincias();
@@ -175,7 +182,8 @@ const CaratulaAbonado = () => {
                 Tecnico,
                 OtObservacionesResponsableEmision,
                 RequiereFactura,
-                PagoInfo
+                PagoInfo,
+                EsAlquiler
             });
         }
         else {
@@ -235,7 +243,7 @@ const CaratulaAbonado = () => {
         <TabList>
             <Tab><i className="bx bx-user"></i> Abonado</Tab>
             <Tab><i className='bx bx-home'></i> Domicilio</Tab>
-            <Tab><i className='bx bx-money'></i> Servicio</Tab>
+            <Tab><i className='bx bx-money'></i> Servicio y precio final</Tab>
             <Tab><i className='bx bx-plug'></i> Instalación y OT</Tab>
         </TabList>
     <TabPanel>
@@ -439,6 +447,14 @@ const CaratulaAbonado = () => {
                         label="Piso">
                         </TextField>
                     </Grid>
+                    {!location.state ? 
+                    <Grid item xs={12} md={12} sm={12} lg={12}>
+                        <FormControl>
+                            <FormControlLabel label="Es alquiler" control={<Checkbox checked={EsAlquiler} onChange={handleChangeEsAlquiler} value={EsAlquiler}></Checkbox>}></FormControlLabel>
+                        </FormControl>
+                        {EsAlquiler ? <Alert severity='info'>El domicilio del abonado es alquiler, por lo cual tendrá que abonar un depósito con el valor de una cuota del servicio seleccionado</Alert> : ""}
+                    </Grid>
+                    : ""}
                 </Grid>
             </CardContent>
         </Card>
@@ -486,16 +502,6 @@ const CaratulaAbonado = () => {
                     </Grid>
                     </>
                     : "" }
-                    { Servicio !== null && MedioPago !== null && !location.state
-                    ?
-                    <>
-                    <Grid item xs={12} md={12} sm={12}>
-                        <Typography variant="h2"><b>Precio Final (Precio Inscripción + Interés {MedioPago.MedioPagoInteres} %):</b> ${convertirAMoney(PagoInfo.Total)}</Typography>
-                        {MedioPago.MedioPagoId === 10 ? 
-                        <Typography variant="h2"><b>Saldo restante por facilidad de pago:</b> ${convertirAMoney((PagoInfo.Total / 2).toFixed(2))}</Typography> : "" }
-                        </Grid>
-                    </>
-                    :""}
                     {!location.state ? 
                     <Grid item xs={12} md={12} sm={12} lg={12}>
                         <FormControl>
@@ -504,6 +510,29 @@ const CaratulaAbonado = () => {
                         {RequiereFactura ? <Alert severity='info'>La factura se generará en la sección "Facturas" del historial de pagos del abonado</Alert> : ""}
                     </Grid>
                     : ""}
+                    { Servicio !== null && MedioPago !== null && !location.state
+                    ?
+                    <>
+                    <Grid item xs={12} md={12} sm={12}>
+                        {!EsAlquiler ? 
+                        <>
+                        <Typography><b>Inscripción:</b> ${Servicio.ServicioInscripcion} </Typography>
+                        <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(Servicio.ServicioInscripcion * MedioPago.MedioPagoInteres)/100}</Typography>
+                        <Typography variant="h2"><b>Precio Final:</b> ${convertirAMoney(PagoInfo.Total)}</Typography>
+                        </>
+                        :
+                        <>
+                        <Typography><b>Inscripción:</b> ${Servicio.ServicioInscripcion} </Typography>
+                        <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(Servicio.ServicioInscripcion * MedioPago.MedioPagoInteres)/100}</Typography>
+                        <Typography><b>Depósito por Alquiler:</b> ${Servicio.ServicioPrecioUnitario}</Typography>
+                        <Typography variant="h2"><b>Precio Final:</b> ${convertirAMoney(PagoInfo.Total)}</Typography>
+                        </>
+                        }
+                        {MedioPago.MedioPagoId === 10 ? 
+                        <Typography variant="h2"><b>Saldo restante por facilidad de pago:</b> ${convertirAMoney((PagoInfo.Total / 2).toFixed(2))}</Typography> : "" }
+                        </Grid>
+                    </>
+                    :""}
                 </Grid>
                 <br/>
             </CardContent>

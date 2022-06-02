@@ -11,6 +11,7 @@ import BotonesDatatable from '../design/components/BotonesDatatable';
 import { Link } from 'react-router-dom';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import TooltipForTable from '../../../helpers/TooltipForTable';
+import SpanAlquiler from '../../../helpers/SpanAlquiler';
 
 const ListaAbonadosInactivos = () => {
     const appContext = useContext(AppContext);
@@ -90,8 +91,8 @@ const ListaAbonadosInactivos = () => {
         },
         {
             "name": <TooltipForTable name="Domicilio" />,
-            "selector": row => row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
-            "wrap": true,
+            "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
+            : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],            "wrap": true,
             "sortable": true
         },
         {

@@ -13,6 +13,7 @@ import BotonesDatatable from '../design/components/BotonesDatatable';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import SpanServicio from '../../../helpers/SpanServicio';
+import SpanAlquiler from '../../../helpers/SpanAlquiler';
 import formatDocumento from '../../../helpers/FormatDocumento';
 import GetUserId from './../../../helpers/GetUserId';
 
@@ -125,7 +126,8 @@ const ListaAbonadosInscriptos = () => {
     },
     {
         "name": <TooltipForTable name="Domicilio" />,
-        "selector": row => row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
+        "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
+        : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
         "wrap": true,
         "sortable": true
     },
@@ -310,9 +312,6 @@ const columnasInscripcion = [
                 <>
                 <Typography variant="h2"><b>Precio total de inscripción:</b> ${inscripcion[0].PagoTotal}</Typography>
                 <Typography variant="h2"><b>Saldo restante:</b> ${inscripcion[0].PagoSaldo}</Typography>
-                <Typography variant="h2"><b>Cuotas restantes:</b> {inscripcion[0].MedioPagoCantidadCuotas - inscripcion.length}</Typography>
-                {inscripcion[0].MedioPagoCantidadCuotas - inscripcion.length > 0 ?
-                <Button variant="contained" color="primary">Agregar cuota</Button> : ""}
                 </>
                 : "" }
                 </>}

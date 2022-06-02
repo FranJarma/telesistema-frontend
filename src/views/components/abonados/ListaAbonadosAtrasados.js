@@ -7,6 +7,7 @@ import { Card, CardContent, Tooltip, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import formatDocumento from '../../../helpers/FormatDocumento';
+import SpanAlquiler from '../../../helpers/SpanAlquiler';
 
 const ListaAbonadosAtrasados = () => {
     const appContext = useContext(AppContext);
@@ -50,8 +51,8 @@ const ListaAbonadosAtrasados = () => {
     },
     {
         "name": <TooltipForTable name="Domicilio" />,
-        "selector": row => row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
-        "wrap": true,
+        "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
+        : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],        "wrap": true,
         "sortable": true
     },
     {

@@ -4,7 +4,7 @@ import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import Modal from '../design/components/Modal';
 import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, MenuItem, TextField, Typography } from '@material-ui/core'; 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Datatable from '../design/components/Datatable';
 import { Alert, Autocomplete } from '@material-ui/lab';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
@@ -19,17 +19,20 @@ import GetUserId from './../../../helpers/GetUserId';
 
 const CambioDomicilio = () => {
     const appContext = useContext(AppContext);
-    const { tareas, barrios, historialDomicilios, mediosPago, municipios, provincias, usuarios, ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerDomiciliosAbonado, traerMunicipiosPorProvincia, traerOrdenesDeTrabajoAsignadas,
-    traerProvincias, cambioDomicilioAbonado, traerTareas, traerUsuariosPorRol, traerMediosPago, descargando } = appContext;
+    const { barrios, historialDomicilios, mediosPago, municipios, provincias, usuarios,
+    ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerDomiciliosAbonado, traerMunicipiosPorProvincia,
+    traerOrdenesDeTrabajoAsignadas, traerProvincias, cambioDomicilioAbonado, traerTareaCambioDomicilio, traerUsuariosPorRol,
+    traerMediosPago, tareaCambioDomicilio, descargando } = appContext;
+
     const location = useLocation();
     //Observables
     useEffect(() => {
-        traerTareas();
-        traerProvincias();
-        traerMunicipiosPorProvincia(ProvinciaId);
         traerDomiciliosAbonado(location.state.UserId);
+        traerTareaCambioDomicilio(location.state.ServicioId);
+        traerProvincias();
         traerUsuariosPorRol(VARIABLES.ID_ROL_TECNICO);
         traerMediosPago();
+        traerMunicipiosPorProvincia(ProvinciaId);
     }, [])
     //States
     const [DomicilioInfo, setDomicilioInfo] = useState({
@@ -48,7 +51,7 @@ const CambioDomicilio = () => {
             [e.target.name] : e.target.value
         });
     }
-    const { UserId, ServicioId, DomicilioCalle, DomicilioNumero, DomicilioPiso, createdAt, createdBy, CambioDomicilioObservaciones} = DomicilioInfo;
+    const { UserId, ServicioId, DomicilioCalle, DomicilioNumero, DomicilioPiso, createdBy, CambioDomicilioObservaciones} = DomicilioInfo;
     //seteamos en 10 para que traiga jujuy directamente
     const [ProvinciaId, setProvinciaId] = useState(10);
     //para más adelante cuando vayan a otras provincias
@@ -65,10 +68,10 @@ const CambioDomicilio = () => {
     const [MedioPago, setMedioPago] = useState(null);
     const [PagoInfo, setPagoInfo] = useState({
         Total: null,
-        Interes: null,
         Saldo: null
     });
     const [RequiereFactura, setRequiereFactura] = useState(false);
+    const [EsAlquiler, setEsAlquiler] = useState(false);
 
     const handleChangeMunicipioSeleccionado = (e) => {
         setMunicipio(e.target.value);
@@ -87,15 +90,20 @@ const CambioDomicilio = () => {
         setMedioPago(e.target.value);
         setPagoInfo({
             ...PagoInfo,
-            Interes: e.target.value.MedioPagoInteres,
-            Total: location.state === 1 ?
-            tareas.filter((tarea)=>tarea.TareaId === VARIABLES.ID_CAMBIO_DOMICILIO_CABLE)[0].TareaPrecioUnitario + (tareas.filter((tarea)=>tarea.TareaId === VARIABLES.ID_CAMBIO_DOMICILIO_CABLE)[0].TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
+            Total: !EsAlquiler ?
+            tareaCambioDomicilio[0].TareaPrecioUnitario + (tareaCambioDomicilio[0].TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
             :
-            tareas.filter((tarea)=>tarea.TareaId === VARIABLES.ID_CAMBIO_DOMICILIO_INTERNET)[0].TareaPrecioUnitario + (tareas.filter((tarea)=>tarea.TareaId === VARIABLES.ID_CAMBIO_DOMICILIO_INTERNET)[0].TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
+            location.state.ServicioPrecioUnitario + tareaCambioDomicilio[0].TareaPrecioUnitario +
+            (tareaCambioDomicilio[0].TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
         })
     }
     const handleChangeRequiereFactura = () => {
         setRequiereFactura(!RequiereFactura)
+    }
+    const handleChangeEsAlquiler = () => {
+        setEsAlquiler(!EsAlquiler);
+        setMedioPago(null);
+        setPagoInfo(null);
     }
     const [OtFechaPrevistaVisita, setOtFechaPrevistaVisita] = useState(null);
     const [Tecnico, setTecnico] = useState(null);
@@ -124,7 +132,8 @@ const CambioDomicilio = () => {
                 OtObservacionesResponsableEmision,
                 MedioPago,
                 PagoInfo,
-                RequiereFactura
+                RequiereFactura,
+                EsAlquiler
             }, setModalNuevoDomicilio)
     }
 }
@@ -331,6 +340,12 @@ const CambioDomicilio = () => {
                         label="Piso">
                         </TextField>
                     </Grid>
+                    <Grid item xs={12} md={12} sm={12} lg={12}>
+                        <FormControl>
+                            <FormControlLabel label="Es alquiler" control={<Checkbox checked={EsAlquiler} onChange={handleChangeEsAlquiler} value={EsAlquiler}></Checkbox>}></FormControlLabel>
+                        </FormControl>
+                        {EsAlquiler ? <Alert severity='info'>El domicilio del abonado es alquiler, por lo cual tendrá que abonar un depósito con el valor de una cuota del servicio que tiene actualmente</Alert> : ""}
+                    </Grid>
                 </Grid>
             </TabPanel>
             <TabPanel>
@@ -433,16 +448,27 @@ const CambioDomicilio = () => {
                                 fullWidth
                                 select
                                 >
-                                {mediosPago.map((mp)=>(
+                                {mediosPago
+                                .filter((mp)=>(mp.MedioPagoId !== VARIABLES.ID_MEDIO_PAGO_FACILIDAD))
+                                .map((mp)=>(
                                     <MenuItem key={mp.MedioPagoId} value={mp}>{mp.MedioPagoNombre}</MenuItem>
-                                ))}
+                                ))
+                                }
                             </TextField>
-                            { MedioPago !== null && MedioPago.MedioPagoInteres > 0
-                                ?
-                                <Typography variant="h2"><b>Total (Precio Inscripción + Interés {MedioPago.MedioPagoInteres} %):</b> ${PagoInfo.Total}</Typography>
-                                :
-                                <Typography variant="h2"><b>Total:</b> ${PagoInfo.Total}</Typography>
-                            }
+                            {!EsAlquiler && tareaCambioDomicilio.length > 0 && MedioPago !== null ? 
+                            <>
+                            <Typography><b>Precio de Cambio de domicilio:</b> ${tareaCambioDomicilio[0].TareaPrecioUnitario} </Typography>
+                            <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(tareaCambioDomicilio[0].TareaPrecioUnitario * MedioPago.MedioPagoInteres)/100}</Typography>
+                            <Typography variant="h2"><b>Precio Final:</b> ${PagoInfo.Total}</Typography>
+                            </>
+                            : EsAlquiler && tareaCambioDomicilio.length > 0 && MedioPago !== null ?
+                            <>
+                            <Typography><b>Precio de Cambio de domicilio:</b> ${tareaCambioDomicilio[0].TareaPrecioUnitario} </Typography>
+                            <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(tareaCambioDomicilio[0].TareaPrecioUnitario * MedioPago.MedioPagoInteres)/100}</Typography>
+                            <Typography><b>Depósito por Alquiler:</b> ${location.state.ServicioPrecioUnitario}</Typography>
+                            <Typography variant="h2"><b>Precio Final:</b> ${PagoInfo.Total}</Typography>
+                            </>
+                            : ""}
                         </Grid>
                         <Grid item xs={12} md={12} sm={12} lg={12}>
                         <FormControl>

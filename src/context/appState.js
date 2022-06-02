@@ -44,6 +44,7 @@ const AppState = props => {
         inscripcion: [],
         detallesPago: [],
         tareas: [],
+        tareaCambioDomicilio: [],
         ordenesDeTrabajo: [],
         ordenesDeTrabajoAsignadas: [],
         tecnicosOrdenDeTrabajo: [],
@@ -534,7 +535,12 @@ const AppState = props => {
     }
     const traerAbonados = async (estadoId = 0, municipioId = 0) => {
         try {
-            const resultado =  await clienteAxios.get(`/api/usuarios/abonados/municipio=${municipioId}&estado=${estadoId}`);
+            const resultado =  await clienteAxios.get('/api/usuarios/abonados', {
+                params: {
+                    estadoId: estadoId,
+                    municipioId: municipioId
+                }
+            });
             dispatch({
                 type: TYPES.LISTA_ABONADOS,
                 payload: resultado.data
@@ -1419,6 +1425,18 @@ const AppState = props => {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
+    const traerTareaCambioDomicilio = async (servicioId) => {
+        try {
+            const resultado = await clienteAxios.get(`/api/tareas/servicioId=${servicioId}`);
+            dispatch({
+                type: TYPES.TAREA_CAMBIO_DOMICILIO,
+                payload: resultado.data
+            })
+        } catch (error) {
+            console.log(error);
+            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
+        }
+    }
     const crearTarea = async(tarea, cerrarModal) => {
         clienteAxios.post('/api/tareas/create', tarea)
         .then(resOk => {
@@ -1849,7 +1867,7 @@ const AppState = props => {
             pagosPendientesTop: state.pagosPendientesTop,
             inscripcion: state.inscripcion,
             detallesPago: state.detallesPago,
-            tareas: state.tareas,
+            tareas: state.tareas, tareaCambioDomicilio: state.tareaCambioDomicilio,
             ordenesDeTrabajo: state.ordenesDeTrabajo,
             ordenesDeTrabajoAsignadas: state.ordenesDeTrabajoAsignadas,
             tecnicosOrdenDeTrabajo: state.tecnicosOrdenDeTrabajo,
@@ -1877,7 +1895,7 @@ const AppState = props => {
             traerMediosPago, crearMedioPago, modificarMedioPago, eliminarMedioPago,
             traerPagosPorAbonado, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, traerDatosInscripcion, traerPagosMensualesPendientes, traerPagosMensualesPendientes,
             traerDetallesPago, eliminarDetallePago,
-            traerTareas, crearTarea, modificarTarea, eliminarTarea,
+            traerTareas, traerTareaCambioDomicilio, crearTarea, modificarTarea, eliminarTarea,
             traerOrdenesDeTrabajo, traerOrdenesDeTrabajoAsignadas, traerTecnicosOt, traerTareasOt, crearOrdenDeTrabajo, modificarOrdenDeTrabajo,
             finalizarOrdenDeTrabajo, registrarVisitaOrdenDeTrabajo, eliminarOrdenDeTrabajo,
             traerMovimientosPorFecha, crearMovimiento,
