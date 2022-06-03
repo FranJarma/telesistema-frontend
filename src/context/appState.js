@@ -53,10 +53,12 @@ const AppState = props => {
         conceptos: [],
         cargando: false,
         descargando: false,
+        registrado: false,
         mensaje: '',
         cajas: [],
         facturas: [],
-        recibos: []
+        recibos: [],
+        comprobante: {}
     }
     let navigate = useNavigate();
     const [state, dispatch] = useReducer(AppReducer, initialState);
@@ -345,16 +347,7 @@ const AppState = props => {
                 type: TYPES.CREAR_ABONADO,
                 payload: respuesta.data
             })
-            if(abonado.RequiereFactura){
-                descargarComprobante("Factura", <FacturaCaratula data={respuesta.data.factura}/>, respuesta.data.factura).then(()=> {
-                    Swal('Operación completa', VARIABLES.ABONADO_CREADO_CORRECTAMENTE).then(()=> navigate(-1));
-                })
-            }
-            else{
-                descargarComprobante("Recibo", <ReciboCaratula data={respuesta.data.recibo}/>, respuesta.data.recibo).then(()=> {
-                    Swal('Operación completa', VARIABLES.ABONADO_CREADO_CORRECTAMENTE).then(()=> navigate(-1));
-                })
-            }
+            Toast(VARIABLES.ABONADO_CREADO_CORRECTAMENTE, 'success');
 
         } catch (error) {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
@@ -443,24 +436,14 @@ const AppState = props => {
             }
         })
     }
-    const cambioDomicilioAbonado = async(domicilio, setModalNuevoDomicilio) => {
+    const cambioDomicilioAbonado = async(domicilio) => {
         try {
             const respuesta = await clienteAxios.put(`/api/usuarios/abonados/cambio-domicilio/${domicilio.UserId}`, domicilio);
             dispatch({
                 type: TYPES.CAMBIO_DOMICILIO_ABONADO,
-                payload: domicilio
+                payload: [respuesta.data, domicilio]
             })
-            setModalNuevoDomicilio(false);
-            if(domicilio.RequiereFactura){
-                descargarComprobante("Factura", <FacturaCaratula data={respuesta.data.factura}/>, respuesta.data.factura).then(()=> {
-                    Swal('Operación completa', VARIABLES.CAMBIO_DOMICILIO_CORRECTO);
-                })
-            }
-            else{
-                descargarComprobante("Recibo", <ReciboCaratula data={respuesta.data.recibo}/>, respuesta.data.recibo).then(()=> {
-                    Swal('Operación completa', VARIABLES.CAMBIO_DOMICILIO_CORRECTO);
-                })
-            }
+            Toast(VARIABLES.CAMBIO_DOMICILIO_CORRECTO, 'success');
         } catch (error) {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
@@ -475,24 +458,14 @@ const AppState = props => {
             }
         }
     }
-    const cambioServicioAbonado = async(servicio, setModalNuevoServicio) => {
+    const cambioServicioAbonado = async(servicio) => {
         try {
             const respuesta = await clienteAxios.put(`/api/usuarios/abonados/cambio-servicio/${servicio.UserId}`, servicio);
             dispatch({
                 type: TYPES.CAMBIO_SERVICIO_ABONADO,
-                payload: servicio
+                payload: [respuesta.data, servicio]
             })
-            setModalNuevoServicio(false);
-            if(servicio.RequiereFactura){
-                descargarComprobante("Factura", <FacturaCaratula data={respuesta.data.factura}/>, respuesta.data.factura).then(()=> {
-                    Swal('Operación completa', VARIABLES.CAMBIO_SERVICIO_CORRECTO);
-                })
-            }
-            else{
-                descargarComprobante("Recibo", <ReciboCaratula data={respuesta.data.recibo}/>, respuesta.data.recibo).then(()=> {
-                    Swal('Operación completa', VARIABLES.CAMBIO_SERVICIO_CORRECTO);
-                })
-            }
+            Toast(VARIABLES.CAMBIO_SERVICIO_CORRECTO, 'success');
 
         } catch (error) {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
@@ -726,6 +699,9 @@ const AppState = props => {
             const blob = await pdf(caratula).toBlob();
             if(tipo === "Factura") saveAs(blob, data.FacturaCodigoAutorizacion)
             else if(tipo === "Recibo") saveAs(blob, `Recibo N°:${data.ReciboId}-CUIT:${data.Cuit}`);
+            dispatch({
+                type: TYPES.DESCARGAR_COMPROBANTE
+            })
         } catch (error) {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
@@ -1880,6 +1856,8 @@ const AppState = props => {
             cajas: state.cajas,
             facturas: state.facturas,
             recibos: state.recibos,
+            registrado: state.registrado,
+            comprobante: state.comprobante,
             iniciarSesion, cerrarSesion, obtenerUsuarioAutenticado, traerUsuarios, traerUsuariosPorRol, crearUsuario, modificarUsuario, eliminarUsuario,
             traerRoles, traerRolesPorUsuario, crearRol, modificarRol, eliminarRol,
             traerPermisos, traerPermisosPorRol,

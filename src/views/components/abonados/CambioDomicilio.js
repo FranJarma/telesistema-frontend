@@ -16,13 +16,14 @@ import * as VARIABLES from './../../../types/variables';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
+import ComprobanteButton from '../design/components/ComprobanteButton';
 
 const CambioDomicilio = () => {
     const appContext = useContext(AppContext);
     const { barrios, historialDomicilios, mediosPago, municipios, provincias, usuarios,
     ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerDomiciliosAbonado, traerMunicipiosPorProvincia,
     traerOrdenesDeTrabajoAsignadas, traerProvincias, cambioDomicilioAbonado, traerTareaCambioDomicilio, traerUsuariosPorRol,
-    traerMediosPago, tareaCambioDomicilio, descargando } = appContext;
+    traerMediosPago, tareaCambioDomicilio, registrado, comprobante } = appContext;
 
     const location = useLocation();
     //Observables
@@ -238,17 +239,17 @@ const CambioDomicilio = () => {
             <FormHelperText>Los domicilios están ordenados por fecha más reciente</FormHelperText>
             <br/>
         </CardContent>
-        <Modal tamaño={'sm'} mensaje={'Generando comprobante...'} abrirModal={descargando}></Modal>
         <Modal
         abrirModal={ModalNuevoDomicilio}
         funcionCerrar={handleChangeModalNuevoDomicilio}
         botones={
         <>
-        <Button
-            variant="contained"
-            color="primary"
-            onClick={onSubmitAbonado}>
-            Confirmar</Button>
+        {!registrado ? 
+            <Button onClick={onSubmitAbonado}
+            variant="contained" color="primary">
+            Confirmar cambio de domicilio
+            </Button>
+        : <ComprobanteButton funcionModal={handleChangeModalNuevoDomicilio} tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
         <Button onClick={handleChangeModalNuevoDomicilio}>Cancelar</Button></>}
         formulario={
             <>
@@ -471,11 +472,11 @@ const CambioDomicilio = () => {
                             : ""}
                         </Grid>
                         <Grid item xs={12} md={12} sm={12} lg={12}>
-                        <FormControl>
-                            <FormControlLabel label="Requiere factura" control={<Checkbox checked={RequiereFactura} onChange={handleChangeRequiereFactura} value={RequiereFactura}></Checkbox>}></FormControlLabel>
-                        </FormControl>
-                        {RequiereFactura ? <Alert severity='info'>La factura se generará en la sección "Facturas" del historial de pagos del abonado</Alert> : ""}
-                    </Grid>
+                            <FormControl>
+                                <FormControlLabel label="Requiere factura" control={<Checkbox checked={RequiereFactura} onChange={handleChangeRequiereFactura} value={RequiereFactura}></Checkbox>}></FormControlLabel>
+                            </FormControl>
+                            {RequiereFactura ? <Alert severity='info'>La factura se generará en la sección "Facturas" del historial de pagos del abonado</Alert> : ""}
+                        </Grid>
                     </Grid>
                 </TabPanel>
                 </Tabs>

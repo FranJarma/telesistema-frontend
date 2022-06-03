@@ -3,12 +3,12 @@ import AppContext from '../../../context/appContext';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import Modal from '../design/components/Modal';
-import { Button, Card, CardContent, CardHeader, FormHelperText, Grid, MenuItem, TextField, Typography } from '@material-ui/core'; 
+import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, MenuItem, TextField, Typography } from '@material-ui/core'; 
 import { useLocation } from 'react-router-dom';
 import Datatable from '../design/components/Datatable';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
 import useStyles from './../Styles';
-import { Autocomplete } from '@material-ui/lab';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TooltipForTable from '../../../helpers/TooltipForTable';
@@ -18,11 +18,12 @@ import BotonesDatatable from '../design/components/BotonesDatatable';
 import convertirAHora from '../../../helpers/ConvertirAHora';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
+import ComprobanteButton from '../design/components/ComprobanteButton';
 
 const CambioServicio = () => {
     const appContext = useContext(AppContext);
     const { historialServicios, mediosPago, ordenesDeTrabajoAsignadas, servicios, usuarios, cambioServicioAbonado, traerTareas, traerServicios, traerServiciosAbonado, traerOnus, traerONUPorId,
-    traerUsuariosPorRol, traerOrdenesDeTrabajoAsignadas, traerMediosPago, descargando } = appContext;
+    traerUsuariosPorRol, traerOrdenesDeTrabajoAsignadas, traerMediosPago, registrado, comprobante } = appContext;
 
     const location = useLocation();
     const styles = useStyles();
@@ -59,6 +60,8 @@ const CambioServicio = () => {
     const [PagoInfo, setPagoInfo] = useState({
         Total: null
     });
+    const [RequiereFactura, setRequiereFactura] = useState(false);
+
     const onInputChangeObservacionesOt = (e) => {
         setOtObservacionesResponsableEmision(e.target.value);
     }
@@ -77,6 +80,9 @@ const CambioServicio = () => {
             Total: (Servicio.ServicioInscripcion + (Servicio.ServicioInscripcion*e.target.value.MedioPagoInteres / 100)).toFixed(2)
         })
     }
+    const handleChangeRequiereFactura = () => {
+        setRequiereFactura(!RequiereFactura)
+    }
     const onSubmitAbonado = (e) => {
         e.preventDefault();
         if(location.state) {
@@ -90,7 +96,8 @@ const CambioServicio = () => {
                 MedioPago,
                 Tecnico,
                 OtFechaPrevistaVisita,
-                OtObservacionesResponsableEmision
+                OtObservacionesResponsableEmision,
+                RequiereFactura
             }, setModalNuevoServicio)
             traerONUPorId(location.state.OnuId);
     }
@@ -187,18 +194,18 @@ const CambioServicio = () => {
             <FormHelperText>Los servicios están ordenados por fecha más reciente</FormHelperText>
             <br/>
         </CardContent>
-        <Modal tamaño={'sm'} mensaje={'Generando comprobante...'} abrirModal={descargando}></Modal>
         <Modal
         abrirModal={ModalNuevoServicio}
         funcionCerrar={handleChangeModalNuevoServicio}
         botones={
-        <>
-        <Button
-            variant="contained"
-            color="primary"
-            onClick={onSubmitAbonado}>
-            Confirmar</Button>
-        <Button onClick={handleChangeModalNuevoServicio}>Cancelar</Button></>}
+            <>
+            {!registrado ? 
+                <Button onClick={onSubmitAbonado}
+                variant="contained" color="primary">
+                Confirmar cambio de servicio
+                </Button>
+            : <ComprobanteButton funcionModal={handleChangeModalNuevoServicio} tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
+            <Button onClick={handleChangeModalNuevoServicio}>Cancelar</Button></>}
         formulario={
             <>
             <Tabs>
@@ -279,6 +286,12 @@ const CambioServicio = () => {
                         </Grid>
                     </>
                 :""}
+                <Grid item xs={12} md={12} sm={12} lg={12}>
+                    <FormControl>
+                        <FormControlLabel label="Requiere factura" control={<Checkbox checked={RequiereFactura} onChange={handleChangeRequiereFactura} value={RequiereFactura}></Checkbox>}></FormControlLabel>
+                    </FormControl>
+                    {RequiereFactura ? <Alert severity='info'>La factura se generará en la sección "Facturas" del historial de pagos del abonado</Alert> : ""}
+                </Grid>
                 
             </Grid>
             <Grid container spacing={3}>

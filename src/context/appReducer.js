@@ -70,14 +70,22 @@ export default (state, action) => {
                 permisosRol: action.payload
             }
         }
+        case TYPES.CREAR_ABONADO:
+            return {
+                ...state,
+                registrado: true,
+                comprobante: action.payload
+        }
         case TYPES.CAMBIO_DOMICILIO_ABONADO: {
             return {
                 ...state,
+                registrado: true,
+                comprobante: action.payload[0],
                 historialDomicilios: [{
-                    DomicilioCalle: action.payload.DomicilioCalle,
-                    DomicilioNumero: action.payload.DomicilioNumero,
-                    BarrioNombre: action.payload.Barrio.BarrioNombre,
-                    MunicipioNombre: action.payload.Municipio.MunicipioNombre,
+                    DomicilioCalle: action.payload[1].DomicilioCalle,
+                    DomicilioNumero: action.payload[1].DomicilioNumero,
+                    BarrioNombre: action.payload[1].Barrio.BarrioNombre,
+                    MunicipioNombre: action.payload[1].Municipio.MunicipioNombre,
                     FechaPedidoCambio: new Date().toISOString(),
                     FechaFinalizacionOt: null,
                     CambioDomicilioObservaciones: 'Esperando finalización de OT. Una vez finalizada, este pasará a ser el nuevo domicilio del abonado'
@@ -87,8 +95,10 @@ export default (state, action) => {
         case TYPES.CAMBIO_SERVICIO_ABONADO: {
             return {
                 ...state,
+                registrado: true,
+                comprobante: action.payload[0],
                 historialServicios: [{
-                    ServicioNombre: action.payload.Servicio.ServicioNombre,
+                    ServicioNombre: action.payload[1].Servicio.ServicioNombre,
                     FechaPedidoCambio: new Date().toISOString(),
                     OtFechaFinalizacion: null,
                     CambioServicioObservaciones: 'Esperando finalización de OT. Una vez finalizada, este pasará a ser el nuevo servicio del abonado'
@@ -467,6 +477,12 @@ export default (state, action) => {
             return {
                 ...state,
                 tareaCambioDomicilio: action.payload
+        }
+        case TYPES.DESCARGAR_COMPROBANTE: 
+            return {
+                ...state,
+                descargando: true,
+                registrado: false
         }
         default:
             return state;

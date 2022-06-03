@@ -311,7 +311,7 @@ const ListaOtPendientes = () => {
                         label="Fecha y hora de finalización"
                         ></DateTimePicker>
                     </Grid>
-                    {(OtInfo.ServicioViejoId !== 1 && !OtInfo.NuevoServicioId) || (OtInfo.NuevoServicioId === 1) ?
+                    {(OtInfo.ServicioViejoId !== 1)||(OtInfo.ServicioNuevoId && OtInfo.ServicioNuevoId !== 1) ?
                         <Grid item xs={12} sm={12} md={12} lg={12}>
                             <Autocomplete
                             value={Onu}
@@ -319,9 +319,11 @@ const ListaOtPendientes = () => {
                                 setOnu(newOnu);
                             }}
                             options={onus}
-                            noOptionsText="No se encontraron onus disponibles"
+                            noOptionsText={"No hay ONUS disponibles"}
                             getOptionLabel={(option) => option.OnuMac}
-                            renderInput={(params) => <TextField {...params} variant ="outlined" fullWidth label="ONU"/>}
+                            renderInput={(params) => <>
+                            <TextField {...params} variant ="outlined" fullWidth label="ONU"/>
+                            </>}
                             />
                         </Grid>
                     : ""}

@@ -594,7 +594,7 @@ const ListaPagos = () => {
             funcionCerrar={handleChangeModalDetallesPago}
             botones={
             <>
-            <Button onClick={handleChangeModalDetallesPago}>Cancelar</Button></>}
+            <Button onClick={handleChangeModalDetallesPago}>Cerrar</Button></>}
             formulario={
             <>
             <Typography style={{marginTop: '0px'}} variant="h2"><i className="bx bx-list-ol"></i> Detalles de pago</Typography>

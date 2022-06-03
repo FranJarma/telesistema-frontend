@@ -14,11 +14,14 @@ import TooltipForTable from '../../../helpers/TooltipForTable';
 import * as VARIABLES from './../../../types/variables';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
+import ComprobanteButton from '../design/components/ComprobanteButton';
 
 const CaratulaAbonado = () => {
     const appContext = useContext(AppContext);
-    const { barrios, condicionesIva, municipios, servicios, provincias, usuarios, mediosPago, ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerCondicionesIva, traerMunicipiosPorProvincia, traerServicios,
-    traerProvincias, crearAbonado, modificarAbonado, traerMediosPago, traerOrdenesDeTrabajoAsignadas, traerUsuariosPorRol } = appContext;
+    const { barrios, condicionesIva, municipios, servicios, provincias, usuarios,
+    mediosPago, ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerCondicionesIva,
+    traerMunicipiosPorProvincia, traerServicios, traerProvincias, crearAbonado, modificarAbonado,
+    traerMediosPago, traerOrdenesDeTrabajoAsignadas, traerUsuariosPorRol, registrado, comprobante } = appContext;
     
     const location = useLocation();
     const [abonadoInfo, setAbonadoInfo] = useState({
@@ -355,13 +358,6 @@ const CaratulaAbonado = () => {
                     </Grid>
             </CardContent>
         </Card>
-        <br/>
-        <div style={{textAlign: 'center', marginBottom: '1.5rem'}}>
-            <Button type="submit" startIcon={<i className={location.state ? "bx bx-edit":"bx bx-check"}></i>}
-            variant="contained" color="primary">
-            {location.state ? "Modificar" : "Registrar"}
-            </Button>
-        </div>
     </TabPanel>
     <TabPanel>
         <Card>
@@ -652,6 +648,15 @@ const CaratulaAbonado = () => {
     </Tabs>
     </CardContent>
     </Card>
+    <br/>
+    <div style={{textAlign: 'center', marginBottom: '1.5rem'}}>
+        {!registrado ? 
+            <Button type="submit" startIcon={<i className={location.state ? "bx bx-edit":"bx bx-check"}></i>}
+            variant="contained" color="primary">
+            {location.state ? "Modificar" : "Registrar"}
+            </Button>
+        : <ComprobanteButton tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
+    </div>
     </form>
     </main>
     <Footer/>
