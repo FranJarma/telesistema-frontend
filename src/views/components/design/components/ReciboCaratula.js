@@ -134,7 +134,7 @@ const ReciboCaratula = ({data}) => (
           </View>
         </View>
         <View style={styles.row}>
-          <Text style={styles.subtitle}>En concepto de: <Text style={styles.subtitleSpan}>{data.MovimientoConceptoNombre}</Text></Text>
+          <Text style={styles.subtitle}>En concepto de: <Text style={styles.subtitleSpan}>{data.MovimientoConceptoNombre} - {data.ServicioNombre}</Text></Text>
         </View>
         <View style={styles.row}>
           <View style={styles.column}>

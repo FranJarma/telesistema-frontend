@@ -665,19 +665,9 @@ const AppState = props => {
             const respuesta = await clienteAxios.post('/api/pagos/create', pago);
             dispatch({
                 type: TYPES.CREAR_PAGO,
-                payload: pago
+                payload: [respuesta.data, pago]
             })
-            setModalCrearPago(false);
-            if(pago.RequiereFactura){
-                descargarComprobante("Factura", <FacturaCaratula data={respuesta.data.factura}/>, respuesta.data.factura).then(()=> {
-                    Swal('Operación completa', VARIABLES.PAGO_CREADO_CORRECTAMENTE);
-                })
-            }
-            else{
-                descargarComprobante("Recibo", <ReciboCaratula data={respuesta.data.recibo}/>, respuesta.data.recibo).then(()=> {
-                    Swal('Operación completa', VARIABLES.PAGO_CREADO_CORRECTAMENTE);
-                })
-            }
+            Toast(VARIABLES.PAGO_CREADO_CORRECTAMENTE, 'success');
         } catch (error) {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
@@ -712,19 +702,9 @@ const AppState = props => {
             const respuesta = await clienteAxios.post('/api/pagos/createPagoAdelantado', pagoAdelantadoInfo);
             dispatch({
                 type: TYPES.CREAR_PAGO_ADELANTADO,
-                payload: pagoAdelantadoInfo
+                payload: [respuesta.data, pagoAdelantadoInfo]
             })
-            setModalPagoAdelantado(false);
-            if(pagoAdelantadoInfo.RequiereFactura){
-                descargarComprobante("Factura", <FacturaCaratula data={respuesta.data.factura}/>, respuesta.data.factura).then(()=> {
-                    Swal('Operación completa', VARIABLES.PAGO_CREADO_CORRECTAMENTE);
-                })
-            }
-            else{
-                descargarComprobante("Recibo", <ReciboCaratula data={respuesta.data.recibo}/>, respuesta.data.recibo).then(()=> {
-                    Swal('Operación completa', VARIABLES.PAGO_CREADO_CORRECTAMENTE);
-                })
-            }
+            Toast(VARIABLES.PAGO_CREADO_CORRECTAMENTE, 'success');
         } catch (error) {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){

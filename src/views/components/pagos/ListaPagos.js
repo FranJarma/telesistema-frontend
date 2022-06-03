@@ -16,10 +16,11 @@ import * as VARIABLES from './../../../types/variables';
 import Factura from '../design/components/Factura';
 import Recibo from '../design/components/Recibo';
 import GetUserId from './../../../helpers/GetUserId';
+import ComprobanteButton from '../design/components/ComprobanteButton';
 
 const ListaPagos = () => {
     const appContext = useContext(AppContext);
-    const { pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, descargando, cargando, mostrarSpinner} = appContext;
+    const { pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
 
     const location = useLocation();
     const [PagoAño, setPagoAño] = useState(new Date());
@@ -323,7 +324,6 @@ const ListaPagos = () => {
                             buscar={true}
                             paginacionPorDefecto={15}
                             />
-                            <Modal tamaño={'sm'} mensaje={'Generando comprobante...'} abrirModal={descargando}></Modal>
                             </CardContent>
                         </Card>
                     </TabPanel>
@@ -337,12 +337,12 @@ const ListaPagos = () => {
             funcionCerrar={handleChangeModalPagoAdelantado}
             botones={
             <>
-            <Button onClick={()=>
-                {
-                crearPagoAdelantado({MesesAPagar: pagosPendientesTop, PagoAdelantadoInfo, RequiereFactura: RequiereFactura}, handleChangeModalPagoAdelantado)}}
-                variant="contained"
-                color="primary">
-                Registrar pago</Button>
+            {!registrado ? 
+            <Button onClick={() =>  crearPagoAdelantado({MesesAPagar: pagosPendientesTop, PagoAdelantadoInfo, RequiereFactura: RequiereFactura}, handleChangeModalPagoAdelantado)}
+            variant="contained" color="primary">
+            Registrar pago
+            </Button>
+            : <ComprobanteButton funcionModal={handleChangeModalNuevoPago} tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
             <Button onClick={handleChangeModalPagoAdelantado}>Cancelar</Button></>}
             formulario={
             <>
@@ -442,17 +442,18 @@ const ListaPagos = () => {
             funcionCerrar={handleChangeModalNuevoPago}
             botones={
             <>
-            <Button onClick={()=>
-                {
+            {!registrado ? 
+            <Button onClick={() =>
                 crearPago(
-                    {PagoInfo,
-                    MedioPagoId,
-                    MunicipioId,
-                    RequiereFactura
-                }, handleChangeModalNuevoPago)}}
-                variant="contained"
-                color="primary">
-                Registrar pago</Button>
+                {PagoInfo,
+                MedioPagoId,
+                MunicipioId,
+                RequiereFactura
+            }, handleChangeModalNuevoPago)}
+            variant="contained" color="primary">
+            Registrar pago
+            </Button>
+            : <ComprobanteButton funcionModal={handleChangeModalNuevoPago} tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
             <Button onClick={handleChangeModalNuevoPago}>Cancelar</Button></>}
             formulario={
             <>
