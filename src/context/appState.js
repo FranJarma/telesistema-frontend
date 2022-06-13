@@ -688,7 +688,8 @@ const AppState = props => {
             mostrarSpinnerDescarga();
             const blob = await pdf(caratula).toBlob();
             if(tipo === "Factura") saveAs(blob, data.FacturaCodigoAutorizacion)
-            else if(tipo === "Recibo") saveAs(blob, `Recibo N°:${data.ReciboId}-CUIT:${data.Cuit}`);
+            if(tipo === "Recibo") saveAs(blob, `Recibo N°:${data.ReciboId}-CUIT:${data.Cuit}`);
+            if(tipo === "Ot") saveAs(blob, `Ot N°:${data.OtId}-Abonado:${data.AbonadoNumero}`);
             dispatch({
                 type: TYPES.DESCARGAR_COMPROBANTE
             })

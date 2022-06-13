@@ -27,6 +27,7 @@ import ListaMovimientos from './views/components/caja/ListaMovimientos';
 import ListaMediosPago from './views/components/mediosPago/ListaMediosPago';
 import ListaAbonadosAtrasados from './views/components/abonados/ListaAbonadosAtrasados';
 import { AuthRoute } from './routes/AuthRoute';
+import NotFound404 from './views/components/NotFound404';
 
 //revisamos si tenemos un token
 const token = localStorage.getItem('token');
@@ -404,6 +405,12 @@ function App() {
                 <AuthRoute roles={["Jefe", "Admin", "Tecnico"]}>
                   <ListaMisOt/>
                 </AuthRoute>
+              }>
+              </Route>
+
+              <Route path="*"
+              element={
+                <NotFound404/>
               }>
               </Route>
               

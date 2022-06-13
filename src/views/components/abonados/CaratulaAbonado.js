@@ -4,7 +4,7 @@ import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import { Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, Grid, MenuItem, TextField, Typography } from '@material-ui/core'; 
 import { DatePicker, KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { Alert, Autocomplete } from '@material-ui/lab';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Datatable from '../design/components/Datatable';
@@ -24,6 +24,10 @@ const CaratulaAbonado = () => {
     traerMediosPago, traerOrdenesDeTrabajoAsignadas, traerUsuariosPorRol, registrado, comprobante } = appContext;
     
     const location = useLocation();
+    const params = useParams();
+    const navigate = useNavigate();
+
+
     const [abonadoInfo, setAbonadoInfo] = useState({
         UserId: null,
         Nombre: null,
@@ -124,8 +128,9 @@ const CaratulaAbonado = () => {
     }, [])
     
     useEffect(() => {
-        if(location.state)
+        if(params.AbonadoNumero)
         {
+            if(!location.state) navigate(-2);
             setAbonadoInfo({
                 UserId: location.state.UserId,
                 Nombre: location.state.Nombre,
@@ -157,7 +162,7 @@ const CaratulaAbonado = () => {
             setOtFechaPrevistaVisita(location.state.OtFechaPrevistaVisita);
             setFechaContrato(location.state.FechaContrato);
         }
-    }, [location.state])
+    }, [params])
 
     const onSubmitAbonado = (e) => {
         e.preventDefault();

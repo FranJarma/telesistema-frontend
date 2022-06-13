@@ -72,7 +72,7 @@ const ListaOtFinalizadas = () => {
         {
             cell: (data) => 
             <>
-            <Typography onClick={()=>{handleChangeModalImprimirOt(data)}} style={{color: "orange", cursor: 'pointer'}}><Tooltip title="Imprimir"><i className="bx bx-printer bx-xs"></i></Tooltip></Typography>
+            <Typography onClick={()=>{handleChangeModalImprimirOt(data)}} style={{color: "orange", cursor: 'pointer'}}><Tooltip title="Descargar pdf"><i className="bx bxs-file-pdf"></i></Tooltip></Typography>
             </>,
         }
     ]

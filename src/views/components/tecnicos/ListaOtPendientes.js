@@ -15,10 +15,15 @@ import TooltipForTable from '../../../helpers/TooltipForTable';
 import DesdeHasta from '../../../helpers/DesdeHasta';
 import convertirAHora from '../../../helpers/ConvertirAHora';
 import GetUserId from './../../../helpers/GetUserId';
+import OtCaratula from '../design/components/OtCaratula';
+import { BlobProvider } from '@react-pdf/renderer';
+import Ot from '../design/components/Ot';
 
 const ListaOtPendientes = () => {
     const appContext = useContext(AppContext);
-    const { ordenesDeTrabajo, onus, tareasOrdenDeTrabajo, traerOrdenesDeTrabajo, traerTareasOt, registrarVisitaOrdenDeTrabajo, finalizarOrdenDeTrabajo, traerOnus} = appContext;
+    const { ordenesDeTrabajo, onus, tareasOrdenDeTrabajo, traerOrdenesDeTrabajo,
+        traerTareasOt, registrarVisitaOrdenDeTrabajo,
+        finalizarOrdenDeTrabajo, traerOnus, descargando, descargarComprobante} = appContext;
 
     useEffect(()=>{
         traerOrdenesDeTrabajo(5);
@@ -165,7 +170,18 @@ const ListaOtPendientes = () => {
                     <Typography onClick={()=>{handleChangeModalFinalizarOt(data)}} style={{color: "navy", cursor: 'pointer'}}><i className='bx bx-calendar-check bx-xs' ></i> Finalizar OT</Typography>
                 </MenuItem>
                 <MenuItem>
-                    <Typography onClick={()=>{handleChangeModalImprimirOt(data)}} style={{color: "navy", cursor: 'pointer'}}><i className="bx bx-printer bx-xs"></i> Imprimir</Typography>
+                {/* <BlobProvider document={<OtCaratula data={data}/>}>
+                {({ url, blob, loading }) => {
+                    console.log("d", url, blob, loading);
+                    return (
+                      <a href={url} target="_blank">
+                        View as PDF
+                      </a>
+                    );
+                  }}
+                    </BlobProvider> */}
+                <Ot data={data}/>
+                {/* <Typography onClick={()=>{descargarComprobante("Ot", <OtCaratula data={data}/>, data)}} style={{color: "navy", cursor: 'pointer'}}><i className="bx bxs-file-pdf bx-xs"></i> Descargar Pdf</Typography> */}
                 </MenuItem>
                 </>
             }/>
