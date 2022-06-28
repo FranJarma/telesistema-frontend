@@ -402,7 +402,7 @@ const CaratulaAbonado = () => {
                         disableClearable
                         value={Barrio}
                         onChange={(_event, newBarrioId) => {
-                            setBarrio(newBarrioId);
+                            if(newBarrioId) setBarrio(newBarrioId);
                         }}
                         options={barrios}
                         noOptionsText="No se encontraron barrios"
@@ -559,8 +559,10 @@ const CaratulaAbonado = () => {
                         <Autocomplete
                         value={Tecnico}
                         onChange={(_event, newTecnico) => {
-                            traerOrdenesDeTrabajoAsignadas(newTecnico.UserId, 5);
-                            setTecnico(newTecnico);
+                            if(newTecnico){
+                                traerOrdenesDeTrabajoAsignadas(newTecnico.UserId, 5);
+                                setTecnico(newTecnico);
+                            }
                         }}
                         options={usuarios}
                         noOptionsText="No se encontraron técnicos"

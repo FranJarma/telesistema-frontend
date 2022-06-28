@@ -295,7 +295,7 @@ const CambioDomicilio = () => {
                         <Autocomplete
                         value={Barrio}
                         onChange={(_event, nuevoBarrio) => {
-                            setBarrio(nuevoBarrio);
+                            if(nuevoBarrio) setBarrio(nuevoBarrio);
                         }}
                         options={barrios}
                         noOptionsText="No se encontraron barrios"
@@ -369,8 +369,10 @@ const CambioDomicilio = () => {
                     <Autocomplete
                         value={Tecnico}
                         onChange={(_event, newTecnico) => {
-                            traerOrdenesDeTrabajoAsignadas(newTecnico.UserId, 5);
-                            setTecnico(newTecnico);
+                            if(newTecnico) {
+                                traerOrdenesDeTrabajoAsignadas(newTecnico.UserId, 5);
+                                setTecnico(newTecnico);
+                            }
                         }}
                         options={usuarios}
                         noOptionsText="No se encontraron técnicos"

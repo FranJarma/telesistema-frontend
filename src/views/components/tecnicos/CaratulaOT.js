@@ -1,24 +1,24 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, Grid, LinearProgress, MenuItem, TextField, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, LinearProgress, MenuItem, TextField, Typography } from '@material-ui/core';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import AppContext from '../../../context/appContext';
-import { Alert, Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@material-ui/lab';
 import { useLocation } from 'react-router';
 import { DatePicker } from '@material-ui/pickers';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import DataTable from 'react-data-table-component';
 import * as VARIABLES from './../../../types/variables';
 import Datatable from '../design/components/Datatable';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
+import OtObservacionesTarea from './OtObservacionesTarea';
 
 const CaratulaOt = () => {
     const appContext = useContext(AppContext);
     const { tareas, abonado, abonados, municipios, barrios, usuarios, traerBarriosPorMunicipio, traerMunicipios,
-    traerTareas, traerAbonados, traerAbonado, traerUsuariosPorRol, traerTareasOt, traerTecnicosOt, tecnicosOrdenDeTrabajo, tareasOrdenDeTrabajo,
+    traerTareas, traerAbonados, traerAbonado, traerUsuariosPorRol, traerTareasOt, tareasOrdenDeTrabajo,
     crearOrdenDeTrabajo, modificarOrdenDeTrabajo, ordenesDeTrabajoAsignadas, traerOrdenesDeTrabajoAsignadas } = appContext;
 
     const location = useLocation();
@@ -28,8 +28,6 @@ const CaratulaOt = () => {
     const [abonadoOt, setAbonadoOt] = useState(null);
     const [barrio, setBarrio] = useState(null);
     const [MunicipioId, setMunicipioId] = useState(0);
-    const [OtRetiraOnu, setOtRetiraOnu]= useState(0);
-    const [OtRetiraCable, setOtRetiraCable]= useState(0);
     const [OtInfo, setOtInfo] = useState({
         OtId: null,
         DomicilioCalle: "",
@@ -40,10 +38,12 @@ const CaratulaOt = () => {
         updatedBy: null
     });
     const [OtResponsableEjecucion, setOtResponsableEjecucion] = useState(null);
+    const [OtAuxiliarDeLinea, setOtAuxiliarDeLinea] = useState(null);
 
     const [PrimerRender, setPrimerRender] = useState(true);
     const [TareasTab, setTareasTab] = useState(false);
     const [TecnicosTab, setTecnicosTab] = useState(false);
+    const [EditMode, setEditMode] = useState(false);
 
     const handleChangeTabTareas = (e) => {
         if(!TareasTab && location.state && PrimerRender) {
@@ -64,12 +64,10 @@ const CaratulaOt = () => {
 
     useEffect(()=>{
         if(location.state){
-            console.log(location.state);
+            setEditMode(true);
             setOtInfo(location.state);
             setMunicipioId(location.state.MunicipioId);
             setBarrio(location.state);
-            setOtRetiraCable(location.state.OtRetiraCable);
-            setOtRetiraOnu(location.state.OtRetiraOnu);
             traerTareasOt(location.state.OtId);
             setTareasOt(tareasOrdenDeTrabajo);
             setOtResponsableEjecucion({
@@ -95,12 +93,6 @@ const CaratulaOt = () => {
         setBarrio(null);
         traerBarriosPorMunicipio(e.target.value);
     }
-    const handleChangeRetiraOnu = (e) => {
-        e.target.checked ? setOtRetiraOnu(1) : setOtRetiraOnu(0);
-    };
-    const handleChangeRetiraCable = (e) => {
-        e.target.checked ? setOtRetiraCable(1) : setOtRetiraCable(0);
-    };
 
     const handleChangeTabOt = () => {
         if(abonado && location.state) {
@@ -118,8 +110,6 @@ const CaratulaOt = () => {
                 OtResponsableEjecucion,
                 OtObservacionesResponsableEmision,
                 OtFechaPrevistaVisita,
-                OtRetiraCable,
-                OtRetiraOnu,
                 createdBy: GetUserId(),
                 abonado,
                 tareasOt,
@@ -131,8 +121,6 @@ const CaratulaOt = () => {
                 OtId, DomicilioCalle, DomicilioNumero, DomicilioPiso,
                 OtObservacionesResponsableEmision,
                 OtFechaPrevistaVisita,
-                OtRetiraCable,
-                OtRetiraOnu,
                 updatedBy: GetUserId(),
                 tareasOt
             });
@@ -151,7 +139,13 @@ const CaratulaOt = () => {
         {
             "name": "Precio de OT",
             "selector": row => "$ " + row["TareaPrecioOt"],
-        }
+            "omit": true
+        },
+        {
+            "name": "Observación (Seleccione uno)",
+            "selector": row =>
+            <OtObservacionesTarea tareasOt={tareasOt} setTareasOt={setTareasOt} tarea={row} editMode ={EditMode}/>
+        },
     ]
     const columnasOt = [
         {
@@ -257,12 +251,14 @@ const CaratulaOt = () => {
                                     value={abonadoOt}
                                     disableClearable
                                     onChange={(_event, newAbonado) => {
-                                        setCargando(true);
-                                        setTimeout(()=>{
-                                            traerAbonado(newAbonado.UserId);
-                                            setAbonadoOt(newAbonado);
-                                            setCargando(false);
-                                        }, 2000)
+                                        if(newAbonado){
+                                            setCargando(true);
+                                            setTimeout(()=>{
+                                                traerAbonado(newAbonado.UserId);
+                                                setAbonadoOt(newAbonado);
+                                                setCargando(false);
+                                            }, 2000)
+                                        }
                                     }}
                                     options={abonados}
                                     noOptionsText="No se encontraron abonados"
@@ -275,7 +271,7 @@ const CaratulaOt = () => {
                             <>
                             <Grid item xs={12} md={3} lg={3} xl={3}>
                                 <TextField
-                                    value={abonadoOt ? abonadoOt.DomicilioCalle + " " +  abonadoOt.DomicilioNumero : DomicilioCalle + " " + DomicilioNumero}
+                                    value={abonadoOt ? abonadoOt.DomicilioCalle + " " +  abonadoOt.DomicilioNumero :""}
                                     variant="outlined"
                                     fullWidth
                                     label="Domicilio completo"
@@ -293,7 +289,7 @@ const CaratulaOt = () => {
                             </Grid>
                             <Grid item xs={6} md={3} lg={3} xl={3}>
                                 <TextField
-                                    value={location.state ? location.state.MunicipioNombre : abonadoOt ? abonadoOt.BarrioNombre : ""}
+                                    value={location.state ? location.state.BarrioNombre : abonadoOt ? abonadoOt.BarrioNombre : ""}
                                     variant="outlined"
                                     fullWidth
                                     label="Barrio"
@@ -309,35 +305,50 @@ const CaratulaOt = () => {
                     <TabPanel>
                         <Card>
                             <CardContent>
-                                <Grid item xs={12} md={12} lg={12} xl={12}>
-                                    <Autocomplete
-                                    value={OtResponsableEjecucion}
-                                    onChange={(_event, newTecnico) => {
-                                        traerOrdenesDeTrabajoAsignadas(newTecnico.UserId, 5);
-                                        setOtResponsableEjecucion(newTecnico);
-                                    }}
-                                    options={usuarios}
-                                    noOptionsText="No se encontraron técnicos"
-                                    getOptionLabel={(option) => option.Nombre +", "+ option.Apellido}
-                                    renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth label="Técnico encargado de ejecución"/>}
-                                    />
-                                </Grid>
-                                <br/>
-                                { OtResponsableEjecucion !== null ?
-                                <Grid item xs={12} md={12} lg={12} xl={12}>
-                                    <Typography variant="h6">Órdenes de trabajo pendientes y asignadas a: {OtResponsableEjecucion.Nombre}, {OtResponsableEjecucion.Apellido}</Typography>
-                                    <br/>
-                                    <Card>
-                                        <CardContent>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} md={12} lg={6} xl={6}>
+                                        <Typography variant="h6">Seleccione un técnico</Typography>
+                                            <br/>
+                                            <Autocomplete
+                                            value={OtResponsableEjecucion}
+                                            onChange={(_event, newTecnico) => {
+                                                if(newTecnico) {
+                                                    traerOrdenesDeTrabajoAsignadas(newTecnico.UserId, 5);
+                                                    setOtResponsableEjecucion(newTecnico);
+                                                    setOtAuxiliarDeLinea(null);
+                                                }
+                                            }}
+                                            options={usuarios}
+                                            noOptionsText="No se encontraron técnicos"
+                                            getOptionLabel={(option) => option.Nombre +", "+ option.Apellido}
+                                            renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth/>}
+                                            />
+                                        <br/>
+                                        <Typography variant="h6">Seleccione un auxiliar de línea</Typography>
+                                            <br/>
+                                            <Autocomplete
+                                            value={OtAuxiliarDeLinea}
+                                            onChange={(_event, newTecnico) => {
+                                                if(newTecnico) setOtAuxiliarDeLinea(newTecnico);
+                                            }}
+                                            options={OtResponsableEjecucion ? usuarios.filter(u => u.UserId !== OtResponsableEjecucion.UserId) : []}
+                                            noOptionsText="No se encontraron técnicos"
+                                            getOptionLabel={(option) => option.Nombre +", "+ option.Apellido}
+                                            renderInput={(params) => <TextField {...params} variant ="outlined" fullWidth/>}
+                                            />
+                                    </Grid>
+                                    { OtResponsableEjecucion !== null ?
+                                    <Grid item xs={12} md={12} lg={6} xl={6}>
+                                        <Typography variant="h6">Órdenes de trabajo pendientes y asignadas a: {OtResponsableEjecucion.Nombre}, {OtResponsableEjecucion.Apellido}</Typography>
+                                        <br/>
                                         <Datatable
                                             loader
                                             datos={ordenesDeTrabajoAsignadas}
                                             columnas={columnasOt}>
                                         </Datatable>
-                                        </CardContent>
-                                    </Card>
+                                    </Grid>
+                                    : ""}
                                 </Grid>
-                                : ""}
                             </CardContent>
                         </Card>
                     </TabPanel>
@@ -345,15 +356,34 @@ const CaratulaOt = () => {
                         <Card>
                             <CardContent>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} md={12} lg={12} xl={12}>
-                                    <DataTable
-                                        columns={columnasTareas}
-                                        data={tareas}
-                                        onSelectedRowsChange={row => setTareasOt(row.selectedRows)}  
-                                        selectableRows
-                                        selectableRowSelected={row => tareasOt.find((tarea) => tarea.TareaId === row.TareaId)}>
-                                    </DataTable>
+                                    <Grid item xs={12} md={12} lg={6} xl={6}>
+                                        <Typography variant="h6">Seleccione una o más tareas</Typography>
+                                            <br/>
+                                            <Autocomplete
+                                            onChange={(_event, newTarea) => {
+                                                if(newTarea){
+                                                    setTareasOt(newTarea);
+                                                    setEditMode(false);
+                                                }
+                                            }}
+                                            disableCloseOnSelect
+                                            multiple={true}
+                                            options={tareas}
+                                            noOptionsText="No se encontraron tareas"
+                                            getOptionLabel={(option) => option.TareaNombre}
+                                            renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth/>}
+                                            />
                                     </Grid>
+                                    { tareasOt.length > 0 ?
+                                    <Grid item xs={12} md={12} lg={6} xl={6}>
+                                        <Typography variant="h6">Tareas de la OT</Typography>
+                                            <br/>
+                                            <Datatable
+                                                columnas={columnasTareas}
+                                                datos={tareasOt}>
+                                            </Datatable>
+                                    </Grid>
+                                    : ""}
                                 </Grid>
                                 {tareasOt.length > 0 && tareasOt.find((tareasOt => tareasOt.TareaId === 14 || tareasOt.TareaId === 15 )) ?
                                 <>
@@ -378,7 +408,7 @@ const CaratulaOt = () => {
                                         disableClearable
                                         value={barrio}
                                         onChange={(_event, nuevoBarrio) => {
-                                            setBarrio(nuevoBarrio);
+                                            if(nuevoBarrio) setBarrio(nuevoBarrio);
                                         }}
                                         options={barrios}
                                         noOptionsText="No se encontraron barrios"
@@ -427,19 +457,9 @@ const CaratulaOt = () => {
                                 </Grid>
                                 </>
                                 : ""}
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                    <FormControl>
-                                        <FormControlLabel label="Retira ONU" control={<Checkbox checked={OtRetiraOnu} onClick={handleChangeRetiraOnu}></Checkbox>}></FormControlLabel>
-                                        <FormControlLabel label="Retira Cable" control={<Checkbox checked={OtRetiraCable} onClick={handleChangeRetiraCable}></Checkbox>}></FormControlLabel>
-                                    </FormControl>
-                                    </Grid>
-                                </Grid>
                             </CardContent>
                         </Card>
                     </TabPanel>
-                    <br/>
-                    <Alert severity="info"><b>ACLARACIÓN:</b> EL NUEVO DOMICILIO ÚNICAMENTE SE DEBE LLENAR PARA <b>CAMBIO DE DOMICILIO</b> Y LOS CHECKBOX DE RETIRO UNICAMENTE PARA <b>DESCONEXIÓN</b></Alert>
                     <br/>
                     <div style={{textAlign: 'center', marginBottom: '1.5rem'}}>
                         <Button type="submit" startIcon={<i className={location.state ? "bx bx-edit":"bx bx-check"}></i>}

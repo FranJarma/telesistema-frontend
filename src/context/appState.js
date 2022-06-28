@@ -10,8 +10,6 @@ import tokenAuthHeaders from '../config/token';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import * as VARIABLES from './../types/variables';
-import FacturaCaratula from '../views/components/design/components/FacturaCaratula';
-import ReciboCaratula from '../views/components/design/components/ReciboCaratula';
 
 const AppState = props => {
     const initialState = {

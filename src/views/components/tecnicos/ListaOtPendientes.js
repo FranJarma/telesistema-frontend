@@ -15,8 +15,6 @@ import TooltipForTable from '../../../helpers/TooltipForTable';
 import DesdeHasta from '../../../helpers/DesdeHasta';
 import convertirAHora from '../../../helpers/ConvertirAHora';
 import GetUserId from './../../../helpers/GetUserId';
-import OtCaratula from '../design/components/OtCaratula';
-import { BlobProvider } from '@react-pdf/renderer';
 import Ot from '../design/components/Ot';
 
 const ListaOtPendientes = () => {
@@ -332,7 +330,7 @@ const ListaOtPendientes = () => {
                             <Autocomplete
                             value={Onu}
                             onChange={(_event, newOnu) => {
-                                setOnu(newOnu);
+                                if(newOnu) setOnu(newOnu);
                             }}
                             options={onus}
                             noOptionsText={"No hay ONUS disponibles"}

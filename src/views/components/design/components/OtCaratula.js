@@ -14,19 +14,19 @@ import convertirAFecha from './../../../../helpers/ConvertirAFecha';
 import convertirAHora from './../../../../helpers/ConvertirAHora';
 
 Font.register({
-  family: 'OpenSans',
-  src: OpenSans
+    family: 'OpenSans',
+    src: OpenSans
 });
 
 Font.register({
-  family: 'OpenSansBold',
-  src: OpenSansBold
+    family: 'OpenSansBold',
+    src: OpenSansBold
 });
 
 Font.register({
     family: 'OpenSansItalic',
     src: OpenSansItalic
-  });
+});
 
   const styles = StyleSheet.create({
     page: {
@@ -138,6 +138,12 @@ Font.register({
     arrow: {
         width: '60px',
         height: '35px'
+    },
+    x: {
+        fontSize: 8,
+        fontFamily: 'OpenSansItalic',
+        position: 'relative',
+        right: 13
     }
 }
 );
@@ -237,12 +243,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Cable coaxil</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 2 && t.OtTareaObservaciones === "Coaxil") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Fibra óptica</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 2 && t.OtTareaObservaciones === "Fibra") ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -261,12 +269,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Cable coaxil</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 3 && t.OtTareaObservaciones === "Coaxil") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Fibra óptica</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 3 && t.OtTareaObservaciones === "Fibra") ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -296,12 +306,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Onu simple</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 5 && t.OtTareaObservaciones === "Onu simple") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Onu combinada</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 5 && t.OtTareaObservaciones === "Onu combinada") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
@@ -337,12 +349,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Si</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 7 && t.OtTareaObservaciones === "Retira onu") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>No</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 7 && !t.OtTareaObservaciones) ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -369,12 +383,15 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Cable Coaxil</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> (t.TareaId === 7 && t.OtTareaObservaciones === "Coaxil") || (t.TareaId === 8 && t.OtTareaObservaciones === "Coaxil")) ? "x" : ""}</Text>
+
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Fibra óptica</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> (t.TareaId === 7 && t.OtTareaObservaciones === "Fibra") || (t.TareaId === 8 && t.OtTareaObservaciones === "Fibra")) ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -456,12 +473,15 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Si</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 16 && t.OtTareaObservaciones === "Retira cable") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>No</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 16 && !t.OtTareaObservaciones) ? "x" : ""}</Text>
+
                     </View>
                 </View>
             </View>
@@ -480,12 +500,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Si</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 17 && t.OtTareaObservaciones === "Retira onu") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>No</Text>
                         <View style={styles.checkBox}></View>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 17 && !t.OtTareaObservaciones) ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -509,7 +531,7 @@ const OtCaratula = ({tareas, data}) => (
                     <Text style={styles.h3}>Configuración de onu</Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.p}>{tareas.some((t)=> t.TareaId === 19) ? "x" : ""}</Text>
+                    <Text style={styles.p}>{tareas.some((t)=> t.TareaId === 20) ? "x" : ""}</Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
                     <Text style={styles.observaciones}>Observación:</Text>

@@ -331,7 +331,7 @@ const ListaMovimientos = () => {
                     disableClearable
                     value={MovimientoConcepto}
                     onChange={(_event, newConceptoId) => {
-                        setMovimientoConcepto(newConceptoId);
+                        if(newConceptoId) setMovimientoConcepto(newConceptoId);
                     }}
                     options={conceptos}
                     noOptionsText="No se encontraron conceptos"
@@ -438,11 +438,13 @@ const ListaMovimientos = () => {
                         <Autocomplete
                             disableClearable
                             onChange={(_event, newUser) => {
-                                setCajaInfo({
-                                    ...CajaInfo,
-                                    CajaRecibeUser: newUser,
-                                    CajaRecibeFullName: newUser.Apellido + ', ' + newUser.Nombre
-                                })
+                                if(newUser) {
+                                    setCajaInfo({
+                                        ...CajaInfo,
+                                        CajaRecibeUser: newUser,
+                                        CajaRecibeFullName: newUser.Apellido + ', ' + newUser.Nombre
+                                    })
+                                }
                             }}
                             value={CajaRecibeUser}
                             options={usuarios}

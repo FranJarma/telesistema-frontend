@@ -349,7 +349,7 @@ const CambioTitularidad = () => {
                         disableClearable
                         value={Barrio}
                         onChange={(_event, newBarrioId) => {
-                            setBarrio(newBarrioId);
+                            if (newBarrioId) setBarrio(newBarrioId);
                         }}
                         options={barrios}
                         noOptionsText="No se encontraron barrios"
