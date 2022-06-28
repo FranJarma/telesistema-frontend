@@ -75,6 +75,11 @@ const CaratulaOt = () => {
                 Apellido: location.state.ApellidoResponsableEjecucion,
                 UserId: location.state.OtResponsableEjecucion,
             });
+            setOtAuxiliarDeLinea({
+                Nombre: location.state.NombreAuxiliarDeLinea,
+                Apellido: location.state.ApellidoAuxiliarDeLinea,
+                UserId: location.state.OtAuxiliarDeLinea,
+            });
             traerOrdenesDeTrabajoAsignadas(location.state.OtResponsableEjecucion, 5);
         }
     },[])
@@ -107,7 +112,7 @@ const CaratulaOt = () => {
         if(!location.state) {
             crearOrdenDeTrabajo({
                 DomicilioCalle, DomicilioNumero, DomicilioPiso,
-                OtResponsableEjecucion,
+                OtResponsableEjecucion, OtAuxiliarDeLinea,
                 OtObservacionesResponsableEmision,
                 OtFechaPrevistaVisita,
                 createdBy: GetUserId(),
@@ -119,7 +124,7 @@ const CaratulaOt = () => {
         else {
             modificarOrdenDeTrabajo({
                 OtId, DomicilioCalle, DomicilioNumero, DomicilioPiso,
-                OtObservacionesResponsableEmision,
+                OtObservacionesResponsableEmision, OtResponsableEjecucion, OtAuxiliarDeLinea,
                 OtFechaPrevistaVisita,
                 updatedBy: GetUserId(),
                 tareasOt
@@ -238,7 +243,7 @@ const CaratulaOt = () => {
                                     label="Observaciones registro de OT">
                                     </TextField>
                                 </Grid>
-                            <Grid item xs={12} md={4} lg={4} xl={4}>
+                            <Grid item xs={12} md={6} lg={6} xl={6}>
                                 {location.state ?
                                 <TextField
                                 variant="outlined"
@@ -269,30 +274,12 @@ const CaratulaOt = () => {
                             </Grid>
                             {cargando ? <Grid item xs={12} md={3} lg={3} xl={3}>Buscando domicilio...<LinearProgress /></Grid> :
                             <>
-                            <Grid item xs={12} md={3} lg={3} xl={3}>
+                            <Grid item xs={12} md={6} lg={6} xl={6}>
                                 <TextField
-                                    value={abonadoOt ? abonadoOt.DomicilioCalle + " " +  abonadoOt.DomicilioNumero :""}
+                                    value={location.state ? location.state.DomicilioCalle +' '+ location.state.DomicilioNumero + " B° " + location.state.BarrioNombre + ', ' + location.state.MunicipioNombre : abonadoOt ? abonadoOt.DomicilioCalle : ""}
                                     variant="outlined"
                                     fullWidth
                                     label="Domicilio completo"
-                                >
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={6} md={2} lg={2} xl={2}>
-                                <TextField
-                                    value={location.state ? location.state.MunicipioNombre : abonadoOt ? abonadoOt.MunicipioNombre : ""}
-                                    variant="outlined"
-                                    fullWidth
-                                    label="Municipio"
-                                >
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={6} md={3} lg={3} xl={3}>
-                                <TextField
-                                    value={location.state ? location.state.BarrioNombre : abonadoOt ? abonadoOt.BarrioNombre : ""}
-                                    variant="outlined"
-                                    fullWidth
-                                    label="Barrio"
                                 >
                                 </TextField>
                             </Grid>
@@ -303,10 +290,10 @@ const CaratulaOt = () => {
                     </Card>
                     </TabPanel>
                     <TabPanel>
-                        <Card>
-                            <CardContent>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} md={12} lg={6} xl={6}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={6} md={6} lg={6} xl={6}>
+                                <Card>
+                                    <CardContent>
                                         <Typography variant="h6">Seleccione un técnico</Typography>
                                             <br/>
                                             <Autocomplete
@@ -324,7 +311,7 @@ const CaratulaOt = () => {
                                             renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth/>}
                                             />
                                         <br/>
-                                        <Typography variant="h6">Seleccione un auxiliar de línea</Typography>
+                                        <Typography variant="h6">Seleccione un auxiliar de línea si es necesario</Typography>
                                             <br/>
                                             <Autocomplete
                                             value={OtAuxiliarDeLinea}
@@ -336,129 +323,141 @@ const CaratulaOt = () => {
                                             getOptionLabel={(option) => option.Nombre +", "+ option.Apellido}
                                             renderInput={(params) => <TextField {...params} variant ="outlined" fullWidth/>}
                                             />
-                                    </Grid>
-                                    { OtResponsableEjecucion !== null ?
-                                    <Grid item xs={12} md={12} lg={6} xl={6}>
-                                        <Typography variant="h6">Órdenes de trabajo pendientes y asignadas a: {OtResponsableEjecucion.Nombre}, {OtResponsableEjecucion.Apellido}</Typography>
-                                        <br/>
-                                        <Datatable
-                                            loader
-                                            datos={ordenesDeTrabajoAsignadas}
-                                            columnas={columnasOt}>
-                                        </Datatable>
-                                    </Grid>
-                                    : ""}
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </TabPanel>
-                    <TabPanel>
-                        <Card>
-                            <CardContent>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} md={12} lg={6} xl={6}>
-                                        <Typography variant="h6">Seleccione una o más tareas</Typography>
-                                            <br/>
-                                            <Autocomplete
-                                            onChange={(_event, newTarea) => {
-                                                if(newTarea){
-                                                    setTareasOt(newTarea);
-                                                    setEditMode(false);
-                                                }
-                                            }}
-                                            disableCloseOnSelect
-                                            multiple={true}
-                                            options={tareas}
-                                            noOptionsText="No se encontraron tareas"
-                                            getOptionLabel={(option) => option.TareaNombre}
-                                            renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth/>}
-                                            />
-                                    </Grid>
-                                    { tareasOt.length > 0 ?
-                                    <Grid item xs={12} md={12} lg={6} xl={6}>
-                                        <Typography variant="h6">Tareas de la OT</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={6} md={6} lg={6} xl={6}>
+                                <Card>
+                                    <CardContent>
+                                        { OtResponsableEjecucion !== null ?
+                                        <>
+                                            <Typography variant="h6">Órdenes de trabajo pendientes y asignadas a: {OtResponsableEjecucion.Nombre}, {OtResponsableEjecucion.Apellido}</Typography>
                                             <br/>
                                             <Datatable
-                                                columnas={columnasTareas}
-                                                datos={tareasOt}>
+                                                loader
+                                                datos={ordenesDeTrabajoAsignadas}
+                                                columnas={columnasOt}>
                                             </Datatable>
-                                    </Grid>
-                                    : ""}
-                                </Grid>
-                                {tareasOt.length > 0 && tareasOt.find((tareasOt => tareasOt.TareaId === 14 || tareasOt.TareaId === 15 )) ?
-                                <>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} md={3} lg={3} xl={3}>
-                                        <TextField
-                                        variant = "outlined"
-                                        onChange={handleChangeMunicipioSeleccionado}
-                                        value={MunicipioId}
-                                        label="Municipio nuevo domicilio"
-                                        fullWidth
-                                        select
-                                        >
-                                        <MenuItem value="">-</MenuItem>
-                                        {municipios.length > 0 ? municipios.map((municipio)=>(
-                                            <MenuItem key={municipio.MunicipioId} value={municipio.MunicipioId}>{municipio.MunicipioNombre}</MenuItem>
-                                        )): <MenuItem disabled>No se encontraron municipios</MenuItem>}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} md={3} lg={3} xl={3}>
+                                        </>
+                                        : ""}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+                    </TabPanel>
+                    <TabPanel>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} md={12} lg={6} xl={6}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography variant="h6">Seleccione una o más tareas</Typography>
+                                        <br/>
                                         <Autocomplete
-                                        disableClearable
-                                        value={barrio}
-                                        onChange={(_event, nuevoBarrio) => {
-                                            if(nuevoBarrio) setBarrio(nuevoBarrio);
+                                        onChange={(_event, newTarea) => {
+                                            if(newTarea){
+                                                setTareasOt(newTarea);
+                                                setEditMode(false);
+                                            }
                                         }}
-                                        options={barrios}
-                                        noOptionsText="No se encontraron barrios"
-                                        getOptionLabel={(option) => option.BarrioNombre}
-                                        renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Barrio nuevo domicilio"/>}
+                                        disableCloseOnSelect
+                                        multiple={true}
+                                        options={tareas}
+                                        noOptionsText="No se encontraron tareas"
+                                        getOptionLabel={(option) => option.TareaNombre}
+                                        renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth/>}
                                         />
-                                    </Grid>
-                                    <Grid item xs={12} md={3} lg={3} xl={3}>
-                                        <TextField
-                                        variant = "outlined"
-                                        value={DomicilioCalle}
-                                        name="DomicilioCalle"
-                                        onChange={onInputChange}
-                                        fullWidth
-                                        label="Calle nuevo domicilio">
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} md={2} lg={2} xl={2}>
-                                        <TextField
-                                        variant = "outlined"
-                                        value={DomicilioNumero}
-                                        name="DomicilioNumero"
-                                        onChange={onInputChange}
-                                        onKeyPress={(e) => {
-                                            if (!/[0-9]/.test(e.key)) {
-                                            e.preventDefault();
-                                            }}}
-                                        fullWidth
-                                        label="Número nuevo domicilio">
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} md={1} lg={1} xl={1}>
-                                        <TextField
-                                        variant = "outlined"
-                                        value={DomicilioPiso}
-                                        name="DomicilioPiso"
-                                        onChange={onInputChange}
-                                        onKeyPress={(e) => {
-                                            if (!/[0-9]/.test(e.key)) {
-                                            e.preventDefault();
-                                            }}}
-                                        fullWidth
-                                        label="Piso nuevo domicilio">
-                                        </TextField>
-                                    </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} md={12} lg={6} xl={6}>
+                                <Card>
+                                    <CardContent>
+                                        { tareasOt.length > 0 ?
+                                        <Grid item xs={12} md={12} lg={12} xl={12}>
+                                            <Typography variant="h6">Tareas de la OT</Typography>
+                                                <br/>
+                                                <Datatable
+                                                    columnas={columnasTareas}
+                                                    datos={tareasOt}>
+                                                </Datatable>
+                                        </Grid>
+                                        : ""}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            {tareasOt.length > 0 && tareasOt.find((tareasOt => tareasOt.TareaId === 14 || tareasOt.TareaId === 15 )) ?
+                            <>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} md={3} lg={3} xl={3}>
+                                    <TextField
+                                    variant = "outlined"
+                                    onChange={handleChangeMunicipioSeleccionado}
+                                    value={MunicipioId}
+                                    label="Municipio nuevo domicilio"
+                                    fullWidth
+                                    select
+                                    >
+                                    <MenuItem value="">-</MenuItem>
+                                    {municipios.length > 0 ? municipios.map((municipio)=>(
+                                        <MenuItem key={municipio.MunicipioId} value={municipio.MunicipioId}>{municipio.MunicipioNombre}</MenuItem>
+                                    )): <MenuItem disabled>No se encontraron municipios</MenuItem>}
+                                    </TextField>
                                 </Grid>
-                                </>
-                                : ""}
-                            </CardContent>
-                        </Card>
+                                <Grid item xs={12} md={3} lg={3} xl={3}>
+                                    <Autocomplete
+                                    disableClearable
+                                    value={barrio}
+                                    onChange={(_event, nuevoBarrio) => {
+                                        if(nuevoBarrio) setBarrio(nuevoBarrio);
+                                    }}
+                                    options={barrios}
+                                    noOptionsText="No se encontraron barrios"
+                                    getOptionLabel={(option) => option.BarrioNombre}
+                                    renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Barrio nuevo domicilio"/>}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={3} lg={3} xl={3}>
+                                    <TextField
+                                    variant = "outlined"
+                                    value={DomicilioCalle}
+                                    name="DomicilioCalle"
+                                    onChange={onInputChange}
+                                    fullWidth
+                                    label="Calle nuevo domicilio">
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} md={2} lg={2} xl={2}>
+                                    <TextField
+                                    variant = "outlined"
+                                    value={DomicilioNumero}
+                                    name="DomicilioNumero"
+                                    onChange={onInputChange}
+                                    onKeyPress={(e) => {
+                                        if (!/[0-9]/.test(e.key)) {
+                                        e.preventDefault();
+                                        }}}
+                                    fullWidth
+                                    label="Número nuevo domicilio">
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} md={1} lg={1} xl={1}>
+                                    <TextField
+                                    variant = "outlined"
+                                    value={DomicilioPiso}
+                                    name="DomicilioPiso"
+                                    onChange={onInputChange}
+                                    onKeyPress={(e) => {
+                                        if (!/[0-9]/.test(e.key)) {
+                                        e.preventDefault();
+                                        }}}
+                                    fullWidth
+                                    label="Piso nuevo domicilio">
+                                    </TextField>
+                                </Grid>
+                            </Grid>
+                            </>
+                            : ""}
+                        </Grid>
                     </TabPanel>
                     <br/>
                     <div style={{textAlign: 'center', marginBottom: '1.5rem'}}>
