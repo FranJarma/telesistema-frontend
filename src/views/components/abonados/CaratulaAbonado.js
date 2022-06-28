@@ -15,6 +15,7 @@ import * as VARIABLES from './../../../types/variables';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
 import ComprobanteButton from '../design/components/ComprobanteButton';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const CaratulaAbonado = () => {
     const appContext = useContext(AppContext);
@@ -283,10 +284,7 @@ const CaratulaAbonado = () => {
                             <TextField
                             onChange={onInputChange}
                             value={Documento}
-                            onKeyPress={(e) => {
-                            if (!/^[,0-9]+$/.test(e.key)) {
-                                e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             variant="outlined"
                             name="Documento"
                             fullWidth
@@ -298,10 +296,7 @@ const CaratulaAbonado = () => {
                             <TextField
                             onChange={onInputChange}
                             value={Cuit}
-                            onKeyPress={(e) => {
-                                if (!/^[,0-9]+$/.test(e.key)) {
-                                    e.preventDefault();
-                                }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             variant="outlined"
                             name="Cuit"
                             fullWidth
@@ -352,10 +347,7 @@ const CaratulaAbonado = () => {
                             value={Telefono}
                             name="Telefono"
                             onChange={onInputChange}
-                            onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                            e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             fullWidth
                             label="N° Teléfono">
                             </TextField>
@@ -426,10 +418,7 @@ const CaratulaAbonado = () => {
                         value={DomicilioNumero}
                         name="DomicilioNumero"
                         onChange={onInputChange}
-                        onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault();
-                        }}}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
                         fullWidth
                         label="Número">
                         </TextField>
@@ -440,10 +429,7 @@ const CaratulaAbonado = () => {
                         value={DomicilioPiso}
                         name="DomicilioPiso"
                         onChange={onInputChange}
-                        onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault();
-                        }}}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
                         fullWidth
                         label="Piso">
                         </TextField>

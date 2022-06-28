@@ -6,6 +6,7 @@ import { Button, Card, CardContent, Grid, TextField, Typography} from '@material
 import { useLocation } from 'react-router-dom';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const PerfilUser = () => {
     const appContext = useContext(AppContext);
@@ -105,10 +106,8 @@ const PerfilUser = () => {
                     onChange={onInputChange}
                     fullWidth
                     label="DNI"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}>
+                    onKeyPress={(e) => {onlyNumbers(e)}}
+                    >
                     </TextField>
                 </Grid>
                 <Grid item xs={12} md={4} lg={4} xl={4}>
@@ -128,10 +127,7 @@ const PerfilUser = () => {
                     value={Telefono}
                     name="Telefono"
                     onChange={onInputChange}
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     fullWidth
                     label="N° Teléfono">
                     </TextField>

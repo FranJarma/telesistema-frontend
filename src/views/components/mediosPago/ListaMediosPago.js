@@ -8,6 +8,7 @@ import AppContext from '../../../context/appContext';
 import { Alert } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaMediosPago = () => {
     const appContext = useContext(AppContext);
@@ -145,10 +146,7 @@ const ListaMediosPago = () => {
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                        if (!/^[.0-9]+$/.test(e.key)) {
-                            e.preventDefault();
-                        }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Cantidad de cuotas"
                     fullWidth
@@ -160,10 +158,7 @@ const ListaMediosPago = () => {
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                        if (!/^[.0-9]+$/.test(e.key)) {
-                            e.preventDefault();
-                        }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Interés del Medio de Pago"
                     fullWidth

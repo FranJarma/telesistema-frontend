@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, CardHeader, Grid, List, ListItem, MenuItem, TextField, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, List, ListItem, MenuItem, TextField, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
@@ -16,12 +16,13 @@ import DesdeHasta from '../../../helpers/DesdeHasta';
 import convertirAHora from '../../../helpers/ConvertirAHora';
 import GetUserId from './../../../helpers/GetUserId';
 import Ot from '../design/components/Ot';
+import onlyNumbers from './../../../helpers/OnlyNumbers';
 
 const ListaOtPendientes = () => {
     const appContext = useContext(AppContext);
     const { ordenesDeTrabajo, onus, tareasOrdenDeTrabajo, traerOrdenesDeTrabajo,
         traerTareasOt, registrarVisitaOrdenDeTrabajo,
-        finalizarOrdenDeTrabajo, traerOnus, descargando, descargarComprobante} = appContext;
+        finalizarOrdenDeTrabajo, traerOnus} = appContext;
 
     useEffect(()=>{
         traerOrdenesDeTrabajo(5);
@@ -33,12 +34,30 @@ const ListaOtPendientes = () => {
     const [ModalFinalizarOt, setModalFinalizarOt] = useState(false);
     const [ModalEliminarOt, setModalEliminarOt] = useState(false);
 
-    const [OtInfo, setOtInfo] = useState({})
+    const [OtInfo, setOtInfo] = useState({
+        OtSeñalDeLuz: null,
+        OtSeñalDeInternet: null,
+        OtVelocidad: null,
+        OtObservacionesResponsableEjecucion: null
+    })
 
-    const [OtObservacionesResponsableEjecucion, setOtObservacionesResponsableEjecucion] = useState("");
-    const [FechaVisita, setFechaVisita] = useState(new Date());
+    const {OtSeñalDeLuz, OtSeñalDeInternet, OtVelocidad, OtObservacionesResponsableEjecucion} = OtInfo;
+
+    const onInputChange = e => {
+        setOtInfo({
+            ...OtInfo,
+            [e.target.name] : e.target.value
+        })
+    }
+
+    const [OtSeVerificoSeñal, setOtSeVerificoSeñal] = useState(false);
+    const handleChangeSeVerificoSeñal = () => {
+        setOtSeVerificoSeñal(!OtSeVerificoSeñal);
+    }
     const [OtFechaInicio, setOtFechaInicio] = useState(new Date());
     const [OtFechaFinalizacion, setOtFechaFinalizacion] = useState(new Date());
+
+    const [FechaVisita, setFechaVisita] = useState(new Date());
     const [Onu, setOnu] = useState(null);
     
     const [FiltrosFecha, setFiltrosFecha] = useState({
@@ -46,9 +65,6 @@ const ListaOtPendientes = () => {
         Hasta: new Date()
     });
     const {Desde, Hasta} = FiltrosFecha;
-    const onInputChange = (e) => {
-        setOtObservacionesResponsableEjecucion(e.target.value);
-    }
 
     const handleChangeModalImprimirOt = (data = '') => {
         if(!ModalImprimirOt) {
@@ -66,7 +82,6 @@ const ListaOtPendientes = () => {
             OtPrimeraVisita: data.OtPrimeraVisita,
             OtSegundaVisita: data.OtSegundaVisita,
             OtTerceraVisita: data.OtTerceraVisita,
-            OtCuartaVisita: data.OtCuartaVisita
         });
             setModalRegistrarVisitaOt(true);
         }
@@ -168,18 +183,7 @@ const ListaOtPendientes = () => {
                     <Typography onClick={()=>{handleChangeModalFinalizarOt(data)}} style={{color: "navy", cursor: 'pointer'}}><i className='bx bx-calendar-check bx-xs' ></i> Finalizar OT</Typography>
                 </MenuItem>
                 <MenuItem>
-                {/* <BlobProvider document={<OtCaratula data={data}/>}>
-                {({ url, blob, loading }) => {
-                    console.log("d", url, blob, loading);
-                    return (
-                      <a href={url} target="_blank">
-                        View as PDF
-                      </a>
-                    );
-                  }}
-                    </BlobProvider> */}
                 <Ot data={data}/>
-                {/* <Typography onClick={()=>{descargarComprobante("Ot", <OtCaratula data={data}/>, data)}} style={{color: "navy", cursor: 'pointer'}}><i className="bx bxs-file-pdf bx-xs"></i> Descargar Pdf</Typography> */}
                 </MenuItem>
                 </>
             }/>
@@ -283,7 +287,6 @@ const ListaOtPendientes = () => {
                 <ListItem>{OtInfo.OtPrimeraVisita ? convertirAFecha(OtInfo.OtPrimeraVisita) +"-"+ convertirAHora(OtInfo.OtPrimeraVisita) : "-"}</ListItem>
                 <ListItem>{OtInfo.OtSegundaVisita ? convertirAFecha(OtInfo.OtSegundaVisita) +"-"+ convertirAHora(OtInfo.OtSegundaVisita) : "-"}</ListItem>
                 <ListItem>{OtInfo.OtTerceraVisita ? convertirAFecha(OtInfo.OtTerceraVisita) +"-"+ convertirAHora(OtInfo.OtTerceraVisita) : "-"}</ListItem>
-                <ListItem>{OtInfo.OtCuartaVisita ? convertirAFecha(OtInfo.OtCuartaVisita) +"-"+ convertirAHora(OtInfo.OtCuartaVisita) : "-"}</ListItem>
             </List>
             {OtInfo.OtTerceraVisita ? <Alert severity="info">La OT ya tiene 3 visitas realizadas por el técnico, se tiene que cobrar un monto adicional que se actualizará al monto de la OT</Alert> : ""}
             </>}
@@ -293,8 +296,8 @@ const ListaOtPendientes = () => {
             funcionCerrar={handleChangeModalFinalizarOt}
             titulo ={<Typography variant="h2"><i className="bx bx-calendar-check"></i> Finalizar OT</Typography>}
             botones={<><Button variant='contained' color="primary"
-            onClick={() =>finalizarOrdenDeTrabajo({...OtInfo, OtFechaInicio, OtFechaFinalizacion, OtObservacionesResponsableEjecucion, updatedBy: GetUserId(), Onu},
-            handleChangeModalFinalizarOt)}>Registrar</Button><Button variant="text" color="inherit" onClick={handleChangeModalFinalizarOt}>Cancelar</Button></>}
+            onClick={() =>finalizarOrdenDeTrabajo({...OtInfo, OtSeVerificoSeñal, OtFechaInicio, OtFechaFinalizacion, updatedBy: GetUserId(), Onu},
+            handleChangeModalFinalizarOt)}>Finalizar OT</Button><Button variant="text" color="inherit" onClick={handleChangeModalFinalizarOt}>Cancelar</Button></>}
             formulario={
                 <>
                 <Grid container spacing={3}>
@@ -302,6 +305,8 @@ const ListaOtPendientes = () => {
                     {OtInfo.OtEsPrimeraBajada && tareasOrdenDeTrabajo.length > 0 && tareasOrdenDeTrabajo.find((tareasOt => tareasOt.TareaId === 1 || tareasOt.TareaId === 5 )) ?
                     <><Alert severity='info'>Al finalizar esta órden de trabajo el abonado: <b>{OtInfo.ApellidoAbonado}, {OtInfo.NombreAbonado}</b> pasará a estar <b>Activo</b></Alert><br/></>
                     : ""}
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={6} xl={6}>
                         <DateTimePicker
                         disableToolbar
                         ampm={false}
@@ -313,7 +318,7 @@ const ListaOtPendientes = () => {
                         label="Fecha y hora de inicio"
                         ></DateTimePicker>
                     </Grid>
-                    <Grid item xs={12} md={12} lg={12} xl={12}>
+                    <Grid item xs={12} md={6} lg={6} xl={6}>
                         <DateTimePicker
                         disableToolbar
                         ampm={false}
@@ -324,6 +329,39 @@ const ListaOtPendientes = () => {
                         fullWidth
                         label="Fecha y hora de finalización"
                         ></DateTimePicker>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                        <TextField
+                        variant = "outlined"
+                        value={OtSeñalDeLuz}
+                        name="OtSeñalDeLuz"
+                        onChange={onInputChange}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
+                        fullWidth
+                        label="Señal de luz (dBm)">
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                        <TextField
+                        variant = "outlined"
+                        value={OtSeñalDeInternet}
+                        name="OtSeñalDeInternet"
+                        onChange={onInputChange}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
+                        fullWidth
+                        label="Señal de internet (dBm)">
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={4} xl={4}>
+                        <TextField
+                        variant = "outlined"
+                        value={OtVelocidad}
+                        name="OtVelocidad"
+                        onChange={onInputChange}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
+                        fullWidth
+                        label="Velocidad (mb)">
+                        </TextField>
                     </Grid>
                     {(OtInfo.ServicioViejoId !== 1)||(OtInfo.ServicioNuevoId && OtInfo.ServicioNuevoId !== 1) ?
                         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -356,6 +394,11 @@ const ListaOtPendientes = () => {
                         label="Observaciones">
                         </TextField>
                     </Grid>
+                </Grid>
+                <Grid item xs={12} md={12} lg={12} xl={12}>
+                    <FormGroup>
+                        <FormControlLabel control={<Checkbox color="primary" onChange={handleChangeSeVerificoSeñal} value={OtSeVerificoSeñal} checked={OtSeVerificoSeñal}></Checkbox>} label="¿Se verificó señal?"></FormControlLabel>
+                    </FormGroup>
                 </Grid>
                 <Typography variant="h2">Total: ${OtInfo.Monto}</Typography>
                 </>}

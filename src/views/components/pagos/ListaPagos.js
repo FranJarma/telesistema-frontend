@@ -17,6 +17,7 @@ import Factura from '../design/components/Factura';
 import Recibo from '../design/components/Recibo';
 import GetUserId from './../../../helpers/GetUserId';
 import ComprobanteButton from '../design/components/ComprobanteButton';
+import onlyNumbers from './../../../helpers/OnlyNumbers';
 
 const ListaPagos = () => {
     const appContext = useContext(AppContext);
@@ -489,10 +490,7 @@ const ListaPagos = () => {
                         variant={MedioPagoId === VARIABLES.ID_MEDIO_PAGO_EFECTIVO ? "outlined" : "filled"}
                         label="Total ($)"
                         value={DetallePagoMonto}
-                        onKeyPress={(e) => {
-                            if (!/^[,0-9]+$/.test(e.key)) {
-                                e.preventDefault();
-                        }}}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
                         inputProps={{
                             maxLength: 4
                         }}
@@ -572,10 +570,7 @@ const ListaPagos = () => {
                     </Alert>
                     <br/>
                     <TextField
-                        onKeyPress={(e) => {
-                        if (!/^[,0-9]+$/.test(e.key)) {
-                            e.preventDefault();
-                        }}}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
                         name="PagoRecargo"
                         fullWidth
                         variant="outlined"

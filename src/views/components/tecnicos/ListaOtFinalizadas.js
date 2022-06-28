@@ -1,14 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Card, CardContent, Tooltip, Typography } from '@material-ui/core';
+import React, { useContext, useEffect } from 'react';
+import { Card, CardContent, MenuItem, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
-import Modal from '../design/components/Modal';
 import AppContext from '../../../context/appContext';
-import CaratulaImpresionOt from './CaratulaImpresionOt';
 import convertirAFecha from './../../../helpers/ConvertirAFecha';
 import convertirAHora from './../../../helpers/ConvertirAHora';
 import TooltipForTable from './../../../helpers/TooltipForTable';
+import Ot from '../design/components/Ot';
+import BotonesDatatable from '../design/components/BotonesDatatable';
 
 const ListaOtFinalizadas = () => {
     const appContext = useContext(AppContext);
@@ -17,21 +17,6 @@ const ListaOtFinalizadas = () => {
     useEffect(()=>{
         traerOrdenesDeTrabajo(6);
     },[])
-
-    const [ModalImprimirOt, setModalImprimirOt] = useState(false);
-
-    const [OtInfo, setOtInfo] = useState({})
-
-    const handleChangeModalImprimirOt = (data = '') => {
-        if(!ModalImprimirOt) {
-            setOtInfo(data);
-            setModalImprimirOt(true);
-        }
-        else {
-            setOtInfo('');
-            setModalImprimirOt(false);
-        }
-    }
 
     const columnasOt = [
         {
@@ -49,7 +34,7 @@ const ListaOtFinalizadas = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + ', ' + row["DomicilioNumero"] + ' | ' +  "Barrio " + row["BarrioNombre"] + ' | ' +  row["MunicipioNombre"],
+            "selector": row => row["DomicilioCalle"] + " " + row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"],
         },
         {
             "name": <TooltipForTable name ="Fecha y hora de inicio"/> ,
@@ -72,7 +57,13 @@ const ListaOtFinalizadas = () => {
         {
             cell: (data) => 
             <>
-            <Typography onClick={()=>{handleChangeModalImprimirOt(data)}} style={{color: "orange", cursor: 'pointer'}}><Tooltip title="Descargar pdf"><i className="bx bxs-file-pdf"></i></Tooltip></Typography>
+            <BotonesDatatable botones={
+                <>
+                <MenuItem>
+                    <Ot data={data}/>
+                </MenuItem>
+                </>
+            }/>
             </>,
         }
     ]
@@ -94,11 +85,6 @@ const ListaOtFinalizadas = () => {
                 />
             </CardContent>
         </Card>
-            <Modal
-            abrirModal={ModalImprimirOt}
-            funcionCerrar={handleChangeModalImprimirOt}
-            formulario={<CaratulaImpresionOt datos={OtInfo}/>}
-            ></Modal>
         </main>
         <Footer/>
         </div>

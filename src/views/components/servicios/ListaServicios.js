@@ -8,6 +8,7 @@ import AppContext from '../../../context/appContext';
 import { Alert } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaServicios = () => {
     const appContext = useContext(AppContext);
@@ -158,10 +159,7 @@ const ListaServicios = () => {
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Precio Unitario"
                     fullWidth
@@ -173,10 +171,7 @@ const ListaServicios = () => {
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Costo de Inscripción"
                     fullWidth
@@ -188,10 +183,7 @@ const ListaServicios = () => {
                 <Grid item xs={12} md={6} sm={6} xl={6}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Multiplicador de 1er mes"
                     fullWidth
@@ -203,10 +195,7 @@ const ListaServicios = () => {
                 <Grid item xs={12} md={6} sm={6} xl={6}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     inputProps={{ maxLength: 3 }}
                     variant="outlined"
                     label="Bonificación por 6 meses de pago(%)"

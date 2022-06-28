@@ -8,6 +8,7 @@ import AppContext from '../../../context/appContext';
 import { Alert } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaTiposTareas = () => {
     const appContext = useContext(AppContext);
@@ -146,10 +147,7 @@ const ListaTiposTareas = () => {
                 <Grid item xs={6} md={6} sm={6} xl={6}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Precio Unitario"
                     fullWidth
@@ -161,10 +159,7 @@ const ListaTiposTareas = () => {
                 <Grid item xs={6} md={6} sm={6} xl={6}>
                     <TextField
                     color="primary"
-                    onKeyPress={(e) => {
-                    if (!/[0-9]/.test(e.key)) {
-                    e.preventDefault();
-                    }}}
+                    onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
                     label="Precio OT"
                     fullWidth

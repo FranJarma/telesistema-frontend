@@ -685,13 +685,14 @@ const AppState = props => {
         try {
             mostrarSpinnerDescarga();
             const blob = await pdf(caratula).toBlob();
-            if(tipo === "Factura") saveAs(blob, data.FacturaCodigoAutorizacion)
-            if(tipo === "Recibo") saveAs(blob, `Recibo N°:${data.ReciboId}-CUIT:${data.Cuit}`);
-            if(tipo === "Ot") saveAs(blob, `Ot N°:${data.OtId}-Abonado:${data.AbonadoNumero}`);
+            if(tipo === "Factura") saveAs(blob, `Factura-N°CAE:${data.FacturaCodigoAutorizacion}-Abonado:${data.AbonadoNumero}`)
+            if(tipo === "Recibo") saveAs(blob, `Recibo-N°:${data.ReciboId}-Abonado:${data.AbonadoNumero}`);
+            if(tipo === "Ot") saveAs(blob, `OT-N°:${data.OtId}-Abonado:${data.AbonadoNumero}`);
             dispatch({
                 type: TYPES.DESCARGAR_COMPROBANTE
             })
         } catch (error) {
+            console.log(error);
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }

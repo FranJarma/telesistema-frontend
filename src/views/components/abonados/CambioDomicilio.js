@@ -17,6 +17,7 @@ import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
 import ComprobanteButton from '../design/components/ComprobanteButton';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const CambioDomicilio = () => {
     const appContext = useContext(AppContext);
@@ -315,10 +316,7 @@ const CambioDomicilio = () => {
                     </Grid>
                     <Grid item xs={12} md={3} lg={3} xl={3}>
                         <TextField
-                        onKeyPress={(event) => {
-                            if (!/[0-9]/.test(event.key)) {
-                            event.preventDefault();
-                        }}}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
                         variant = "outlined"
                         value={DomicilioNumero}
                         name="DomicilioNumero"
@@ -329,10 +327,7 @@ const CambioDomicilio = () => {
                     </Grid>
                     <Grid item xs={12} md={3} lg={3} xl={3}>
                         <TextField
-                        onKeyPress={(event) => {
-                            if (!/[0-9]/.test(event.key)) {
-                            event.preventDefault();
-                        }}}
+                        onKeyPress={(e) => {onlyNumbers(e)}}
                         variant = "outlined"
                         value={DomicilioPiso}
                         name="DomicilioPiso"

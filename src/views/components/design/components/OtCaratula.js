@@ -128,8 +128,9 @@ Font.register({
     },
     verificoSeñal: {
         backgroundColor: "white",
-        textAlign: 'center',
-        paddingRight: 36,
+        paddingLeft: 5,
+        paddingRight: 15,
+        left: 10,
         position: 'absolute',
         zIndex: 1,
         bottom: 3,
@@ -560,10 +561,25 @@ const OtCaratula = ({tareas, data}) => (
                     <Text style={styles.h3}>Fecha de realización:</Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && !data.OtSegundaVisita && !data.OtTerceraVisita?
+                            convertirAFecha(data.OtFechaFinalizacion)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && data.OtSegundaVisita && !data.OtTerceraVisita?
+                            convertirAFecha(data.OtFechaFinalizacion)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && data.OtSegundaVisita && data.OtTerceraVisita ?
+                            convertirAFecha(data.OtFechaFinalizacion)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
                     <View style={styles.verificoSeñal}>
@@ -571,10 +587,23 @@ const OtCaratula = ({tareas, data}) => (
                             ¿Se verificó señal?
                         </Text>
                         <View style={styles.flexRowNoBorder}>
-                            <Text style={styles.label}>Si</Text>
-                            <View style={styles.checkBox}></View>
-                            <Text style={styles.label}>No</Text>
-                            <View style={styles.checkBox}></View>
+                            {data.OtSeVerificoSeñal === 1 ?
+                            <>
+                                <Text style={styles.label}>Si</Text>
+                                <View style={styles.checkBox}></View>
+                                <Text style={styles.x}>x</Text>
+                                <Text style={styles.label}>No</Text>
+                                <View style={styles.checkBox}></View>
+                            </>
+                            :
+                            <>
+                                <Text style={styles.label}>Si</Text>
+                                <View style={styles.checkBox}></View>
+                                <Text style={styles.label}>No</Text>
+                                <View style={styles.checkBox}></View>
+                                <Text style={styles.x}>x</Text>
+                            </>
+                            }
                         </View>
                     </View>
                 </View>
@@ -585,13 +614,25 @@ const OtCaratula = ({tareas, data}) => (
                     <Text style={styles.h3}>Hora de inicio:</Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}></Text>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && !data.OtSegundaVisita && !data.OtTerceraVisita?
+                            convertirAHora(data.OtFechaInicio)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}></Text>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && data.OtSegundaVisita && !data.OtTerceraVisita?
+                            convertirAHora(data.OtFechaInicio)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}></Text>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && data.OtSegundaVisita && data.OtTerceraVisita ?
+                            convertirAHora(data.OtFechaInicio)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}></View>
             </View>
@@ -601,34 +642,46 @@ const OtCaratula = ({tareas, data}) => (
                     <Text style={styles.h3}>Hora de finalización:</Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}></Text>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && !data.OtSegundaVisita && !data.OtTerceraVisita ?
+                            convertirAHora(data.OtFechaFinalizacion)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}></Text>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && data.OtSegundaVisita && !data.OtTerceraVisita ?
+                            convertirAHora(data.OtFechaFinalizacion)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}></Text>
+                    <Text style={styles.h4}>
+                        {data.OtPrimeraVisita && data.OtSegundaVisita && data.OtTerceraVisita ?
+                            convertirAHora(data.OtFechaFinalizacion)
+                        : ""}
+                    </Text>
                 </View>
                 <View style={styles.flexColumnBorderLeft}></View>
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Responsable de ejecución: <Text style={styles.h4}>{data.ApellidoResponsableEjecucion}, {data.NombreResponsableEjecucion}</Text></Text>            
+                <Text style={styles.h3}>Responsable de ejecución: <Text style={styles.h4}>{data.ApellidoResponsableEjecucion +', '+data.NombreResponsableEjecucion}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Auxiliar de línea: <Text style={styles.h4}>Marta Gonzales</Text></Text>            
+                <Text style={styles.h3}>Auxiliar de línea: <Text style={styles.h4}>{data.OtAuxiliarDeLinea ? data.ApellidoAuxiliarDeLinea +', ' + data.NombreAuxiliarDeLinea : '-'}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>
                 <View style={styles.flexColumn}>
-                    <Text style={styles.h3}>Señal de luz (dbm): <Text style={styles.h4}>10</Text></Text>            
+                    <Text style={styles.h3}>Señal de luz (dbm): <Text style={styles.h4}>{data.OtSeñalDeLuz ? data.OtSeñalDeLuz : "-"}</Text></Text>            
                 </View>
                 <View style={styles.flexColumn}>
-                    <Text style={styles.h3}>Señal de internet (dbm): <Text style={styles.h4}>5</Text></Text>            
+                    <Text style={styles.h3}>Señal de internet (dbm): <Text style={styles.h4}>{data.OtSeñalDeInternet ? data.OtSeñalDeInternet : "-"}</Text></Text>            
                 </View>
                 <View style={styles.flexColumn}>
-                    <Text style={styles.h3}>Velocidad (mb): <Text style={styles.h4}>2</Text></Text>            
+                    <Text style={styles.h3}>Velocidad (mb): <Text style={styles.h4}>{data.OtVelocidad ? data.OtVelocidad : "-"}</Text></Text>            
                 </View>
             </View>
 
@@ -637,7 +690,6 @@ const OtCaratula = ({tareas, data}) => (
                     <Text style={styles.h3}>Observaciones: <Text style={styles.h4}></Text></Text>     
                 </View>      
             </View>
-
         </View>
 
     </Page>

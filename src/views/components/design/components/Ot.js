@@ -15,8 +15,8 @@ const Ot = ({data}) => {
 
   return (
     <>
-      <Typography style={{color: 'navy'}} onClick={() => descargarComprobante("Ot", <OtCaratula tareas={tareasOrdenDeTrabajo} data={data}/>, data)}>
-      <i style={{color: "navy"}} className={!descargando ? 'bx bx-file bx-xs' : 'bx bx-loader bx-spin'}>
+      <Typography style={{color: 'navy', cursor: 'pointer'}} onClick={() => descargarComprobante("Ot", <OtCaratula tareas={tareasOrdenDeTrabajo} data={data}/>, data)}>
+      <i style={{color: "navy", cursor: 'pointer'}} className={!descargando ? 'bx bx-file bx-xs' : 'bx bx-loader bx-spin'}>
       </i>
       {!descargando ? " Descargar orden de trabajo" : "Espere por favor..."}
       </Typography>

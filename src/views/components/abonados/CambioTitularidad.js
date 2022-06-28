@@ -10,6 +10,7 @@ import { Alert, Autocomplete } from '@material-ui/lab';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const CambioTitularidad = () => {
     const appContext = useContext(AppContext);
@@ -272,10 +273,7 @@ const CambioTitularidad = () => {
                                 value={Telefono}
                                 name="Telefono"
                                 onChange={onInputChange}
-                                onKeyPress={(e) => {
-                                if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault();
-                                }}}
+                                onKeyPress={(e) => {onlyNumbers(e)}}
                                 fullWidth
                                 label="N° Teléfono">
                                 </TextField>
@@ -375,10 +373,7 @@ const CambioTitularidad = () => {
                             value={DomicilioNumero}
                             name="DomicilioNumero"
                             onChange={onInputChange}
-                            onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                            e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             fullWidth
                             label="Número">
                             </TextField>
@@ -390,10 +385,7 @@ const CambioTitularidad = () => {
                             value={DomicilioPiso}
                             name="DomicilioPiso"
                             onChange={onInputChange}
-                            onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                            e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             fullWidth
                             label="Piso">
                             </TextField>

@@ -15,6 +15,7 @@ import * as VARIABLES from './../../../types/variables';
 import Spinner from '../design/components/Spinner';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaMovimientos = () => {
     const appContext = useContext(AppContext);
@@ -341,10 +342,7 @@ const ListaMovimientos = () => {
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
                 <TextField
-                onKeyPress={(e) => {
-                    if (!/^[0-9]*$/.test(e.key)) {
-                    e.preventDefault();
-                }}}
+                onKeyPress={(e) => {onlyNumbers(e)}}
                 inputProps={{
                     maxLength: 8
                 }}
@@ -359,10 +357,7 @@ const ListaMovimientos = () => {
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
                 <TextField
-                onKeyPress={(e) => {
-                    if (!/^[0-9]*$/.test(e.key)) {
-                    e.preventDefault();
-                }}}
+                onKeyPress={(e) => {onlyNumbers(e)}}
                 inputProps={{
                     maxLength: 2
                 }}
@@ -473,10 +468,7 @@ const ListaMovimientos = () => {
                         </Grid>
                         <Grid item xs={6} md={4} lg={4} xl={4}>
                             <TextField
-                            onKeyPress={(e) => {
-                            if (!/^[0-9]+$/.test(e.key)) {
-                                e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             variant="outlined"
                             value={CajaPesos}
                             name="CajaPesos"
@@ -491,10 +483,7 @@ const ListaMovimientos = () => {
                         </Grid>
                         <Grid item xs={6} md={2} lg={2} xl={2}>
                             <TextField
-                            onKeyPress={(e) => {
-                            if (!/^[0-9]+$/.test(e.key)) {
-                                e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             inputProps={{
                                 maxLength: 2
                             }}

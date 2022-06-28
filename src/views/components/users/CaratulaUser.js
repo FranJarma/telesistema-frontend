@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import GetUserId from './../../../helpers/GetUserId';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const CaratulaUser = () => {
     const appContext = useContext(AppContext);
@@ -170,10 +171,8 @@ const CaratulaUser = () => {
                             onChange={onInputChange}
                             fullWidth
                             label="DNI"
-                            onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                            e.preventDefault();
-                            }}}>
+                            onKeyPress={(e) => {onlyNumbers(e)}}
+                            >
                             </TextField>
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
@@ -193,10 +192,7 @@ const CaratulaUser = () => {
                             value={Telefono}
                             name="Telefono"
                             onChange={onInputChange}
-                            onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                            e.preventDefault();
-                            }}}
+                            onKeyPress={(e) => {onlyNumbers(e)}}
                             fullWidth
                             label="N° Teléfono">
                             </TextField>

@@ -3,7 +3,7 @@ import { Button, Card, CardContent, Grid, LinearProgress, MenuItem, TextField, T
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import AppContext from '../../../context/appContext';
-import { Autocomplete } from '@material-ui/lab';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import { useLocation } from 'react-router';
 import { DatePicker } from '@material-ui/pickers';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -14,6 +14,7 @@ import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
 import OtObservacionesTarea from './OtObservacionesTarea';
+import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const CaratulaOt = () => {
     const appContext = useContext(AppContext);
@@ -30,6 +31,7 @@ const CaratulaOt = () => {
     const [MunicipioId, setMunicipioId] = useState(0);
     const [OtInfo, setOtInfo] = useState({
         OtId: null,
+        OtMonto: null,
         DomicilioCalle: "",
         DomicilioNumero: "",
         DomicilioPiso: null,
@@ -84,7 +86,7 @@ const CaratulaOt = () => {
         }
     },[])
 
-    const {OtId, DomicilioCalle, DomicilioNumero, DomicilioPiso, OtObservacionesResponsableEmision} = OtInfo;
+    const {OtId, OtMonto, DomicilioCalle, DomicilioNumero, DomicilioPiso, OtObservacionesResponsableEmision} = OtInfo;
 
     const onInputChange = (e) => {
         setOtInfo({
@@ -110,8 +112,12 @@ const CaratulaOt = () => {
     const onSubmitOT = (e) => {
         e.preventDefault();
         if(!location.state) {
+            setOtInfo({
+                ...OtInfo,
+                OtMonto: tareasOt.map(item => item.TareaPrecioOt).reduce((prev, curr) => prev + curr, 0)
+            })
             crearOrdenDeTrabajo({
-                DomicilioCalle, DomicilioNumero, DomicilioPiso,
+                OtMonto, DomicilioCalle, DomicilioNumero, DomicilioPiso,
                 OtResponsableEjecucion, OtAuxiliarDeLinea,
                 OtObservacionesResponsableEmision,
                 OtFechaPrevistaVisita,
@@ -123,7 +129,7 @@ const CaratulaOt = () => {
         }
         else {
             modificarOrdenDeTrabajo({
-                OtId, DomicilioCalle, DomicilioNumero, DomicilioPiso,
+                OtId, OtMonto, DomicilioCalle, DomicilioNumero, DomicilioPiso,
                 OtObservacionesResponsableEmision, OtResponsableEjecucion, OtAuxiliarDeLinea,
                 OtFechaPrevistaVisita,
                 updatedBy: GetUserId(),
@@ -276,7 +282,7 @@ const CaratulaOt = () => {
                             <>
                             <Grid item xs={12} md={6} lg={6} xl={6}>
                                 <TextField
-                                    value={location.state ? location.state.DomicilioCalle +' '+ location.state.DomicilioNumero + " B° " + location.state.BarrioNombre + ', ' + location.state.MunicipioNombre : abonadoOt ? abonadoOt.DomicilioCalle : ""}
+                                    value={location.state ? location.state.DomicilioCalle +' '+ location.state.DomicilioNumero + " B° " + location.state.BarrioNombre + ', ' + location.state.MunicipioNombre : abonadoOt ? abonadoOt.DomicilioCalle + ' '+ abonadoOt.DomicilioNumero + " B° " + abonadoOt.BarrioNombre + ', ' + abonadoOt.MunicipioNombre : ""}
                                     variant="outlined"
                                     fullWidth
                                     label="Domicilio completo"
@@ -327,10 +333,10 @@ const CaratulaOt = () => {
                                 </Card>
                             </Grid>
                             <Grid item xs={6} md={6} lg={6} xl={6}>
+                            { OtResponsableEjecucion !== null ?
+                                <>
                                 <Card>
                                     <CardContent>
-                                        { OtResponsableEjecucion !== null ?
-                                        <>
                                             <Typography variant="h6">Órdenes de trabajo pendientes y asignadas a: {OtResponsableEjecucion.Nombre}, {OtResponsableEjecucion.Apellido}</Typography>
                                             <br/>
                                             <Datatable
@@ -338,10 +344,10 @@ const CaratulaOt = () => {
                                                 datos={ordenesDeTrabajoAsignadas}
                                                 columnas={columnasOt}>
                                             </Datatable>
-                                        </>
-                                        : ""}
                                     </CardContent>
                                 </Card>
+                                </>
+                            : ""}
                             </Grid>
                         </Grid>
                     </TabPanel>
@@ -350,6 +356,7 @@ const CaratulaOt = () => {
                             <Grid item xs={12} md={12} lg={6} xl={6}>
                                 <Card>
                                     <CardContent>
+                                        <Alert>Tenga en cuenta que las tareas para Cambio de Domicilio y de Servicio no aparecerán acá.</Alert>
                                         <Typography variant="h6">Seleccione una o más tareas</Typography>
                                         <br/>
                                         <Autocomplete
@@ -361,18 +368,18 @@ const CaratulaOt = () => {
                                         }}
                                         disableCloseOnSelect
                                         multiple={true}
-                                        options={tareas}
+                                        options={tareas.filter(t => t.TareaPrecioOt !== 0)}
                                         noOptionsText="No se encontraron tareas"
-                                        getOptionLabel={(option) => option.TareaNombre}
+                                        getOptionLabel={(option) => option.TareaNombre +' - $'+ option.TareaPrecioOt}
                                         renderInput={(params) => <TextField {...params} value={OtResponsableEjecucion} variant ="outlined" fullWidth/>}
                                         />
                                     </CardContent>
                                 </Card>
                             </Grid>
                             <Grid item xs={12} md={12} lg={6} xl={6}>
+                            { tareasOt.length > 0 ?
                                 <Card>
                                     <CardContent>
-                                        { tareasOt.length > 0 ?
                                         <Grid item xs={12} md={12} lg={12} xl={12}>
                                             <Typography variant="h6">Tareas de la OT</Typography>
                                                 <br/>
@@ -380,10 +387,11 @@ const CaratulaOt = () => {
                                                     columnas={columnasTareas}
                                                     datos={tareasOt}>
                                                 </Datatable>
+                                                <Typography variant="h2">Total: ${tareasOt.map(item => item.TareaPrecioOt).reduce((prev, curr) => prev + curr, 0)}</Typography>
                                         </Grid>
-                                        : ""}
                                     </CardContent>
                                 </Card>
+                            : ""}
                             </Grid>
                             {tareasOt.length > 0 && tareasOt.find((tareasOt => tareasOt.TareaId === 14 || tareasOt.TareaId === 15 )) ?
                             <>
@@ -432,10 +440,7 @@ const CaratulaOt = () => {
                                     value={DomicilioNumero}
                                     name="DomicilioNumero"
                                     onChange={onInputChange}
-                                    onKeyPress={(e) => {
-                                        if (!/[0-9]/.test(e.key)) {
-                                        e.preventDefault();
-                                        }}}
+                                    onKeyPress={(e) => {onlyNumbers(e)}}
                                     fullWidth
                                     label="Número nuevo domicilio">
                                     </TextField>
@@ -446,10 +451,7 @@ const CaratulaOt = () => {
                                     value={DomicilioPiso}
                                     name="DomicilioPiso"
                                     onChange={onInputChange}
-                                    onKeyPress={(e) => {
-                                        if (!/[0-9]/.test(e.key)) {
-                                        e.preventDefault();
-                                        }}}
+                                    onKeyPress={(e) => {onlyNumbers(e)}}
                                     fullWidth
                                     label="Piso nuevo domicilio">
                                     </TextField>

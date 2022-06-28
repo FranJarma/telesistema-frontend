@@ -395,7 +395,6 @@ export default (state, action) => {
             if(ot.OtPrimeraVisita === null) ot.OtPrimeraVisita = action.payload.FechaVisita.toISOString();
             else if(ot.OtPrimeraVisita !== null && ot.OtSegundaVisita === null) ot.OtSegundaVisita = action.payload.FechaVisita.toISOString();
             else if(ot.OtPrimeraVisita !== null && ot.OtSegundaVisita !== null && ot.OtTerceraVisita === null) ot.OtTerceraVisita = action.payload.FechaVisita.toISOString();
-            else if(ot.OtPrimeraVisita !== null && ot.OtSegundaVisita !== null && ot.OtTerceraVisita !== null && ot.OtCuartaVisita === null) ot.OtCuartaVisita = action.payload.FechaVisita.toISOString();
 
             return {
                 ...state,
