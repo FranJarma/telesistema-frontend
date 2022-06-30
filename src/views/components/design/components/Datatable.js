@@ -25,7 +25,7 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
     || (item.Email && item.Email.toString().includes(textoFiltrado.toLowerCase()))
     || (item.Documento && item.Documento.toString().includes(textoFiltrado.toLowerCase()))
     || (item.BarrioNombre && item.BarrioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
-    || (item.MunicipioNombre && item.MunicipioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+    || (item.Municipio.MunicipioNombre && item.Municipio.MunicipioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.DomicilioCalle && item.DomicilioCalle.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.DomicilioNumero && item.DomicilioNumero.toString().includes(textoFiltrado.toLowerCase()))
     || (item.ServicioNombre && item.ServicioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))

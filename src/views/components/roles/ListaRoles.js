@@ -66,7 +66,7 @@ const Roles = () => {
         <BotonesDatatable botones={
             <>
             <MenuItem>
-                <Link to={`/caratula-role/edit/RoleId=${data.RoleId}`} state={data}
+                <Link to={`/caratula-role/RoleId=${data.RoleId}`} state={data}
                 style={{textDecoration: 'none', color: "navy"}}>
                 <Typography><i className='bx bx-pencil bx-xs' ></i> Editar</Typography>
                 </Link>

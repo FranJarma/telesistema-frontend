@@ -67,6 +67,13 @@ const ListaOtFinalizadas = () => {
             </>,
         }
     ]
+    const ExpandedComponent = ({ data }) =>
+    <>
+        {data.OtAuxiliarDeLinea ? <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-wrench"></i>Auxiliar de línea: {data.ApellidoAuxiliarDeLinea + ', ' + data.NombreAuxiliarDeLinea}</Typography> : ""}
+        {data.OtPrimeraVisita ? <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i>1°Visita: {convertirAFecha(data.OtPrimeraVisita)}</Typography> : ""}
+        {data.OtSegundaVisita ? <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i>2°Visita: {convertirAFecha(data.OtSegundaVisita)}</Typography> : ""}
+        {data.OtTerceraVisita ? <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i>3°Visita: {convertirAFecha(data.OtTerceraVisita)}</Typography> : ""}
+    </>;
     return (
         <>
         <div className="container">
@@ -82,6 +89,7 @@ const ListaOtFinalizadas = () => {
                     columnas={columnasOt}
                     paginacion={true}
                     buscar={true}
+                    expandedComponent={ExpandedComponent}
                 />
             </CardContent>
         </Card>

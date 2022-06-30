@@ -252,6 +252,17 @@ function App() {
               }>
               </Route>
 
+              <Route
+              path="/caratula-role/:RoleId"
+              element={
+                <AuthRoute roles={["Jefe", "Admin"]}>
+                  <Suspense fallback={<Cargando/>}>
+                    <CaratulaRole/>
+                  </Suspense>
+                </AuthRoute>
+              }>
+              </Route>
+
               <Route exact
               path="/abonados-activos"
               element={

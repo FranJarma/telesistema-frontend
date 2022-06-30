@@ -55,19 +55,19 @@ const ListaMovimientos = () => {
         CajaDia: new Date().getDate(),
         CajaMes: new Date().getMonth() + 1,
         CajaAño: new Date().getFullYear(),
-        CajaCerradaUser: GetUserId(),
+        UserIdCierre: GetUserId(),
         CajaCerradaFullName: GetFullName(),
-        CajaRecibeUser: null,
+        UserIdRecibe: null,
         CajaRecibeFullName: null,
         CajaPesos: null,
         CajaCentavos: '00',
         CajaTotalSistema: null,
         CajaTurno: null,
-        CajaMunicipio: null,
+        MunicipioId: null,
         CajaCierreObservaciones: null
     });
 
-    const {CajaRecibeUser, CajaPesos, CajaCentavos, CajaCierreObservaciones} = CajaInfo;
+    const {UserIdRecibe, CajaPesos, CajaCentavos, CajaCierreObservaciones} = CajaInfo;
 
     const handleChangeModalMovimiento = e => {
         if((Municipio === 0 && Turno === "Todos")||(Municipio === 0 && Turno !== "Todos")||(Municipio !== 0 && Turno === "Todos")) {
@@ -94,7 +94,7 @@ const ListaMovimientos = () => {
         setMunicipio(e.target.value);
         setCajaInfo({
             ...CajaInfo,
-            CajaMunicipio: e.target.value
+            MunicipioId: e.target.value
         })
         traerMovimientosPorFecha(diaMovimiento, e.target.value, Turno);
         if(Turno !== "Todos"){
@@ -168,13 +168,13 @@ const ListaMovimientos = () => {
         <Typography variant="h6">Cierre de caja del día : {diaMovimiento.toLocaleDateString()} - Turno: {Turno}</Typography><br/>
         <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
-            {cajas.length > 0 && Turno !== "Todos" && Municipio !== 0 && !cargando ?
+            {cajas && Turno !== "Todos" && Municipio !== 0 && !cargando ?
                 <Card>
                     <CardContent>
                     <Chip style={{backgroundColor: "red", color: "white", marginBottom: 25}} label="LA CAJA SE ENCUENTRA CERRADA"></Chip>
-                        <Typography variant="h6"><b>Recibida por:</b> {cajas[0].CajaRecibeFullName}</Typography>
-                        <Typography variant="h6"><b>Cerrada por:</b> {cajas[0].CajaCerradaFullName}</Typography>
-                        <Typography variant="h6"><b>Fecha y hora de cierre:</b> {convertirAFecha(cajas[0].CajaCerradaFecha)}-{convertirAHora(cajas[0].CajaCerradaFecha)}</Typography>
+                        <Typography variant="h6"><b>Recibida por:</b> {cajas.uCierre.CajaCerradaFullName}</Typography>
+                        <Typography variant="h6"><b>Cerrada por:</b> {cajas.uRecibe.CajaRecibeFullName}</Typography>
+                        <Typography variant="h6"><b>Fecha y hora de cierre:</b> {convertirAFecha(cajas.CajaCerradaFecha)}-{convertirAHora(cajas.CajaCerradaFecha)}</Typography>
                     </CardContent>
                 </Card>
             : !cargando?
@@ -189,7 +189,7 @@ const ListaMovimientos = () => {
             <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Card>
                 <CardContent>
-                    {(cajas.length === 0 && Municipio !== 0 && Turno !== "Todos") || (cajas.length > 0 && !cajas[0].CajaCerradaFecha) ?
+                    {(Municipio !== 0 && Turno !== "Todos") ?
                     <CardHeader
                         action={
                         <>
@@ -436,12 +436,12 @@ const ListaMovimientos = () => {
                                 if(newUser) {
                                     setCajaInfo({
                                         ...CajaInfo,
-                                        CajaRecibeUser: newUser,
+                                        UserIdRecibe: newUser,
                                         CajaRecibeFullName: newUser.Apellido + ', ' + newUser.Nombre
                                     })
                                 }
                             }}
-                            value={CajaRecibeUser}
+                            value={UserIdRecibe}
                             options={usuarios}
                             noOptionsText="No se encontraron usuarios que puedan recibir caja"
                             getOptionLabel={(option) => option.Apellido + ", " + option.Nombre}

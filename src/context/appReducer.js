@@ -12,8 +12,8 @@ export default (state, action) => {
                 usuarioAutenticado: true
         }
         case TYPES.OBTENER_INFO_USUARIO:
-            localStorage.setItem('u_info', JSON.stringify(action.payload.User));
-            localStorage.setItem('u_roles', JSON.stringify(action.payload.Roles));
+            localStorage.setItem('u_info', JSON.stringify(action.payload.u_info));
+            localStorage.setItem('u_roles', JSON.stringify(action.payload.u_roles));
             return {
                 ...state,
                 usuarioAutenticado: true,

@@ -1743,7 +1743,7 @@ const AppState = props => {
     //caja
     const traerCaja = async (municipio, fecha, turno) => {
         try {
-            if(state.cajas.length > 0) {
+            if(state.cajas) {
                 dispatch({
                     type: TYPES.REINICIALIZAR_CAJA
                 })

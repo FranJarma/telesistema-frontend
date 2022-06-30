@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import AppContext from '../../../context/appContext';
@@ -13,6 +13,7 @@ const ListaBarrios = () => {
     useEffect(()=>{
         traerMunicipiosPorProvincia(10);
         traerBarriosPorMunicipio(0);
+        console.log(barrios);
     },[]);
 
     const [MunicipioId, setMunicipioId] = useState(0);
@@ -87,7 +88,7 @@ const ListaBarrios = () => {
         },
         {
             "name": "Municipio",
-            "selector": row => row["MunicipioNombre"],
+            "selector": row => row["Municipio"].MunicipioNombre,
             "wrap": true,
             "sortable": true
         },
