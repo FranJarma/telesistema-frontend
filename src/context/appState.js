@@ -53,7 +53,7 @@ const AppState = props => {
         descargando: false,
         registrado: false,
         mensaje: '',
-        cajas: [],
+        cajas: {},
         facturas: [],
         recibos: [],
         comprobante: {}

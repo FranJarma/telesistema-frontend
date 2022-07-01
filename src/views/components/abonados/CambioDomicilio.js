@@ -142,31 +142,31 @@ const CambioDomicilio = () => {
     const columnasDomicilios = [
         {
             "name": "id",
-            "selector": row =>row["UserId"],
+            "selector": row =>row.UserDomicilioId,
             "omit": true,
         },
         {
             "name": <TooltipForTable name="Domicilio" />,
-            "selector": row => row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
+            "selector": row => row["Domicilio"].DomicilioCalle + ' ' + row["Domicilio"].DomicilioNumero +  ", B° " + row["Domicilio"].Barrio.BarrioNombre + ' ' +  row["Domicilio"].Barrio.Municipio.MunicipioNombre,
             "wrap": true,
             "sortable": true
         },
         {
             "name": "Fecha de solicitud",
-            "selector": row =>convertirAFecha(row["FechaPedidoCambio"]),
+            "selector": row =>  convertirAFecha(row.createdAt),
             "hide": "sm",
             "wrap": true
         },
         {
             "name": "Fecha de realización",
-            "selector": row => row["OtFechaFinalizacion"] ? convertirAFecha(row["OtFechaFinalizacion"]) +"-"+ convertirAHora(row["OtFechaFinalizacion"])
+            "selector": row => row["OtUDomicilio"].OtFechaFinalizacion ? convertirAFecha(row["Ot"].OtFechaFinalizacion)
             : "OT No Finalizada",
             "hide": "sm",
             "wrap": true
         },
         {
             "name": "Observaciones",
-            "selector": row =>row["CambioDomicilioObservaciones"],
+            "selector": row =>  row.CambioDomicilioObservaciones,
             "hide": "sm",
             "wrap": true
         },

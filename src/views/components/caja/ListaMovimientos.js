@@ -168,7 +168,7 @@ const ListaMovimientos = () => {
         <Typography variant="h6">Cierre de caja del día : {diaMovimiento.toLocaleDateString()} - Turno: {Turno}</Typography><br/>
         <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
-            {cajas && Turno !== "Todos" && Municipio !== 0 && !cargando ?
+            {Object.entries(cajas).length > 0 && Turno !== "Todos" && Municipio !== 0 && !cargando ?
                 <Card>
                     <CardContent>
                     <Chip style={{backgroundColor: "red", color: "white", marginBottom: 25}} label="LA CAJA SE ENCUENTRA CERRADA"></Chip>
@@ -389,7 +389,7 @@ const ListaMovimientos = () => {
             </>
         }
         formulario={
-            Municipio !== null && Turno !== null ?
+            Object.entries(cajas).length > 0 && Municipio !== null && Turno !== null ?
         <>
             <Card>
                 <CardContent>

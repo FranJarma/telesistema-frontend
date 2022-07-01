@@ -105,29 +105,29 @@ const CambioServicio = () => {
     const columnasServicios = [
         {
             "name": "id",
-            "selector": row =>row["UserId"],
+            "selector": row =>row.UserServicioId,
             "omit": true,
         },
         {
             "name": "Servicio",
-            "selector": row =>row["OnuMac"] ? row["ServicioNombre"] + ' | ' + "MAC Onu:" + ' ' + row["OnuMac"] : row["ServicioNombre"],
+            "selector": row =>row["Onu"] ? row["Servicio"].ServicioNombre + ' | ' + "MAC Onu:" + ' ' + row["Onu"].OnuMac : row["Servicio"].ServicioNombre,
             "wrap": true,
             "sortable": true
         },
         {
             "name": "Fecha de solicitud",
-            "selector": row =>convertirAFecha(row["FechaPedidoCambio"]),
+            "selector": row =>convertirAFecha(row.createdAt),
             "sortable": true
         },
         {
             "name": "Fecha de realización",
-            "selector": row => row["OtFechaFinalizacion"] ? convertirAFecha(row["OtFechaFinalizacion"]) +"-"+ convertirAHora(row["OtFechaFinalizacion"])
+            "selector": row => row["Ot"] ? convertirAFecha(row["Ot"].OtFechaFinalizacion) +"-"+ convertirAHora(row["Ot"].OtFechaFinalizacion)
             : "OT No Finalizada",
             "sortable": true
         },
         {
             "name": "Observaciones",
-            "selector": row =>row["CambioServicioObservaciones"],
+            "selector": row =>row.CambioServicioObservaciones,
             "hide": "sm",
             "wrap": true,
             "sortable": true

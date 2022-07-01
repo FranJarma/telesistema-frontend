@@ -474,7 +474,7 @@ export default (state, action) => {
         case TYPES.REINICIALIZAR_CAJA:
             return {
                 ...state,
-                cajas: []
+                cajas: {}
         }
         case TYPES.TAREA_CAMBIO_DOMICILIO:
             return {
