@@ -88,13 +88,13 @@ const ListaOnus = ({location}) => {
         },
         {
             "name": "Modelo",
-            "selector": row => row["ModeloOnuNombre"],
+            "selector": row => row["ModeloOnu"].ModeloOnuNombre,
             "wrap": true,
             "sortable": true
         },
         {
             "name": "Abonado",
-            "selector": row => row["Nombre"] ? row["Nombre"] + ', ' + row["Apellido"] : '-',
+            "selector": row => row["Abonado"] ? row["Abonado"].Apellido + ', ' + row["Abonado"].Nombre : '-',
             "wrap": true,
             "sortable": true
         },

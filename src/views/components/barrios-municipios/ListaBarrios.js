@@ -3,7 +3,7 @@ import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Typog
 import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import AppContext from '../../../context/appContext';
-import { Alert } from '@material-ui/lab';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetUserId from './../../../helpers/GetUserId';
 
@@ -13,25 +13,24 @@ const ListaBarrios = () => {
     useEffect(()=>{
         traerMunicipiosPorProvincia(10);
         traerBarriosPorMunicipio(0);
-        console.log(barrios);
     },[]);
 
     const [MunicipioId, setMunicipioId] = useState(0);
-    const [MunicipioNombre, setMunicipioNombre] = useState('El Carmen');
-    const [MunicipioIdModal, setMunicipioIdModal] = useState(1);
     const [ModalBarrio, setModalBarrio] = useState(false);
     const [ModalEliminarBarrio, setModalEliminarBarrio] = useState(false);
     const [EditMode, setEditMode] = useState(false);
+
     const [BarrioInfo, setBarrioInfo] = useState({
         BarrioId: '',
         BarrioNombre: '',
+        Municipio: {},
         createdBy: null,
         updatedAt: null,
         updatedBy: null,
         deletedBy: null,
         deletedAt: null
     })
-    const { BarrioNombre } = BarrioInfo;
+    const { BarrioNombre, Municipio } = BarrioInfo;
 
     const onInputChange= (e) =>{
         setBarrioInfo({
@@ -46,8 +45,6 @@ const ListaBarrios = () => {
         if(data !== '') {
             setEditMode(true);
             setBarrioInfo({...data, updatedBy: GetUserId(), updatedAt: new Date() });
-            setMunicipioIdModal(data.MunicipioId);
-            setMunicipioNombre(data.MunicipioNombre);
         }
         else {
             setEditMode(false);
@@ -64,14 +61,6 @@ const ListaBarrios = () => {
     const handleChangeMunicipioSeleccionado = (e) => {
         setMunicipioId(e.target.value);
         traerBarriosPorMunicipio(e.target.value);
-    }
-
-    const handleFocusMunicipioSeleccionado = (e) => {
-        setMunicipioNombre(e.target.innerHTML)
-    }
-
-    const handleChangeMunicipioIdModal = (e) => {
-        setMunicipioIdModal(e.target.value);
     }
 
     const columnasBarrios = [
@@ -157,26 +146,23 @@ const ListaBarrios = () => {
                     ></TextField>
                 </Grid>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
-                    <TextField
-                    onChange={handleChangeMunicipioIdModal}
-                    value={MunicipioIdModal}
-                    label="Municipio"
-                    fullWidth
-                    select
-                    variant="outlined"
-                    onFocus={handleFocusMunicipioSeleccionado}
-                    >
-                    {municipios.length > 0 ? municipios.map((municipio)=>(
-                        <MenuItem key={municipio.MunicipioId} value={municipio.MunicipioId}>{municipio.MunicipioNombre}</MenuItem>
-                    )): <MenuItem disabled>No se encontraron municipios</MenuItem>}
-                    </TextField>
+                <Autocomplete
+                    value={Municipio}
+                    onChange={(_event, nuevoMunicipio) => {
+                        if(nuevoMunicipio) setBarrioInfo({...BarrioInfo, Municipio: nuevoMunicipio});
+                    }}
+                    options={municipios}
+                    noOptionsText="No se encontraron municipios"
+                    getOptionLabel={(option) => option.MunicipioNombre}
+                    renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Municipio"/>}
+                    />
                 </Grid>
             </Grid>
         }
         botones={
             <>
-            <Button variant="contained" color="primary" onClick={()=>{EditMode ? modificarBarrio({...BarrioInfo, MunicipioNombre, MunicipioIdModal}, handleChangeModalBarrio)
-            : crearBarrio({...BarrioInfo, MunicipioNombre, MunicipioIdModal}, handleChangeModalBarrio)}}>{EditMode ? "Editar" : "Confirmar"}</Button>
+            <Button variant="contained" color="primary" onClick={()=>{EditMode ? modificarBarrio(BarrioInfo, handleChangeModalBarrio, setMunicipioId)
+            : crearBarrio(BarrioInfo, handleChangeModalBarrio, setMunicipioId)}}>{EditMode ? "Editar" : "Confirmar"}</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalBarrio} >Cancelar</Button>
             </>
         }

@@ -808,7 +808,7 @@ const AppState = props => {
             }
         })
     }
-    const modificarBarrio = async(barrio, cerrarModal) => {
+    const modificarBarrio = async(barrio, cerrarModal, setMunicipioId) => {
         clienteAxios.put('/api/barrios/update', barrio)
         .then(resOk => {
             if (resOk.data)
@@ -818,6 +818,8 @@ const AppState = props => {
                 });
                 Swal('Operación completa', resOk.data.msg);
                 cerrarModal(true);
+                traerBarriosPorMunicipio(barrio.Municipio.MunicipioId);
+                setMunicipioId(barrio.Municipio.MunicipioId);
         })
         .catch(err => {
             if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
@@ -910,7 +912,7 @@ const AppState = props => {
             }
         })
     }
-    const modificarMunicipio = async(municipio, cerrarModal) => {
+    const modificarMunicipio = async(municipio, cerrarModal, setProvinciaId) => {
         clienteAxios.put('/api/municipios/update', municipio)
         .then(resOk => {
             if (resOk.data)
@@ -920,9 +922,8 @@ const AppState = props => {
                 });
                 Swal('Operación completa', resOk.data.msg);
                 cerrarModal(true);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                traerMunicipiosPorProvincia(municipio.Provincia.ProvinciaId);
+                setProvinciaId(municipio.Provincia.ProvinciaId);
         })
         .catch(err => {
             if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");

@@ -1,15 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import AppContext from '../../../context/appContext';
-import { Alert } from '@material-ui/lab';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import GetUserId from './../../../helpers/GetUserId';
+import { red } from '@material-ui/core/colors';
 
 const ListaMunicipios = () => {
     const appContext = useContext(AppContext);
     const { municipios, provincias, traerProvincias, traerMunicipiosPorProvincia, crearMunicipio, modificarMunicipio, eliminarMunicipio } = appContext;
+    
     useEffect(()=>{
         traerProvincias();
         traerMunicipiosPorProvincia(10);
@@ -20,21 +22,21 @@ const ListaMunicipios = () => {
         MunicipioNombre: '',
         MunicipioSigla: '',
         MunicipioCodigoPostal: '',
+        Provincia: {},
         createdBy: null,
         updatedAt: null,
         updatedBy: null,
         deletedBy: null,
         deletedAt: null
     })
-    const [ProvinciaIdVieja, setProvinciaIdVieja] = useState('');
+
     const [ProvinciaId, setProvinciaId] = useState(10);
-    const [ProvinciaIdModal, setProvinciaIdModal] = useState(10);
-    const [ProvinciaNombreModal, setProvinciaNombreModal] = useState('Jujuy');
+
     const [ModalMunicipio, setModalMunicipio] = useState(false);
     const [ModalEliminarMunicipio, setModalEliminarMunicipio] = useState(false);
     const [EditMode, setEditMode] = useState(false);
 
-    const { MunicipioNombre, MunicipioSigla, MunicipioCodigoPostal } = MunicipioInfo;
+    const { MunicipioNombre, MunicipioSigla, MunicipioCodigoPostal, Provincia } = MunicipioInfo;
 
     const onInputChange= (e) =>{
         setMunicipioInfo({
@@ -47,27 +49,17 @@ const ListaMunicipios = () => {
         setProvinciaId(e.target.value);
         traerMunicipiosPorProvincia(e.target.value);
     }
-    const handleChangeProvinciaSeleccionadaModal = (e) => {
-        setProvinciaIdModal(e.target.value);
-    }
-
-    const handleFocusProvinciaSeleccionadaModal = (e) => {
-        setProvinciaNombreModal(e.target.innerHTML)
-    }
 
     const handleChangeModalMunicipio = (data = '') => {
         setModalMunicipio(!ModalMunicipio);
         setModalEliminarMunicipio(false);
         if(data !== '') {
-            setProvinciaIdVieja(data.ProvinciaId);
             setEditMode(true);
             setMunicipioInfo({...data, updatedBy: GetUserId(), updatedAt: new Date() });
-            setProvinciaIdModal(data.ProvinciaId); //para que cargue JUJUY por defecto
-            setProvinciaNombreModal(data.ProvinciaNombre);
         }
         else {
             setEditMode(false);
-            setMunicipioInfo({...data, createdBy: GetUserId()});
+            setMunicipioInfo({...MunicipioInfo, createdBy: GetUserId()});
         }
     }
 
@@ -98,12 +90,6 @@ const ListaMunicipios = () => {
         {
             "name": "Código Postal",
             "selector": row => row["MunicipioCodigoPostal"],
-            "wrap": true,
-            "sortable": true
-        },
-        {
-            "name": "Provincia",
-            "selector": row => row["ProvinciaNombre"],
             "wrap": true,
             "sortable": true
         },
@@ -196,30 +182,27 @@ const ListaMunicipios = () => {
                     ></TextField>
                 </Grid>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
-                    <TextField
-                    onChange={handleChangeProvinciaSeleccionadaModal}
-                    value={ProvinciaIdModal}
-                    label="Provincia"
-                    fullWidth
-                    select
-                    variant="outlined"
-                    onFocus={handleFocusProvinciaSeleccionadaModal}
-                    >
-                    {provincias.length > 0 ? provincias.map((provincia)=>(
-                        <MenuItem key={provincia.ProvinciaId} value={provincia.ProvinciaId}>{provincia.ProvinciaNombre}</MenuItem>
-                    )): <MenuItem disabled>No se encontraron provincias</MenuItem>}
-                    </TextField>
+                    <Autocomplete
+                        value={Provincia}
+                        onChange={(_event, nuevaProvincia) => {
+                            if(nuevaProvincia) setMunicipioInfo({...MunicipioInfo, Provincia: nuevaProvincia});
+                        }}
+                        options={provincias}
+                        noOptionsText="No se encontraron provincias"
+                        getOptionLabel={(option) => option.ProvinciaNombre}
+                        renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Provincia"/>}
+                    />
                 </Grid>
             </Grid>
         }
         botones={
             <>
             <Button variant="contained" color="primary" onClick={()=>{EditMode ?
-            modificarMunicipio({...MunicipioInfo, ProvinciaIdVieja, ProvinciaNombreModal, ProvinciaIdModal}, handleChangeModalMunicipio)
+            modificarMunicipio(MunicipioInfo, handleChangeModalMunicipio, setProvinciaId)
             :
-            crearMunicipio({...MunicipioInfo, ProvinciaNombreModal, ProvinciaIdModal}, handleChangeModalMunicipio)}}
+            crearMunicipio(MunicipioInfo, handleChangeModalMunicipio, setProvinciaId)}}
             >{EditMode ? "Editar" : "Confirmar"}</Button>
-            <Button variant="text" color="inherit" >Cancelar</Button>
+            <Button variant="text" color="inherit" onClick={handleChangeModalMunicipio} >Cancelar</Button>
             </>
         }
         />
@@ -229,7 +212,7 @@ const ListaMunicipios = () => {
         titulo={<Alert severity="error">¿Está seguro que quiere eliminar el municipio?</Alert>}
         botones={
             <>
-            <Button variant="contained" color="secondary" onClick={()=>{eliminarMunicipio(MunicipioInfo, handleChangeModalEliminarMunicipio)}}>Eliminar</Button>
+            <Button variant="contained" style={{backgroundColor: red[500]}} onClick={()=>{eliminarMunicipio(MunicipioInfo, handleChangeModalEliminarMunicipio)}}>Eliminar</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalEliminarMunicipio}>Cancelar</Button>
             </>
         }

@@ -15,3 +15,4 @@ export const ABONADO_CREADO_CORRECTAMENTE = "El abonado ha sido registrado corre
 export const PAGO_CREADO_CORRECTAMENTE = "El pago ha sido registrado correctamente. Puede descargar el comprobante";
 export const CAMBIO_DOMICILIO_CORRECTO = "El cambio de domicilio ha sido registrado correctamente. Puede descargar el comprobante";
 export const CAMBIO_SERVICIO_CORRECTO = "El cambio de servicio ha sido registrado correctamente. Puede descargar el comprobante";
+export const MUNICIPIO_CREADO_CORRECTAMENTE = "El municipio ha sido registrado correctamente.";
