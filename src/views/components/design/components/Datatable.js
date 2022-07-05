@@ -2,6 +2,7 @@ import DataTable from 'react-data-table-component';
 import React, { useState, useEffect } from 'react';
 import Spinner from './Spinner';
 import Buscador from './Buscador';
+import convertirAFecha from './../../../../helpers/ConvertirAFecha';
 
 const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, paginacionPorDefecto, buscar, seleccionable, fnSeleccionable, fnExpandible}) => {
     //state y effect para spinner
@@ -17,7 +18,7 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
     //state para buscador
     const [textoFiltrado, setTextoFiltrado] = useState('');
     const itemsFiltrados = datos.filter(item =>
-    (item.createdAt && item.createdAt.toString().includes(textoFiltrado.toLowerCase()))
+    (item.createdAt && convertirAFecha(item.createdAt).includes(textoFiltrado.toLowerCase()))
     || (item.createdBy && item.createdBy.toString().includes(textoFiltrado.toLowerCase()))
     || (item.Nombre && item.Nombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.Apellido && item.Apellido.toLowerCase().includes(textoFiltrado.toLowerCase()))
@@ -25,9 +26,13 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
     || (item.Email && item.Email.toString().includes(textoFiltrado.toLowerCase()))
     || (item.Documento && item.Documento.toString().includes(textoFiltrado.toLowerCase()))
     || (item.BarrioNombre && item.BarrioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
-    || (item.Municipio.MunicipioNombre && item.Municipio.MunicipioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+    || (item.DomicilioAbonado.Barrio.BarrioNombre && item.DomicilioAbonado.Barrio.BarrioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+    || (item.DomicilioAbonado.Barrio.Municipio.MunicipioNombre && item.DomicilioAbonado.Barrio.Municipio.MunicipioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+    || (item.MunicipioNombre && item.MunicipioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+    || (item.DomicilioAbonado.DomicilioCompleto && item.DomicilioAbonado.DomicilioCompleto.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.DomicilioCalle && item.DomicilioCalle.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.DomicilioNumero && item.DomicilioNumero.toString().includes(textoFiltrado.toLowerCase()))
+    || (item.ServicioAbonado.ServicioNombre && item.ServicioAbonado.ServicioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.ServicioNombre && item.ServicioNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.ServicioDescripcion && item.ServicioDescripcion.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.MedioPagoNombre && item.MedioPagoNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
@@ -46,9 +51,9 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
     || (item.RoleDescription && item.RoleDescription.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.TareaNombre && item.TareaNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.OtId && item.OtId.toString().includes(textoFiltrado.toLowerCase()))
-    || (item.OtFechaPrevistaVisita && item.OtFechaPrevistaVisita.toString().includes(textoFiltrado.toLowerCase()))
+    || (item.OtFechaPrevistaVisita && convertirAFecha(item.OtFechaPrevistaVisita).includes(textoFiltrado.toLowerCase()))
     || (item.MovimientoCantidad && item.MovimientoCantidad.toString().includes(textoFiltrado.toLowerCase()))
-    || (item.FechaVencimientoServicio && item.FechaVencimientoServicio.toString().includes(textoFiltrado.toLowerCase()))
+    || (item.FechaVencimientoServicio && convertirAFecha(item.FechaVencimientoServicio).includes(textoFiltrado.toLowerCase()))
     || (item.NombreResponsableEjecucion && item.NombreResponsableEjecucion.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.ApellidoResponsableEjecucion && item.ApellidoResponsableEjecucion.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.NombreAbonado && item.NombreAbonado.toLowerCase().includes(textoFiltrado.toLowerCase()))

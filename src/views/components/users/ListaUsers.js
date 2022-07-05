@@ -9,6 +9,7 @@ import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import { Link } from 'react-router-dom';
 import BotonesDatatable from '../design/components/BotonesDatatable';
+import formatDocumento from './../../../helpers/FormatDocumento';
 
 const Users = () => {
     const appContext = useContext(AppContext);
@@ -51,16 +52,6 @@ const Users = () => {
         "omit": true,
     },
     {
-        "name": "Nombre",
-        "selector": row =>row["Nombre"],
-        "omit": true
-    },
-    {
-        "name": "Apellido",
-        "selector": row =>row["Apellido"],
-        "omit": true
-    },
-    {
         "name": "Nombre Completo",
         "selector": row => row["Apellido"] + ', ' + row["Nombre"],
         "wrap": true,
@@ -68,7 +59,7 @@ const Users = () => {
     },
     {
         "name": "DNI",
-        "selector": row => row["Documento"],
+        "selector": row => formatDocumento(row["Documento"]),
         "wrap": true,
         "sortable": true
     },
@@ -86,7 +77,7 @@ const Users = () => {
     },
     {
         "name": "Estado",
-        "selector": row =>row["EstadoNombre"],
+        "selector": row =>row["EstadoAbonado"].EstadoNombre,
         "wrap": true,
         "sortable": true
     },

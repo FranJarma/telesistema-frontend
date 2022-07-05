@@ -116,7 +116,7 @@ export default (state, action) => {
         case TYPES.CAMBIAR_ESTADO_ABONADO: {
             return {
                 ...state,
-                abonados: state.abonados.map(abonado => abonado.UserId === action.payload.UserId ? action.payload : abonado)
+                abonados: state.abonados.filter(abonado => abonado.UserId !== action.payload.UserId)
             };
         }
         case TYPES.LISTA_ABONADOS:
@@ -348,7 +348,11 @@ export default (state, action) => {
         case TYPES.DATOS_INSCRIPCION:
             return {
                 ...state,
-                inscripcion: action.payload
+                inscripcion: {
+                    PagoTotal: action.payload.PagoTotal,
+                    PagoSaldo: action.payload.PagoSaldo
+                },
+                detallesInscripcion: action.payload.Detalles
         }
         case TYPES.LISTA_DETALLES_PAGO_ABONADO:
             return {

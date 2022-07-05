@@ -16,10 +16,12 @@ import SpanServicio from '../../../helpers/SpanServicio';
 import SpanAlquiler from '../../../helpers/SpanAlquiler';
 import formatDocumento from '../../../helpers/FormatDocumento';
 import GetUserId from './../../../helpers/GetUserId';
+import Factura from '../design/components/Factura';
+import Recibo from '../design/components/Recibo';
 
 const ListaAbonadosInscriptos = () => {
     const appContext = useContext(AppContext);
-    const { abonados, municipios, inscripcion, traerAbonados, traerMunicipiosPorProvincia, cambiarEstadoAbonado, traerDatosInscripcion } = appContext;
+    const { abonados, municipios, inscripcion, detallesInscripcion, traerAbonados, traerMunicipiosPorProvincia, cambiarEstadoAbonado, traerDatosInscripcion } = appContext;
 
     useEffect(() => {
         traerAbonados(1);
@@ -37,10 +39,8 @@ const ListaAbonadosInscriptos = () => {
         EstadoId: null,
         CambioEstadoObservaciones: null,
         createdBy: null,
-        updatedAt: null,
         updatedBy: null,
         deletedBy: null,
-        deletedAt: null
     });
 
     const { CambioEstadoObservaciones } = AbonadoInfo;
@@ -49,9 +49,9 @@ const ListaAbonadosInscriptos = () => {
         setModalDarDeBaja(!modalDarDeBaja)
         if(!modalDarDeBaja){
             setAbonadoInfo({
+                ...AbonadoInfo,
                 EstadoId: 3,
                 UserId: data.UserId,
-                deletedAt: new Date(),
                 deletedBy: GetUserId()
             })
         }
@@ -68,7 +68,8 @@ const ListaAbonadosInscriptos = () => {
             setAbonadoInfo({
                 EstadoId: 2,
                 CambioEstadoFecha: new Date().toJSON(),
-                UserId: data.UserId
+                UserId: data.UserId,
+                updatedBy: GetUserId()
             })
         }
         else {
@@ -79,19 +80,15 @@ const ListaAbonadosInscriptos = () => {
     }
 
     const handleChangeModalDatosInscripcion = (data) => {
-        setModalDatosInscripcion(!modalDatosInscripcion)
-        if(!modalDarDeBaja){
+        setModalDatosInscripcion(!modalDatosInscripcion);
+        if(!modalDatosInscripcion){
             traerDatosInscripcion(data.UserId);
-            setAbonadoInfo({
-                EstadoId: 3,
-                UserId: data.UserId
-            })
         }
-        else {
-            setAbonadoInfo({
-                UserId: null
-            })
-        }
+        // else {
+        //     setAbonadoInfo({
+        //         UserId: null
+        //     })
+        // }
     }
 
     const onChangeInputEstadoObservaciones = (e) => {
@@ -126,8 +123,12 @@ const ListaAbonadosInscriptos = () => {
     },
     {
         "name": <TooltipForTable name="Domicilio" />,
-        "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
-        : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
+        "selector": row =>
+        row["DomicilioAbonado"].EsAlquiler === 1 ?
+        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
+        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
+        : row["DomicilioAbonado"].DomicilioCompleto
+        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
         "wrap": true,
         "sortable": true
     },
@@ -138,10 +139,10 @@ const ListaAbonadosInscriptos = () => {
         "hide": "sm"
     },
     {
-        "name": "Servicio",
-        "selector": row =><SpanServicio servicioId={row["ServicioId"]} servicioNombre={row["ServicioNombre"]}></SpanServicio>,
-        "sortable": true,
+        "name": <TooltipForTable name="Servicio" />,
+        "selector": row => <SpanServicio servicioId={row["ServicioAbonado"].ServicioId} servicioNombre={row["ServicioAbonado"].ServicioNombre} onuMac={row["OnuAbonado"] ? row["OnuAbonado"].OnuMac : ""}></SpanServicio>,
         "hide": "sm",
+        "width": "300px"
     },
     {
         "name": <TooltipForTable name="Posible Fecha de Bajada" />,
@@ -193,15 +194,24 @@ const columnasInscripcion = [
     },
     {
         "name": "Registrado por ",
-        "selector": row =>row["Nombre"] + ', ' + row["Apellido"],
+        "selector": row =>row.Registro.Apellido + ', ' + row.Registro.Nombre,
         "wrap": true,
         "sortable": true,
     },
     {
         "name": "Forma de pago",
-        "selector": row => row["MedioPagoNombre"],
+        "selector": row => row.MedioPago.MedioPagoNombre,
         "wrap": true,
         "sortable": true,
+    },
+    {
+        cell: (data) =>
+        <>
+        {
+        data.Movimiento.FacturaId ? <><Factura data={data} format={true}/></>
+        : <Recibo data={data} format={true}/>
+        }
+        </>,
     }
 ]
     const ExpandedComponent = ({ data }) =>
@@ -305,13 +315,13 @@ const columnasInscripcion = [
                 titulo={<Alert severity="success" icon={<i className="bx bx-money bx-sm"></i>}>Datos de la inscripción</Alert>}
                 formulario={
                 <>
-                <Datatable
-                datos={inscripcion}
-                columnas={columnasInscripcion}></Datatable>
-                { inscripcion.length > 0 ?
+                { detallesInscripcion.length > 0 ?
                 <>
-                <Typography variant="h2"><b>Precio total de inscripción:</b> ${inscripcion[0].PagoTotal}</Typography>
-                <Typography variant="h2"><b>Saldo restante:</b> ${inscripcion[0].PagoSaldo}</Typography>
+                <Datatable
+                datos={detallesInscripcion}
+                columnas={columnasInscripcion}></Datatable>
+                <Typography variant="h2"><b>Precio total de inscripción:</b> ${inscripcion.PagoTotal}</Typography>
+                <Typography variant="h2"><b>Saldo restante:</b> ${inscripcion.PagoSaldo}<Button style={{float: 'right'}} variant="contained" color="secondary">Pagar saldo restante</Button></Typography>
                 </>
                 : "" }
                 </>}

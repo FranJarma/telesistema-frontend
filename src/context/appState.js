@@ -39,7 +39,8 @@ const AppState = props => {
         pagos: [],
         pagosPendientes: [],
         pagosPendientesTop: [],
-        inscripcion: [],
+        inscripcion: {},
+        detallesInscripcion: [],
         detallesPago: [],
         tareas: [],
         tareaCambioDomicilio: [],
@@ -600,7 +601,7 @@ const AppState = props => {
         }
     }
 
-    const traerPagosMensualesPendientes = async (UserId, Concepto, top) => {
+    const traerPagosMensualesPendientes = async (UserId, Concepto, top = 0) => {
         try {
             const resultado = await clienteAxios.get(`/api/pagos/UserId=${UserId}&Concepto=${Concepto}&top=${top}`);
             if(!top) {
@@ -620,9 +621,9 @@ const AppState = props => {
             if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
-    const traerDetallesPago = async (id) => {
+    const traerDetallesPago = async (PagoId) => {
         try {
-            const resultado = await clienteAxios.get(`/api/detallesPago/${id}`);
+            const resultado = await clienteAxios.get(`/api/detallesPago/${PagoId}`);
             dispatch({
                 type: TYPES.LISTA_DETALLES_PAGO_ABONADO,
                 payload: resultado.data
@@ -1673,9 +1674,7 @@ const AppState = props => {
         try {
             const resultado = await clienteAxios.get('/api/movimientos', {
                 params: {
-                    Dia: Fecha.getDate(),
-                    Mes: Fecha.getMonth() + 1,
-                    Año: Fecha.getFullYear(),
+                    Fecha: new Date(Fecha).toISOString().split('T')[0],
                     Municipio: Municipio,
                     Turno: Turno
                 }
@@ -1823,6 +1822,7 @@ const AppState = props => {
             pagosPendientes: state.pagosPendientes,
             pagosPendientesTop: state.pagosPendientesTop,
             inscripcion: state.inscripcion,
+            detallesInscripcion: state.detallesInscripcion,
             detallesPago: state.detallesPago,
             tareas: state.tareas, tareaCambioDomicilio: state.tareaCambioDomicilio,
             ordenesDeTrabajo: state.ordenesDeTrabajo,
@@ -1852,7 +1852,7 @@ const AppState = props => {
             traerOnus, traerONUPorId, crearONU, modificarONU, eliminarONU,
             traerModelosONU, crearModeloONU, modificarModeloONU, eliminarModeloONU,
             traerMediosPago, crearMedioPago, modificarMedioPago, eliminarMedioPago,
-            traerPagosPorAbonado, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, traerDatosInscripcion, traerPagosMensualesPendientes, traerPagosMensualesPendientes,
+            traerPagosPorAbonado, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, traerDatosInscripcion, traerPagosMensualesPendientes,
             traerDetallesPago, eliminarDetallePago,
             traerTareas, traerTareaCambioDomicilio, crearTarea, modificarTarea, eliminarTarea,
             traerOrdenesDeTrabajo, traerOrdenesDeTrabajoAsignadas, traerTecnicosOt, traerTareasOt, crearOrdenDeTrabajo, modificarOrdenDeTrabajo,

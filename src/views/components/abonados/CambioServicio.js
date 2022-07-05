@@ -121,7 +121,7 @@ const CambioServicio = () => {
         },
         {
             "name": "Fecha de realización",
-            "selector": row => row["Ot"] ? convertirAFecha(row["Ot"].OtFechaFinalizacion) +"-"+ convertirAHora(row["Ot"].OtFechaFinalizacion)
+            "selector": row => row["OtUServicio"].OtFechaFinalizacion ? convertirAFecha(row["OtUServicio"].OtFechaFinalizacion) +"-"+ convertirAHora(row["OtUServicio"].OtFechaFinalizacion)
             : "OT No Finalizada",
             "sortable": true
         },

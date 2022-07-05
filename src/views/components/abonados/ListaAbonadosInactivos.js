@@ -10,8 +10,11 @@ import Modal from '../design/components/Modal';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import { Link } from 'react-router-dom';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
+import convertirAHora from '../../../helpers/ConvertirAHora';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import SpanAlquiler from '../../../helpers/SpanAlquiler';
+import formatDocumento from '../../../helpers/FormatDocumento';
+import GetUserId from '../../../helpers/GetUserId';
 
 const ListaAbonadosInactivos = () => {
     const appContext = useContext(AppContext);
@@ -31,10 +34,8 @@ const ListaAbonadosInactivos = () => {
         EstadoId: null,
         CambioEstadoObservaciones: null,
         createdBy: null,
-        updatedAt: null,
         updatedBy: null,
         deletedBy: null,
-        deletedAt: null
     });
 
     const { CambioEstadoObservaciones } = AbonadoInfo;
@@ -43,9 +44,11 @@ const ListaAbonadosInactivos = () => {
         setModalDarDeAlta(!modalDarDeAlta)
         if(!modalDarDeAlta){
             setAbonadoInfo({
+                ...AbonadoInfo,
                 UserId: data.UserId,
                 EstadoId: 1,
                 CambioEstadoFecha: new Date().toJSON(),
+                updatedBy: GetUserId()
             })
         }
         else {
@@ -85,14 +88,19 @@ const ListaAbonadosInactivos = () => {
         },
         {
             "name": "DNI",
-            "selector": row =>row["Documento"],
+            "selector": row => formatDocumento(row["Documento"]),
             "sortable": true,
             "hide": "sm"
         },
         {
             "name": <TooltipForTable name="Domicilio" />,
-            "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
-            : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],            "wrap": true,
+            "selector": row =>
+            row["DomicilioAbonado"].EsAlquiler === 1 ?
+            <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
+            +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
+            : row["DomicilioAbonado"].DomicilioCompleto
+            +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
+            "wrap": true,
             "sortable": true
         },
         {
@@ -103,7 +111,7 @@ const ListaAbonadosInactivos = () => {
         },
         {
             "name": "Fecha y hora de baja",
-            "selector": row => row["deletedAt"] ? convertirAFecha(row["deletedAt"]) : "",
+            "selector": row => row["deletedAt"] ? convertirAFecha(row["deletedAt"]) +'-'+ convertirAHora(row["deletedAt"]) : "",
             "wrap": true,
             "sortable": true
         },

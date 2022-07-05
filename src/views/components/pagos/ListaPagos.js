@@ -22,7 +22,6 @@ import onlyNumbers from './../../../helpers/OnlyNumbers';
 const ListaPagos = () => {
     const appContext = useContext(AppContext);
     const { pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
-
     const location = useLocation();
     const [PagoAño, setPagoAño] = useState(new Date());
     const [ConceptoId, setConceptoId] = useState(null);
@@ -101,7 +100,12 @@ const ListaPagos = () => {
             updatedBy: GetUserId()
         })
         setModalPagoAdelantado(!ModalPagoAdelantado);
-        traerPagosMensualesPendientes(location.state.UserId, 1);
+        if(!ModalPagoAdelantado) {
+            traerPagosMensualesPendientes(location.state.UserId, 1);
+        }
+        else{
+            setCantidadMesesAPagar(null)
+        }
     }
     const handleChangeModalNuevoPago = (data, edit = false) => {
         setModalNuevoPago(!ModalNuevoPago);
@@ -120,9 +124,11 @@ const ListaPagos = () => {
 
     }
     const handleChangeModalDetallesPago = (data) => {
-        traerDetallesPago(data.PagoId);
-        setPagoInfo({...data, updatedBy: GetUserId()});
         setModalDetallesPago(!ModalDetallesPago);
+        if(!ModalDetallesPago) {
+            traerDetallesPago(data.PagoId);
+            setPagoInfo({...data, updatedBy: GetUserId()});
+        }
     }
 
     const handleChangeModalEliminarDetallePago = (data) => {
@@ -201,13 +207,11 @@ const ListaPagos = () => {
         {
             "name": "Periodo",
             "selector": row => row["PagoMes"] + "/" + row["PagoAño"],
-            "sortable": true,
             "wrap": true
         },
         {
             "name": "Total",
             "selector": row => "$ " + row["PagoTotal"],
-            "sortable": true,
             "wrap": true
         }
     ]
@@ -232,27 +236,29 @@ const ListaPagos = () => {
         },
         {
             "name": "Registrado por ",
-            "selector": row =>row["NombreCarga"] + ', ' + row["ApellidoCarga"],
+            "selector": row =>row["Registro"].Apellido + ', ' + row["Registro"].Nombre,
             "wrap": true,
             "sortable": true,
         },
         {
             "name": "Forma de pago",
-            "selector": row => row["MedioPagoNombre"],
+            "selector": row => row["MedioPago"].MedioPagoNombre,
             "wrap": true,
             "sortable": true,
         },
         {
             "name": "Motivo de pago",
-            "selector": row => row["MovimientoConceptoNombre"],
+            "selector": row => row["Movimiento"].MovimientoConcepto.MovimientoConceptoNombre,
             "wrap": true,
             "sortable": true,
         },
         {
-            cell: (data) => 
+            cell: (data) =>
             <>
-            {data.FacturaId ? <><Factura data={data}/></>
-            : <Recibo data={data}/>}
+            {
+            data.Movimiento.FacturaId ? <><Factura data={data} format={true}/></>
+            : <Recibo data={data} format={true}/>
+            }
             </>,
         }
     ]
@@ -407,13 +413,14 @@ const ListaPagos = () => {
                                 </CardContent>
                             </Card>
                             <br/>
-                            {pagosPendientesTop.length > 0 && CantidadMesesAPagar !== 0 && !cargando ?
+                            {pagosPendientesTop.length > 0 && CantidadMesesAPagar !== null && !cargando ?
                             <Card>
                                 <CardContent>
                                     <Typography variant="h2">Datos del pago</Typography>
+                                    <Typography variant="h6">Meses a pagar: {pagosPendientesTop.map((pagosPend)=>(<Chip icon={<i className="bx bx-calendar"></i>} color="secondary" style={{margin: 2}} label={pagosPend.PagoMes+"/"+pagosPend.PagoAño}></Chip>))}</Typography>
                                     {
                                     CantidadMesesAPagar < 6 ?
-                                    <>  <Typography variant="h6">Meses a pagar: {pagosPendientesTop.map((pagosPend)=>(<Chip icon={<i className="bx bx-calendar"></i>} color="secondary" style={{margin: 2}} label={pagosPend.PagoMes+"/"+pagosPend.PagoAño}></Chip>))}</Typography>
+                                    <>
                                     <Typography variant="h6">Total a pagar : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0)}</Typography></>
                                     :CantidadMesesAPagar === 6 ?
                                     <><Typography variant="h6">Subtotal : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => prev + curr, 0)}</Typography>

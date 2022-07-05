@@ -136,7 +136,7 @@ const ListaMovimientos = () => {
         },
         {
             "name": "Medio de Pago",
-            "selector": row =>row["MedioPagoNombre"],
+            "selector": row =>row["MovimientoMedioPago"].MedioPagoNombre,
             "wrap": true
         },
         {
@@ -146,17 +146,17 @@ const ListaMovimientos = () => {
         },
         {
             "name": "Quién cargo movimiento",
-            "selector": row => row["ApellidoCarga"] + ", " +row["NombreCarga"],
+            "selector": row => row["MovimientoRegistro"].Apellido + ", " +row["MovimientoRegistro"].Nombre,
             "wrap": true
         },
         {
             "name": "Abonado",
-            "selector": row => row["ApellidoAbonado"] ? row["ApellidoAbonado"] + ", " +row["NombreAbonado"] : "-",
+            "selector": row => row["MovimientoAbonado"] ? row["MovimientoAbonado"].Apellido + ", " +row["MovimientoAbonado"].Nombre : "-",
             "wrap": true
         },
         {
             "name": "Concepto",
-            "selector": row =>row["MovimientoCantidad"] > 0 ? <><span style={{color: 'green', fontWeight: 'bold'}}>{row["Tipo"] +": "}</span>{row["Concepto"]}</>  : <><span style={{color: 'red', fontWeight: 'bold'}}>{row["Tipo"] +": "}</span>{row["Concepto"]}</>,
+            "selector": row =>row["MovimientoCantidad"] > 0 ? <><span style={{color: 'green', fontWeight: 'bold'}}>{row["MovimientoConcepto"].MovimientoConceptoTipo +": "}</span>{row["MovimientoConcepto"].MovimientoConceptoNombre}</>  : <><span style={{color: 'red', fontWeight: 'bold'}}>{row["MovimientoConcepto"].MovimientoConceptoTipo +": "}</span>{row["MovimientoConcepto"].MovimientoConceptoNombre}</>,
             "wrap": true
         }
     ]

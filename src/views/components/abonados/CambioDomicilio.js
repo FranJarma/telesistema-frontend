@@ -159,7 +159,7 @@ const CambioDomicilio = () => {
         },
         {
             "name": "Fecha de realización",
-            "selector": row => row["OtUDomicilio"].OtFechaFinalizacion ? convertirAFecha(row["Ot"].OtFechaFinalizacion)
+            "selector": row => row["OtUDomicilio"].OtFechaFinalizacion ? convertirAFecha(row["OtUDomicilio"].OtFechaFinalizacion)
             : "OT No Finalizada",
             "hide": "sm",
             "wrap": true

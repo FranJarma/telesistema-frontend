@@ -36,10 +36,8 @@ const ListaAbonadosActivos = () => {
         EstadoId: null,
         CambioEstadoObservaciones: null,
         createdBy: null,
-        updatedAt: null,
         updatedBy: null,
         deletedBy: null,
-        deletedAt: null
     });
 
     const { CambioEstadoObservaciones } = AbonadoInfo;
@@ -48,10 +46,10 @@ const ListaAbonadosActivos = () => {
         setModalDarDeBaja(!modalDarDeBaja)
         if(!modalDarDeBaja){
             setAbonadoInfo({
+                ...AbonadoInfo,
                 EstadoId: 3,
                 UserId: data.UserId,
-                deletedAt: new Date(),
-                deletedBy: GetUserId()
+                deletedBy: GetUserId(),
             })
         }
         else {
@@ -105,8 +103,13 @@ const ListaAbonadosActivos = () => {
     },
     {
         "name": <TooltipForTable name="Domicilio" />,
-        "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
-        : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],        "wrap": true,
+        "selector": row =>
+        row["DomicilioAbonado"].EsAlquiler === 1 ?
+        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
+        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
+        : row["DomicilioAbonado"].DomicilioCompleto
+        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
+        "wrap": true,
         "sortable": true
     },
     {
@@ -121,7 +124,7 @@ const ListaAbonadosActivos = () => {
     },
     {
         "name": <TooltipForTable name="Servicio" />,
-        "selector": row => <SpanServicio servicioId={row["ServicioId"]} servicioNombre={row["ServicioNombre"]} onuMac={row["OnuMac"]}></SpanServicio>,
+        "selector": row => <SpanServicio servicioId={row["ServicioAbonado"].ServicioId} servicioNombre={row["ServicioAbonado"].ServicioNombre} onuMac={row["OnuAbonado"] ? row["OnuAbonado"].OnuMac : ""}></SpanServicio>,
         "hide": "sm",
         "width": "300px"
     },

@@ -1,5 +1,6 @@
 function convertirAFecha (timestamp) {
-    return timestamp.split('T')[0].split('-').reverse().join('/');
+    const fecha = new Date(timestamp);
+    return fecha.toLocaleDateString();
 }
 
 export default convertirAFecha;
