@@ -161,12 +161,12 @@ const OtCaratula = ({tareas, data}) => (
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Responsable de emisión de ot: <Text style={styles.h4}>{data.ApellidoResponsableCreacion}, {data.NombreResponsableCreacion}</Text></Text>            
+                <Text style={styles.h3}>Responsable de emisión de ot: <Text style={styles.h4}>{data.RegistroOt.NombreCompletoUsuarioRegistro}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>
                 <View style={styles.flexColumn}>
-                    <Text style={styles.h3}>Responsable de ejecución: <Text style={styles.h4}>{data.ApellidoResponsableEjecucion}, {data.NombreResponsableEjecucion}</Text></Text>            
+                    <Text style={styles.h3}>Responsable de ejecución: <Text style={styles.h4}>{data.TecnicoResponsableOt.NombreCompletoTecnicoResponsable}</Text></Text>            
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
                     <Text style={styles.h3}>Hora: <Text style={styles.h4}>{convertirAHora(data.createdAt)}</Text></Text>            
@@ -183,20 +183,20 @@ const OtCaratula = ({tareas, data}) => (
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Abonado: <Text style={styles.h4}>{data.ApellidoAbonado}, {data.NombreAbonado}</Text></Text>            
+                <Text style={styles.h3}>Abonado: <Text style={styles.h4}>{data.AbonadoOt.NombreCompletoAbonado}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>
                 <View style={styles.flexColumn}>
-                    <Text style={styles.h3}>Barrio: <Text style={styles.h4}>{data.BarrioNombre}</Text></Text>            
+                    <Text style={styles.h3}>Barrio: <Text style={styles.h4}>{data.AbonadoOt.DomicilioAbonado.Barrio.BarrioNombre}</Text></Text>            
                 </View>
                 <View style={styles.flexColumnBorderLeft}>
-                    <Text style={styles.h3}>Localidad: <Text style={styles.h4}>{data.MunicipioNombre}</Text></Text>            
+                    <Text style={styles.h3}>Localidad: <Text style={styles.h4}>{data.AbonadoOt.DomicilioAbonado.Barrio.Municipio.MunicipioNombre}</Text></Text>            
                 </View>
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Domicilio: <Text style={styles.h4}>{data.DomicilioCalle}, {data.DomicilioNumero}</Text></Text>            
+                <Text style={styles.h3}>Domicilio: <Text style={styles.h4}>{data.AbonadoOt.DomicilioAbonado.DomicilioCompleto}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>
@@ -244,14 +244,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Cable coaxil</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 2 && t.OtTareaObservaciones === "Coaxil") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 2 && t.ottarea.OtTareaObservaciones === "Coaxil") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Fibra óptica</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 2 && t.OtTareaObservaciones === "Fibra") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 2 && t.ottarea.OtTareaObservaciones === "Fibra") ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -270,14 +270,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Cable coaxil</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 3 && t.OtTareaObservaciones === "Coaxil") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 3 && t.ottarea.OtTareaObservaciones === "Coaxil") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Fibra óptica</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 3 && t.OtTareaObservaciones === "Fibra") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 3 && t.ottarea.OtTareaObservaciones === "Fibra") ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -307,14 +307,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Onu simple</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 5 && t.OtTareaObservaciones === "Onu simple") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 5 && t.ottarea.OtTareaObservaciones === "Onu simple") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Onu combinada</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 5 && t.OtTareaObservaciones === "Onu combinada") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 5 && t.ottarea.OtTareaObservaciones === "Onu combinada") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
@@ -350,14 +350,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Si</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 7 && t.OtTareaObservaciones === "Retira onu") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 7 && t.ottarea.OtTareaObservaciones === "Retira onu") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>No</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 7 && !t.OtTareaObservaciones) ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 7 && !t.ottarea.OtTareaObservaciones) ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -384,7 +384,7 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Cable Coaxil</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> (t.TareaId === 7 && t.OtTareaObservaciones === "Coaxil") || (t.TareaId === 8 && t.OtTareaObservaciones === "Coaxil")) ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> (t.TareaId === 7 && t.ottarea.OtTareaObservaciones === "Coaxil") || (t.TareaId === 8 && t.ottarea.OtTareaObservaciones === "Coaxil")) ? "x" : ""}</Text>
 
                     </View>
                 </View>
@@ -392,7 +392,7 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Fibra óptica</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> (t.TareaId === 7 && t.OtTareaObservaciones === "Fibra") || (t.TareaId === 8 && t.OtTareaObservaciones === "Fibra")) ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> (t.TareaId === 7 && t.ottarea.OtTareaObservaciones === "Fibra") || (t.TareaId === 8 && t.ottarea.OtTareaObservaciones === "Fibra")) ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -474,14 +474,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Si</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 16 && t.OtTareaObservaciones === "Retira cable") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 16 && t.ottarea.OtTareaObservaciones === "Retira cable") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>No</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 16 && !t.OtTareaObservaciones) ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 16 && !t.ottarea.OtTareaObservaciones) ? "x" : ""}</Text>
 
                     </View>
                 </View>
@@ -501,14 +501,14 @@ const OtCaratula = ({tareas, data}) => (
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>Si</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 17 && t.OtTareaObservaciones === "Retira onu") ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 17 && t.ottarea.OtTareaObservaciones === "Retira onu") ? "x" : ""}</Text>
                     </View>
                 </View>
                 <View style={styles.flexColumn}>
                     <View style={styles.flexRowNoBorder}>
                         <Text style={styles.label}>No</Text>
                         <View style={styles.checkBox}></View>
-                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 17 && !t.OtTareaObservaciones) ? "x" : ""}</Text>
+                        <Text style={styles.x}>{tareas.some((t)=> t.TareaId === 17 && !t.ottarea.OtTareaObservaciones) ? "x" : ""}</Text>
                     </View>
                 </View>
             </View>
@@ -666,11 +666,11 @@ const OtCaratula = ({tareas, data}) => (
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Responsable de ejecución: <Text style={styles.h4}>{data.ApellidoResponsableEjecucion +', '+data.NombreResponsableEjecucion}</Text></Text>            
+                <Text style={styles.h3}>Responsable de ejecución: <Text style={styles.h4}>{data.TecnicoResponsableOt.NombreCompletoTecnicoResponsable}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>
-                <Text style={styles.h3}>Auxiliar de línea: <Text style={styles.h4}>{data.OtAuxiliarDeLinea ? data.ApellidoAuxiliarDeLinea +', ' + data.NombreAuxiliarDeLinea : '-'}</Text></Text>            
+                <Text style={styles.h3}>Auxiliar de línea: <Text style={styles.h4}>{data.TecnicoAuxiliarOt ? data.TecnicoAuxiliarOt.NombreCompletoAuxiliarDeLinea: '-'}</Text></Text>            
             </View>
 
             <View style={styles.flexRow}>

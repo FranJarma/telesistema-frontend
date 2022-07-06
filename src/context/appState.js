@@ -46,8 +46,6 @@ const AppState = props => {
         tareaCambioDomicilio: [],
         ordenesDeTrabajo: [],
         ordenesDeTrabajoAsignadas: [],
-        tecnicosOrdenDeTrabajo: [],
-        tareasOrdenDeTrabajo: [],
         movimientos: [],
         conceptos: [],
         cargando: false,
@@ -688,7 +686,7 @@ const AppState = props => {
             const blob = await pdf(caratula).toBlob();
             if(tipo === "Factura") saveAs(blob, `Factura-N°CAE:${data.FacturaCodigoAutorizacion}-Abonado:${data.AbonadoNumero}`)
             if(tipo === "Recibo") saveAs(blob, `Recibo-N°:${data.ReciboId}-Abonado:${data.AbonadoNumero}`);
-            if(tipo === "Ot") saveAs(blob, `OT-N°:${data.OtId}-Abonado:${data.AbonadoNumero}`);
+            if(tipo === "Ot") saveAs(blob, `OT-N°:${data.OtId}-Abonado:${data.AbonadoOt.AbonadoNumero}`);
             dispatch({
                 type: TYPES.DESCARGAR_COMPROBANTE
             })
@@ -1480,7 +1478,10 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
+            if(error == VARIABLES.ERROR_AUTENTICACION || error == VARIABLES.ERROR_NETWORK) {
+                navigate("/");
+                window.location.reload();
+            };
         }
     }
     const traerOrdenesDeTrabajoAsignadas = async (tecnicoId, estadoId) => {
@@ -1488,30 +1489,6 @@ const AppState = props => {
             const resultado = await clienteAxios.get(`/api/ot/tecnico=${tecnicoId}&estado=${estadoId}`);
             dispatch({
                 type: TYPES.LISTA_OT_ASIGNADAS,
-                payload: resultado.data
-            })
-        } catch (error) {
-            console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
-        }
-    }
-    const traerTecnicosOt = async (ot) => {
-        try {
-            const resultado = await clienteAxios.get(`/api/ot/tecnicos/${ot}`);
-            dispatch({
-                type: TYPES.LISTA_TECNICOS_OT,
-                payload: resultado.data
-            })
-        } catch (error) {
-            console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
-        }
-    }
-    const traerTareasOt = async (ot) => {
-        try {
-            const resultado = await clienteAxios.get(`/api/ot/tareas/${ot}`);
-            dispatch({
-                type: TYPES.LISTA_TAREAS_OT,
                 payload: resultado.data
             })
         } catch (error) {
@@ -1855,7 +1832,7 @@ const AppState = props => {
             traerPagosPorAbonado, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, traerDatosInscripcion, traerPagosMensualesPendientes,
             traerDetallesPago, eliminarDetallePago,
             traerTareas, traerTareaCambioDomicilio, crearTarea, modificarTarea, eliminarTarea,
-            traerOrdenesDeTrabajo, traerOrdenesDeTrabajoAsignadas, traerTecnicosOt, traerTareasOt, crearOrdenDeTrabajo, modificarOrdenDeTrabajo,
+            traerOrdenesDeTrabajo, traerOrdenesDeTrabajoAsignadas, crearOrdenDeTrabajo, modificarOrdenDeTrabajo,
             finalizarOrdenDeTrabajo, registrarVisitaOrdenDeTrabajo, eliminarOrdenDeTrabajo,
             traerMovimientosPorFecha, crearMovimiento,
             traerConceptos,

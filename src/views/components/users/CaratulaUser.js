@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import AppContext from '../../../context/appContext';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
-import { Button, Card, CardContent, FormControlLabel, Grid, FormGroup, Switch, TextField, Typography} from '@material-ui/core'; 
+import { Button, Card, CardContent, FormControlLabel, Grid, FormGroup, Switch, TextField, Typography, Checkbox} from '@material-ui/core'; 
 import { useLocation } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -259,6 +259,7 @@ const CaratulaUser = () => {
                         data={roles}
                         onSelectedRowsChange={row => setRolesSeleccionados(row.selectedRows)}
                         selectableRows
+                        selectableRowsComponent={Checkbox}
                         selectableRowSelected={row => RolesSeleccionados.find((rol) => rol.RoleId === row.RoleId)}>
                     </DataTable>
                     </Card>

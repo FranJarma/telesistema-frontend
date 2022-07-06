@@ -39,25 +39,36 @@ const ListaAbonadosAtrasados = () => {
     },
     {
         "name": <TooltipForTable name="Nombre Completo" />,
-        "selector": row => row["Apellido"] + ', ' + row["Nombre"],
+        "selector": row => <TooltipForTable name={row["NombreCompleto"]} />,
         "wrap": true,
         "sortable": true,
     },
     {
         "name": <TooltipForTable name="Documento" />,
-        "selector": row => formatDocumento(row["Documento"]),
+        "selector": row => <TooltipForTable name={formatDocumento(row["Documento"])} />,
         "wrap": true,
         "sortable": true,
     },
     {
         "name": <TooltipForTable name="Domicilio" />,
-        "selector": row => row["EsAlquiler"] ? <SpanAlquiler domicilio={row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"]}/>
-        : row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],        "wrap": true,
+        "selector": row =>
+        row["DomicilioAbonado"].EsAlquiler === 1 ?
+        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
+        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
+        : row["DomicilioAbonado"].DomicilioCompleto
+        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
+        "wrap": true,
         "sortable": true
     },
     {
         "name": <TooltipForTable name="Meses que debe"/>,
-        "selector": row => <TooltipForTable name={row["MesesDebe"]}/>,
+        "selector": row => <TooltipForTable name={row["PagosAbonado"][0].MesesDebe}/>,
+        "sortable": true,
+        "hide": "sm",
+    },
+    {
+        "name": <TooltipForTable name="Debe en total"/>,
+        "selector": row => <TooltipForTable name={'$ '+ row["PagosAbonado"][0].Saldo}/>,
         "sortable": true,
         "hide": "sm",
     }

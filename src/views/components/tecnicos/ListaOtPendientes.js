@@ -124,23 +124,25 @@ const ListaOtPendientes = () => {
             "name": "Abonado",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["ApellidoAbonado"] + ", " + row["NombreAbonado"]
+            "selector": row => row["AbonadoOt"].NombreCompletoAbonado
         },
         {
             "name": "Domicilio",
-            "width": "300px",
             "wrap": true,
             "sortable": true,
-            "selector": row => !row["DomicilioCalleCambio"] ? row["DomicilioCalle"] + " " + row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"] :
-            <DesdeHasta title1="Domicilio Viejo" title2="Domicilio Nuevo" proposito={"Cambio de Domicilio"} desde={row["DomicilioCalle"] + " " +  row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"]} hasta={row["DomicilioCalleCambio"] + " " +  row["DomicilioNumeroCambio"] + ", B° " + row["BarrioNombreCambio"] + " " + row["MunicipioNombreCambio"]}></DesdeHasta>
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
+            +` B° ${row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre} ${row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre}`,
+            // !row["DomicilioCalleCambio"] ? row["DomicilioCalle"] + " " + row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"] :
+            // <DesdeHasta title1="Domicilio Viejo" title2="Domicilio Nuevo" proposito={"Cambio de Domicilio"} desde={row["DomicilioCalle"] + " " +  row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"]} hasta={row["DomicilioCalleCambio"] + " " +  row["DomicilioNumeroCambio"] + ", B° " + row["BarrioNombreCambio"] + " " + row["MunicipioNombreCambio"]}></DesdeHasta>
         },
         {
             "name": "Servicio",
             "width": "200px",
             "wrap": true,
             "sortable": true,
-            "selector": row => !row["NuevoServicioId"] ? row["ServicioViejo"]:
-            <DesdeHasta title1="Servicio Viejo" title2="Servicio Nuevo" proposito={"Cambio de Servicio"} desde={row["ServicioViejo"]} hasta={row["ServicioNuevo"]}></DesdeHasta>
+            "selector": row => row["AbonadoOt"].ServicioAbonado.ServicioNombre
+        //     !row["NuevoServicioId"] ? row["ServicioViejo"]:
+        //     <DesdeHasta title1="Servicio Viejo" title2="Servicio Nuevo" proposito={"Cambio de Servicio"} desde={row["ServicioViejo"]} hasta={row["ServicioNuevo"]}></DesdeHasta>
         },
         {
             "name": <TooltipForTable name="Fecha de Emisión"/>,
@@ -152,13 +154,13 @@ const ListaOtPendientes = () => {
             "name": "Monto",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["Monto"] > 0 ? "$ " + row["Monto"] : "-"
+            "selector": row => row["OtMonto"] > 0 ? "$ "+ row["OtMonto"] : "$ "+ 0
         },
         {
             "name": <TooltipForTable name="Técnico responsable"/>,
             "wrap": true,
             "sortable": true,
-            "selector": row => row["ApellidoResponsableEjecucion"] + ", " + row["NombreResponsableEjecucion"]
+            "selector": row => row["TecnicoResponsableOt"].NombreCompletoTecnicoResponsable
         },
         {
             "name": <TooltipForTable name="Observaciones"/>,
@@ -190,6 +192,15 @@ const ListaOtPendientes = () => {
             </>,
         }
     ]
+    const ExpandedComponent = ({ data }) =>
+    <>
+    <Card>
+        <CardContent>
+            <Typography variant="h2">Tareas:</Typography>
+            {data.TareasOt.map((t) => <MenuItem>{t.TareaNombre}</MenuItem>)}
+        </CardContent>
+    </Card>
+    </>;
     return (
         <>
         <div className="container">
@@ -237,6 +248,7 @@ const ListaOtPendientes = () => {
                     </Grid>
                 </Grid> */}
                 <Datatable
+                    expandedComponent={ExpandedComponent}
                     loader={true}
                     datos={ordenesDeTrabajo}
                     columnas={columnasOt}

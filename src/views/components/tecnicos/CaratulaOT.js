@@ -174,8 +174,8 @@ const CaratulaOt = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + ', ' + row["DomicilioNumero"] + ', B° ' + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
-        }    
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
+            +` B° ${row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre} ${row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre}`,        }    
     ]
 
     return ( 
@@ -273,7 +273,7 @@ const CaratulaOt = () => {
                                     }}
                                     options={abonados}
                                     noOptionsText="No se encontraron abonados"
-                                    getOptionLabel={(option) => option.Apellido + ", " + option.Nombre}
+                                    getOptionLabel={(option) => option.NombreCompleto}
                                     renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Abonado"/>}
                                     />
                                 }
@@ -282,7 +282,7 @@ const CaratulaOt = () => {
                             <>
                             <Grid item xs={12} md={6} lg={6} xl={6}>
                                 <TextField
-                                    value={location.state ? location.state.DomicilioCalle +' '+ location.state.DomicilioNumero + " B° " + location.state.BarrioNombre + ', ' + location.state.MunicipioNombre : abonadoOt ? abonadoOt.DomicilioCalle + ' '+ abonadoOt.DomicilioNumero + " B° " + abonadoOt.BarrioNombre + ', ' + abonadoOt.MunicipioNombre : ""}
+                                    value={abonadoOt ? `${abonadoOt.DomicilioAbonado.DomicilioCompleto} B° ${abonadoOt.DomicilioAbonado.Barrio.BarrioNombre}, ${abonadoOt.DomicilioAbonado.Barrio.Municipio.MunicipioNombre}` : ""}
                                     variant="outlined"
                                     fullWidth
                                     label="Domicilio completo"

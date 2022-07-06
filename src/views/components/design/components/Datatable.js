@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Spinner from './Spinner';
 import Buscador from './Buscador';
 import convertirAFecha from './../../../../helpers/ConvertirAFecha';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, paginacionPorDefecto, buscar, seleccionable, fnSeleccionable, fnExpandible}) => {
     //state y effect para spinner
@@ -21,6 +22,7 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
     (item.createdAt && convertirAFecha(item.createdAt).includes(textoFiltrado.toLowerCase()))
     || (item.createdBy && item.createdBy.toString().includes(textoFiltrado.toLowerCase()))
     || (item.Nombre && item.Nombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+    || (item.NombreCompleto && item.NombreCompleto.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.Apellido && item.Apellido.toLowerCase().includes(textoFiltrado.toLowerCase()))
     || (item.NombreUsuario && item.NombreUsuario.toString().includes(textoFiltrado.toLowerCase()))
     || (item.Email && item.Email.toString().includes(textoFiltrado.toLowerCase()))
@@ -87,6 +89,7 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
             onSelectedRowsChange={row => fnSeleccionable(row.selectedRows)}
             subHeader = {buscar ? true : false}
             paginationPerPage={paginacionPorDefecto ? paginacionPorDefecto : 10}
+            selectableRowsComponent={Checkbox}
             subHeaderComponent={
                 buscar ? 
                 <Buscador onFiltrar={e => setTextoFiltrado(e.target.value)} textoFiltrado={textoFiltrado}/>

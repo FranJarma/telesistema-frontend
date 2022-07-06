@@ -117,7 +117,7 @@ const ListaAbonadosInscriptos = () => {
     },
     {
         "name": <TooltipForTable name="Nombre Completo" />,
-        "selector": row => row["Apellido"] + ', ' + row["Nombre"],
+        "selector": row => row["NombreCompleto"],
         "wrap": true,
         "sortable": true,
     },

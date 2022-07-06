@@ -28,13 +28,14 @@ const ListaOtFinalizadas = () => {
             "name": "Abonado",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["ApellidoAbonado"] + ", " + row["NombreAbonado"]
+            "selector": row => row["AbonadoOt"].NombreCompletoAbonado
         },
         {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + " " + row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"],
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
+            +` B° ${row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre} ${row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre}`,
         },
         {
             "name": <TooltipForTable name ="Fecha y hora de inicio"/> ,
@@ -49,10 +50,10 @@ const ListaOtFinalizadas = () => {
             "selector": row => row["OtFechaFinalizacion"] ? convertirAFecha(row["OtFechaFinalizacion"]) + "-" + convertirAHora(row["OtFechaFinalizacion"]) : ""
         },
         {
-            "name": <TooltipForTable name="Técnico a cargo"/>,
+            "name": <TooltipForTable name="Técnico responsable"/>,
             "wrap": true,
             "sortable": true,
-            "selector": row => row["ApellidoResponsableEjecucion"] + ", " + row["NombreResponsableEjecucion"]
+            "selector": row => row["TecnicoResponsableOt"].NombreCompletoTecnicoResponsable
         },
         {
             cell: (data) => 

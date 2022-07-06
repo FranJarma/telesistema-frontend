@@ -11,6 +11,7 @@ export const ID_MEDIO_PAGO_FACILIDAD = 10;
 export const ID_MEDIO_PAGO_EFECTIVO= 1;
 //MENSAJES
 export const ERROR_AUTENTICACION = "Error: Request failed with status code 401";
+export const ERROR_NETWORK = "Error: Network Error";
 export const ABONADO_CREADO_CORRECTAMENTE = "El abonado ha sido registrado correctamente. Puede descargar el comprobante";
 export const PAGO_CREADO_CORRECTAMENTE = "El pago ha sido registrado correctamente. Puede descargar el comprobante";
 export const CAMBIO_DOMICILIO_CORRECTO = "El cambio de domicilio ha sido registrado correctamente. Puede descargar el comprobante";
