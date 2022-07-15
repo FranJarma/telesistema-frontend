@@ -21,7 +21,7 @@ import onlyNumbers from './../../../helpers/OnlyNumbers';
 
 const ListaPagos = () => {
     const appContext = useContext(AppContext);
-    const { pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
+    const { pagoAdelantado, pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
     const location = useLocation();
     const [PagoAño, setPagoAño] = useState(new Date());
     const [ConceptoId, setConceptoId] = useState(null);
@@ -94,8 +94,6 @@ const ListaPagos = () => {
     const handleChangeModalPagoAdelantado = () => {
         setPagoAdelantadoInfo({
             ...PagoAdelantadoInfo,
-            MunicipioId: MunicipioId,
-            ServicioId: ServicioId,
             createdBy: GetUserId(),
             updatedBy: GetUserId()
         })
@@ -349,7 +347,8 @@ const ListaPagos = () => {
             variant="contained" color="primary">
             Registrar pago
             </Button>
-            : <ComprobanteButton funcionModal={handleChangeModalNuevoPago} tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
+            :
+            <ComprobanteButton funcionModal={handleChangeModalPagoAdelantado} tipo={RequiereFactura ? "Factura" : "Recibo"} data={RequiereFactura ? comprobante.factura : comprobante.recibo}/>}
             <Button onClick={handleChangeModalPagoAdelantado}>Cancelar</Button></>}
             formulario={
             <>
@@ -424,8 +423,8 @@ const ListaPagos = () => {
                                     <Typography variant="h6">Total a pagar : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0)}</Typography></>
                                     :CantidadMesesAPagar === 6 ?
                                     <><Typography variant="h6">Subtotal : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => prev + curr, 0)}</Typography>
-                                    <Typography variant="h6">Descuento del {location.state.ServicioBonificacionPagoSeisMeses}% : ${(pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0))*location.state.ServicioBonificacionPagoSeisMeses/100}</Typography>
-                                    <Typography variant="h6">Total con descuento aplicado : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0)-(pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0))*location.state.ServicioBonificacionPagoSeisMeses/100}</Typography></>
+                                    <Typography variant="h6">Descuento del {location.state.ServicioAbonado.ServicioBonificacionPagoSeisMeses}% : ${(pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0))*location.state.ServicioAbonado.ServicioBonificacionPagoSeisMeses/100}</Typography>
+                                    <Typography variant="h6">Total con descuento aplicado : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0)-(pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => (prev + curr), 0))*location.state.ServicioAbonado.ServicioBonificacionPagoSeisMeses/100}</Typography></>
                                     :CantidadMesesAPagar === 12  ?
                                     <><Typography variant="h6">Total : ${pagosPendientesTop.map(item => item.PagoTotal).reduce((prev, curr) => prev + curr, 0)-pagosPendientesTop[pagosPendientesTop.length-1].PagoTotal}</Typography>
                                     <Typography variant="h6">Mes gratis : <Chip icon={<i className="bx bx-calendar"></i>} variant="outlined" color="primary" style={{margin: 2}} label={pagosPendientesTop[pagosPendientesTop.length-1].PagoMes+"/"+pagosPendientesTop[pagosPendientesTop.length-1].PagoAño}></Chip></Typography></>

@@ -93,10 +93,10 @@ const CambioDomicilio = () => {
         setPagoInfo({
             ...PagoInfo,
             Total: !EsAlquiler ?
-            tareaCambioDomicilio[0].TareaPrecioUnitario + (tareaCambioDomicilio[0].TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
+            tareaCambioDomicilio.TareaPrecioUnitario + (tareaCambioDomicilio.TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
             :
-            location.state.ServicioPrecioUnitario + tareaCambioDomicilio[0].TareaPrecioUnitario +
-            (tareaCambioDomicilio[0].TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
+            location.state.ServicioAbonado.ServicioPrecioUnitario + tareaCambioDomicilio.TareaPrecioUnitario +
+            (tareaCambioDomicilio.TareaPrecioUnitario * e.target.value.MedioPagoInteres / 100)
         })
     }
     const handleChangeRequiereFactura = () => {
@@ -203,20 +203,20 @@ const CambioDomicilio = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + ' ' + row["DomicilioNumero"] +  ", B° " + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
-        }    
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto + " B°" + row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre + ", " + row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre
+        }  
     ]
     const ExpandedComponent = ({ data }) =>
     <>
-        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-home"></i> Dirección: {data.DomicilioCalle} {data.DomicilioNumero}</Typography>
+        {/* <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-home"></i> Dirección: {data.DomicilioCalle} {data.DomicilioNumero}</Typography>
         <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-home"></i> Barrio: {data.BarrioNombre}</Typography>
         <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-building-house"></i> Municipio: {data.MunicipioNombre}</Typography>
-        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i> Fecha de Solicitud: {convertirAFecha(data.FechaPedidoCambio)}</Typography>
+        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i> Fecha de Solicitud: {convertirAFecha(data.createdAt)}</Typography>
         { data.FechaInicioOt ?
         <><Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i> Fecha de Realización (Inicio): {convertirAFecha(data.FechaInicioOt)} - {convertirAHora(data.FechaInicioOt)}</Typography>
         <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-calendar"></i> Fecha de Realización (Fin): {convertirAFecha(data.OtFechaFinalizacion)} - {convertirAHora(data.OtFechaFinalizacion)}</Typography></>
         : ""}
-        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-clipboard"></i> Observaciones: {data.CambioDomicilioObservaciones}</Typography>
+        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-clipboard"></i> Observaciones: {data.CambioDomicilioObservaciones}</Typography> */}
     </>;
     return ( 
     <>
@@ -453,17 +453,17 @@ const CambioDomicilio = () => {
                                 ))
                                 }
                             </TextField>
-                            {!EsAlquiler && tareaCambioDomicilio.length > 0 && MedioPago !== null ? 
+                            {!EsAlquiler && tareaCambioDomicilio && MedioPago !== null ? 
                             <>
-                            <Typography><b>Precio de Cambio de domicilio:</b> ${tareaCambioDomicilio[0].TareaPrecioUnitario} </Typography>
-                            <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(tareaCambioDomicilio[0].TareaPrecioUnitario * MedioPago.MedioPagoInteres)/100}</Typography>
+                            <Typography><b>Precio de Cambio de domicilio:</b> ${tareaCambioDomicilio.TareaPrecioUnitario} </Typography>
+                            <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(tareaCambioDomicilio.TareaPrecioUnitario * MedioPago.MedioPagoInteres)/100}</Typography>
                             <Typography variant="h2"><b>Precio Final:</b> ${PagoInfo.Total}</Typography>
                             </>
-                            : EsAlquiler && tareaCambioDomicilio.length > 0 && MedioPago !== null ?
+                            : EsAlquiler && tareaCambioDomicilio && MedioPago !== null ?
                             <>
-                            <Typography><b>Precio de Cambio de domicilio:</b> ${tareaCambioDomicilio[0].TareaPrecioUnitario} </Typography>
-                            <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(tareaCambioDomicilio[0].TareaPrecioUnitario * MedioPago.MedioPagoInteres)/100}</Typography>
-                            <Typography><b>Depósito por Alquiler:</b> ${location.state.ServicioPrecioUnitario}</Typography>
+                            <Typography><b>Precio de Cambio de domicilio:</b> ${tareaCambioDomicilio.TareaPrecioUnitario} </Typography>
+                            <Typography><b>Interés del {MedioPago.MedioPagoInteres}%:</b> ${(tareaCambioDomicilio.TareaPrecioUnitario * MedioPago.MedioPagoInteres)/100}</Typography>
+                            <Typography><b>Depósito por Alquiler:</b> ${location.state.ServicioAbonado.ServicioPrecioUnitario}</Typography>
                             <Typography variant="h2"><b>Precio Final:</b> ${PagoInfo.Total}</Typography>
                             </>
                             : ""}

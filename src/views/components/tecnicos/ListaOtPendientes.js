@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, List, ListItem, MenuItem, TextField, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Checkbox, FormControlLabel, FormGroup, Grid, List, ListItem, MenuItem, TextField, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
@@ -12,7 +12,6 @@ import { Alert, Autocomplete } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
 import TooltipForTable from '../../../helpers/TooltipForTable';
-import DesdeHasta from '../../../helpers/DesdeHasta';
 import convertirAHora from '../../../helpers/ConvertirAHora';
 import GetUserId from './../../../helpers/GetUserId';
 import Ot from '../design/components/Ot';
@@ -20,8 +19,7 @@ import onlyNumbers from './../../../helpers/OnlyNumbers';
 
 const ListaOtPendientes = () => {
     const appContext = useContext(AppContext);
-    const { ordenesDeTrabajo, onus, tareasOrdenDeTrabajo, traerOrdenesDeTrabajo,
-        traerTareasOt, registrarVisitaOrdenDeTrabajo,
+    const { ordenesDeTrabajo, onus, traerOrdenesDeTrabajo, registrarVisitaOrdenDeTrabajo,
         finalizarOrdenDeTrabajo, traerOnus} = appContext;
 
     useEffect(()=>{
@@ -93,7 +91,6 @@ const ListaOtPendientes = () => {
     const handleChangeModalFinalizarOt = (data = '') => {
         if(!ModalFinalizarOt) {
             setOtInfo(data);
-            traerTareasOt(data.OtId);
             setModalFinalizarOt(true);
         }
         else {
@@ -314,8 +311,8 @@ const ListaOtPendientes = () => {
                 <>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12} lg={12} xl={12}>
-                    {OtInfo.OtEsPrimeraBajada && tareasOrdenDeTrabajo.length > 0 && tareasOrdenDeTrabajo.find((tareasOt => tareasOt.TareaId === 1 || tareasOt.TareaId === 5 )) ?
-                    <><Alert severity='info'>Al finalizar esta órden de trabajo el abonado: <b>{OtInfo.ApellidoAbonado}, {OtInfo.NombreAbonado}</b> pasará a estar <b>Activo</b></Alert><br/></>
+                    {OtInfo.OtEsPrimeraBajada ?
+                    <><Alert severity='info'>Al finalizar esta órden de trabajo el abonado: <b>{OtInfo.AbonadoOt.NombreCompletoAbonado}</b> pasará a estar <b>Activo</b></Alert><br/></>
                     : ""}
                     </Grid>
                     <Grid item xs={12} md={6} lg={6} xl={6}>

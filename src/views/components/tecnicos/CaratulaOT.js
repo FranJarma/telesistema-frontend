@@ -19,7 +19,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 const CaratulaOt = () => {
     const appContext = useContext(AppContext);
     const { tareas, abonado, abonados, municipios, barrios, usuarios, traerBarriosPorMunicipio, traerMunicipios,
-    traerTareas, traerAbonados, traerAbonado, traerUsuariosPorRol, traerTareasOt, tareasOrdenDeTrabajo,
+    traerTareas, traerAbonados, traerAbonado, traerUsuariosPorRol,
     crearOrdenDeTrabajo, modificarOrdenDeTrabajo, ordenesDeTrabajoAsignadas, traerOrdenesDeTrabajoAsignadas } = appContext;
 
     const location = useLocation();
@@ -42,18 +42,7 @@ const CaratulaOt = () => {
     const [OtResponsableEjecucion, setOtResponsableEjecucion] = useState(null);
     const [OtAuxiliarDeLinea, setOtAuxiliarDeLinea] = useState(null);
 
-    const [PrimerRender, setPrimerRender] = useState(true);
-    const [TareasTab, setTareasTab] = useState(false);
-    const [TecnicosTab, setTecnicosTab] = useState(false);
     const [EditMode, setEditMode] = useState(false);
-
-    const handleChangeTabTareas = (e) => {
-        if(!TareasTab && location.state && PrimerRender) {
-            setTareasOt(tareasOrdenDeTrabajo);
-            setPrimerRender(false);
-        }
-        setTareasTab(!TareasTab);
-    }
 
     const [OtFechaPrevistaVisita, setOtFechaPrevistaVisita] = useState(new Date());
 
@@ -70,19 +59,20 @@ const CaratulaOt = () => {
             setOtInfo(location.state);
             setMunicipioId(location.state.MunicipioId);
             setBarrio(location.state);
-            traerTareasOt(location.state.OtId);
-            setTareasOt(tareasOrdenDeTrabajo);
+            setTareasOt(location.state.TareasOt);
             setOtResponsableEjecucion({
-                Nombre: location.state.NombreResponsableEjecucion,
-                Apellido: location.state.ApellidoResponsableEjecucion,
-                UserId: location.state.OtResponsableEjecucion,
+                Nombre: location.state.TecnicoResponsableOt.Nombre,
+                Apellido: location.state.TecnicoResponsableOt.Apellido,
+                UserId: location.state.TecnicoResponsableOt.UserId,
             });
-            setOtAuxiliarDeLinea({
-                Nombre: location.state.NombreAuxiliarDeLinea,
-                Apellido: location.state.ApellidoAuxiliarDeLinea,
-                UserId: location.state.OtAuxiliarDeLinea,
-            });
-            traerOrdenesDeTrabajoAsignadas(location.state.OtResponsableEjecucion, 5);
+            if(location.state.TecnicoAuxiliarOt){
+                setOtAuxiliarDeLinea({
+                    Nombre: location.state.TecnicoAuxiliarOt.Nombre,
+                    Apellido: location.state.TecnicoAuxiliarOt.Apellido,
+                    UserId: location.state.TecnicoAuxiliarOt.UserId,
+                });
+            }
+
         }
     },[])
 
@@ -99,14 +89,6 @@ const CaratulaOt = () => {
         setMunicipioId(e.target.value);
         setBarrio(null);
         traerBarriosPorMunicipio(e.target.value);
-    }
-
-    const handleChangeTabOt = () => {
-        if(abonado && location.state) {
-            setAbonadoOt({
-                abonado
-            });
-        }
     }
 
     const onSubmitOT = (e) => {
@@ -191,9 +173,9 @@ const CaratulaOt = () => {
             <CardContent>
                 <Tabs>
                     <TabList>
-                        <Tab onClick={handleChangeTabOt}><i className="bx bx-task"></i> Datos de la OT</Tab>
+                        <Tab><i className="bx bx-task"></i> Datos de la OT</Tab>
                         <Tab><i className='bx bx-wrench'></i> Técnicos</Tab>
-                        <Tab onClick={handleChangeTabTareas}><i className='bx bx-list-ol'></i> Tareas</Tab>
+                        <Tab><i className='bx bx-list-ol'></i> Tareas</Tab>
                     </TabList>
                 <TabPanel>
                     <Card>
@@ -254,7 +236,7 @@ const CaratulaOt = () => {
                                 <TextField
                                 variant="outlined"
                                 fullWidth
-                                value={location.state.ApellidoAbonado + ', ' + location.state.NombreAbonado}
+                                value={location.state.AbonadoOt.NombreCompletoAbonado}
                                 label="Apellido y nombre del abonado">
                                 </TextField>
                                 :
@@ -282,7 +264,7 @@ const CaratulaOt = () => {
                             <>
                             <Grid item xs={12} md={6} lg={6} xl={6}>
                                 <TextField
-                                    value={abonadoOt ? `${abonadoOt.DomicilioAbonado.DomicilioCompleto} B° ${abonadoOt.DomicilioAbonado.Barrio.BarrioNombre}, ${abonadoOt.DomicilioAbonado.Barrio.Municipio.MunicipioNombre}` : ""}
+                                    value={abonadoOt ? `${abonadoOt.DomicilioAbonado.DomicilioCompleto} B° ${abonadoOt.DomicilioAbonado.Barrio.BarrioNombre}, ${abonadoOt.DomicilioAbonado.Barrio.Municipio.MunicipioNombre}` : location.state ? location.state.AbonadoOt.DomicilioAbonado.DomicilioCompleto + " B° " + location.state.AbonadoOt.DomicilioAbonado.Barrio.BarrioNombre +', '+ location.state.AbonadoOt.DomicilioAbonado.Barrio.Municipio.MunicipioNombre   : ""}
                                     variant="outlined"
                                     fullWidth
                                     label="Domicilio completo"

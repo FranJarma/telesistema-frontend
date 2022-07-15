@@ -60,27 +60,26 @@ const CambioTitularidad = () => {
     const [CondicionIvaId, setCondicionIvaId] = useState(0);
     const [FechaNacimiento, setFechaNacimiento] = useState(new Date());
     const [FechaContrato, setFechaContrato] = useState(new Date());
-    const [FechaBajada, setFechaBajada] = useState(new Date());
     const [DomicilioId, setDomicilioId] = useState(0);
 
     const [MismoDomicilio, setMismoDomicilio] = useState(false);
     const handleChangeCheckMismoDomicilio = e => {
         setMismoDomicilio(!MismoDomicilio);
         if(!MismoDomicilio){
-            setProvinciaId(location.state.ProvinciaId);
-            setMunicipioId(location.state.MunicipioId);
+            setProvinciaId(location.state.DomicilioAbonado.Barrio.Municipio.Provincia.ProvinciaId);
+            setMunicipioId(location.state.DomicilioAbonado.Barrio.Municipio.MunicipioId);
             setBarrio({
-                BarrioId: location.state.BarrioId,
-                BarrioNombre: location.state.BarrioNombre
+                BarrioId: location.state.DomicilioAbonado.Barrio.BarrioId,
+                BarrioNombre: location.state.DomicilioAbonado.Barrio.BarrioNombre
             });
             setAbonadoInfo({
                 ...abonadoInfo,
-                DomicilioCalle: location.state.DomicilioCalle,
-                DomicilioNumero: location.state.DomicilioNumero,
-                DomicilioPiso: location.state.DomicilioPiso,
+                DomicilioCalle: location.state.DomicilioAbonado.DomicilioCalle,
+                DomicilioNumero: location.state.DomicilioAbonado.DomicilioNumero,
+                DomicilioPiso: location.state.DomicilioAbonado.DomicilioPiso,
                 createdBy: GetUserId()
             });
-            setDomicilioId(location.state.DomicilioId);
+            setDomicilioId(location.state.DomicilioAbonado.DomicilioId);
         }
         else {
             setMunicipioId(0);
@@ -131,7 +130,6 @@ const CambioTitularidad = () => {
             DomicilioPiso,
             FechaNacimiento,
             FechaContrato,
-            FechaBajada,
             CondicionIvaId,
             ProvinciaId,
             MunicipioId,
@@ -165,10 +163,10 @@ const CambioTitularidad = () => {
                         <Grid item xs={12} lg={3}>
                             <Typography variant="h6"> <b> Nombre completo: </b> {location.state.Nombre} {location.state.Apellido}</Typography>
                             <Typography variant="h6"> <b> DNI: </b> {location.state.Documento}</Typography>
-                            <Typography variant="h6"> <b> Tipo de servicio contratado: </b> {location.state.ServicioNombre}</Typography>
+                            <Typography variant="h6"> <b> Tipo de servicio contratado: </b> {location.state.ServicioAbonado.ServicioNombre}</Typography>
                             <Typography variant="h6"> <b> Fecha de Contrato: </b> {convertirAFecha(location.state.FechaContrato)}</Typography>
-                            <Typography variant="h6"> <b> Dirección: </b> {location.state.DomicilioCalle} {location.state.DomicilioNumero}</Typography>
-                            <Typography variant="h6"> <b> Barrio: </b> {location.state.BarrioNombre}, {location.state.MunicipioNombre} {location.state.ProvinciaNombre}</Typography>
+                            <Typography variant="h6"> <b> Dirección: </b> {location.state.DomicilioAbonado.DomicilioCompleto}</Typography>
+                            <Typography variant="h6"> <b> Barrio: </b> {location.state.DomicilioAbonado.Barrio.BarrioNombre}, {location.state.DomicilioAbonado.Barrio.Municipio.MunicipioNombre}</Typography>
                             {location.state.OnuMac ? 
                                 <>
                                 <Typography variant="h6"> <b> MAC: </b> {location.state.OnuMac} </Typography>
@@ -229,7 +227,7 @@ const CambioTitularidad = () => {
                                 >
                                 </TextField>
                             </Grid>
-                            <Grid item xs={12} md={3} lg={3} xl={3}>
+                            <Grid item xs={12} md={6} lg={3} xl={3}>
                                 <TextField
                                 variant="outlined"
                                 value={CondicionIvaId}
@@ -243,18 +241,17 @@ const CambioTitularidad = () => {
                                 ))}
                                 </TextField>
                             </Grid>
-                            <Grid item xs={12} md={3} lg={3} xl={3}>
-                                <TextField
-                                variant="outlined"
-                                value={Email}
-                                name="Email"
-                                onChange={onInputChange}
+                            <Grid item xs={12} md={3} lg={2} xl={2}>
+                                <TextField 
+                                variant='outlined'
+                                value={FechaContrato.toLocaleDateString()}
+                                format="dd/MM/yyyy"
                                 fullWidth
-                                label="Email"
+                                label="Fecha de Contrato"
                                 >
-                                </TextField>
+                                </TextField >
                             </Grid>
-                            <Grid item xs={12} md={3} lg={3} xl={3}>
+                            <Grid item xs={12} md={3} lg={2} xl={2}>
                                 <DatePicker 
                                 inputVariant="outlined"
                                 value={FechaNacimiento}
@@ -267,7 +264,7 @@ const CambioTitularidad = () => {
                                 views={["year", "month", "date"]}>
                                 </DatePicker >
                             </Grid>
-                            <Grid item xs={12} md={3} lg={3} xl={3}>
+                            <Grid item xs={12} md={6} lg={2} xl={2}>
                                 <TextField
                                 variant="outlined"
                                 value={Telefono}
@@ -278,27 +275,16 @@ const CambioTitularidad = () => {
                                 label="N° Teléfono">
                                 </TextField>
                             </Grid>
-                            <Grid item xs={12} md={4} lg={4} xl={4}>
-                                <DatePicker 
-                                inputVariant="outlined"
-                                value={FechaContrato}
-                                onChange={(fecha)=>setFechaContrato(fecha)}
-                                format="dd/MM/yyyy"
+                            <Grid item xs={12} md={6} lg={3} xl={3}>
+                                <TextField
+                                variant="outlined"
+                                value={Email}
+                                name="Email"
+                                onChange={onInputChange}
                                 fullWidth
-                                label="Fecha de Contrato"
+                                label="Email"
                                 >
-                                </DatePicker >
-                            </Grid>
-                            <Grid item xs={12} md={4} lg={4} xl={4}>
-                                <DatePicker 
-                                inputVariant="outlined"
-                                value={FechaBajada}
-                                onChange={(fecha)=>setFechaBajada(fecha)}
-                                format="dd/MM/yyyy"
-                                fullWidth
-                                label="Fecha de Bajada"
-                                >
-                                </DatePicker >
+                                </TextField>
                             </Grid>
                         </Grid>
                     </CardContent>

@@ -110,7 +110,7 @@ const CambioServicio = () => {
         },
         {
             "name": "Servicio",
-            "selector": row =>row["Onu"] ? row["Servicio"].ServicioNombre + ' | ' + "MAC Onu:" + ' ' + row["Onu"].OnuMac : row["Servicio"].ServicioNombre,
+            "selector": row =>row["Onu"].OnuMac ? row["Servicio"].ServicioNombre + ' | ' + "MAC Onu:" + ' ' + row["Onu"].OnuMac : row["Servicio"].ServicioNombre,
             "wrap": true,
             "sortable": true
         },
@@ -165,7 +165,7 @@ const CambioServicio = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + ', ' + row["DomicilioNumero"] + ' | ' +  "Barrio " + row["BarrioNombre"] + ' | ' +  row["MunicipioNombre"],
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto + " B°" + row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre + ", " + row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre
         }    
     ]
     const ExpandedComponent = ({ data }) =>
@@ -220,13 +220,13 @@ const CambioServicio = () => {
                 <CardContent>
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
-                            <Typography variant="h6"><b>Domicilio actual: </b>{location.state.DomicilioCalle}, {location.state.DomicilioNumero}</Typography>
-                            <Typography variant="h6"><b>Barrio: </b>{location.state.BarrioNombre}</Typography>
-                            <Typography variant="h6"><b>Municipio: </b> {location.state.MunicipioNombre}</Typography>
+                            <Typography variant="h6"><b>Domicilio actual: </b>{location.state.DomicilioAbonado.DomicilioCompleto}</Typography>
+                            <Typography variant="h6"><b>Barrio: </b>{location.state.DomicilioAbonado.Barrio.BarrioNombre}</Typography>
+                            <Typography variant="h6"><b>Municipio: </b> {location.state.DomicilioAbonado.Barrio.Municipio.MunicipioNombre}</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
-                            <Typography variant="h6"><b>Servicio actual: </b> {location.state.ServicioNombre}</Typography>
-                            {location.state.OnuMac ? <Typography variant="h6"><b>MAC ONU: </b> {location.state.OnuMac}</Typography>:""}
+                            <Typography variant="h6"><b>Servicio actual: </b> {location.state.ServicioAbonado.ServicioNombre}</Typography>
+                            {/* {location.state.Onu.OnuMac ? <Typography variant="h6"><b>MAC ONU: </b> {location.state.Onu.OnuMac}</Typography>:""} */}
                             <Typography variant="h6"><b>Fecha de contrato: </b> {convertirAFecha(location.state.FechaContrato)}</Typography>
                         </Grid>
                     </Grid>

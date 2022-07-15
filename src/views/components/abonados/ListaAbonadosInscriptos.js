@@ -208,7 +208,7 @@ const columnasInscripcion = [
         cell: (data) =>
         <>
         {
-        data.Movimiento.FacturaId ? <><Factura data={data} format={true}/></>
+        data.Movimiento.FacturaId !== null ? <><Factura data={data} format={true}/></>
         : <Recibo data={data} format={true}/>
         }
         </>,
@@ -321,7 +321,7 @@ const columnasInscripcion = [
                 datos={detallesInscripcion}
                 columnas={columnasInscripcion}></Datatable>
                 <Typography variant="h2"><b>Precio total de inscripción:</b> ${inscripcion.PagoTotal}</Typography>
-                <Typography variant="h2"><b>Saldo restante:</b> ${inscripcion.PagoSaldo}<Button style={{float: 'right'}} variant="contained" color="secondary">Pagar saldo restante</Button></Typography>
+                <Typography variant="h2"><b>Saldo restante:</b> ${inscripcion.PagoSaldo}{inscripcion.PagoSaldo > 0 ? <Button style={{float: 'right'}} variant="contained" color="secondary">Pagar saldo restante</Button>:""}</Typography>
                 </>
                 : "" }
                 </>}

@@ -140,23 +140,23 @@ const CaratulaAbonado = () => {
                 Cuit: location.state.Cuit,
                 Email: location.state.Email,
                 Telefono: location.state.Telefono,
-                DomicilioCalle: location.state.DomicilioCalle,
-                DomicilioNumero: location.state.DomicilioNumero,
-                DomicilioPiso: location.state.DomicilioPiso,
+                DomicilioCalle: location.state.DomicilioAbonado.DomicilioCalle,
+                DomicilioNumero: location.state.DomicilioAbonado.DomicilioNumero,
+                DomicilioPiso: location.state.DomicilioAbonado.DomicilioPiso,
                 updatedAt: new Date(),
                 updatedBy: GetUserId()
             });
-            setMunicipioId(location.state.MunicipioId);
+            setMunicipioId(location.state.DomicilioAbonado.Barrio.Municipio.MunicipioId);
             traerBarriosPorMunicipio(location.state.MunicipioId);
             setBarrio({
-                BarrioId: location.state.BarrioId,
-                BarrioNombre: location.state.BarrioNombre
+                BarrioId: location.state.DomicilioAbonado.Barrio.BarrioId,
+                BarrioNombre: location.state.DomicilioAbonado.Barrio.BarrioNombre
             });
             setServicio({
-                ServicioId: location.state.ServicioId,
-                ServicioNombre: location.state.ServicioNombre,
-                ServicioPrecioUnitario: location.state.ServicioPrecioUnitario,
-                ServicioInscripcion: location.state.ServicioInscripcion,
+                ServicioId: location.state.ServicioAbonado.ServicioId,
+                ServicioNombre: location.state.ServicioAbonado.ServicioNombre,
+                ServicioPrecioUnitario: location.state.ServicioAbonado.ServicioPrecioUnitario,
+                ServicioInscripcion: location.state.ServicioAbonado.ServicioInscripcion,
             });
             setCondicionIvaId(location.state.CondicionIvaId);
             setFechaNacimiento(location.state.FechaNacimiento);
@@ -235,7 +235,7 @@ const CaratulaAbonado = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + ', ' + row["DomicilioNumero"] + ', B° ' + row["BarrioNombre"] + ' ' +  row["MunicipioNombre"],
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto + " B°" + row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre + ", " + row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre
         }    
     ]
     return ( 
@@ -365,7 +365,7 @@ const CaratulaAbonado = () => {
                         <TextField
                         variant = {location.state ? "filled" : "outlined"}
                         disabled = {location.state ? true : false}
-                        value={location.state ? location.state.ProvinciaNombre : ProvinciaId}
+                        value={location.state ? location.state.DomicilioAbonado.Barrio.Municipio.Provincia.ProvinciaNombre : ProvinciaId}
                         label="Provincia"
                         fullWidth
                         select = {location.state ? false : true}
@@ -455,7 +455,7 @@ const CaratulaAbonado = () => {
                         <TextField
                         variant = {location.state ? "filled" : "outlined"}
                         disabled = {location.state ? true : false}
-                        value={location.state ? location.state.ServicioNombre : Servicio !== null ? Servicio : ""}
+                        value={location.state ? location.state.ServicioAbonado.ServicioNombre : Servicio !== null ? Servicio : ""}
                         onChange={handleChangeServicioSeleccionado}
                         label="Tipo de servicio"
                         fullWidth

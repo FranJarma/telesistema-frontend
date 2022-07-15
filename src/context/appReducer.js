@@ -82,13 +82,21 @@ export default (state, action) => {
                 registrado: true,
                 comprobante: action.payload[0],
                 historialDomicilios: [{
-                    DomicilioCalle: action.payload[1].DomicilioCalle,
-                    DomicilioNumero: action.payload[1].DomicilioNumero,
-                    BarrioNombre: action.payload[1].Barrio.BarrioNombre,
-                    MunicipioNombre: action.payload[1].Municipio.MunicipioNombre,
-                    FechaPedidoCambio: new Date().toISOString(),
-                    FechaFinalizacionOt: null,
-                    CambioDomicilioObservaciones: 'Esperando finalización de OT. Una vez finalizada, este pasará a ser el nuevo domicilio del abonado'
+                    createdAt: new Date().toISOString(),
+                    CambioDomicilioObservaciones: 'Esperando finalización de OT. Una vez finalizada, este pasará a ser el nuevo domicilio del abonado',
+                    Domicilio: {
+                        DomicilioCalle: action.payload[1].DomicilioCalle,
+                        DomicilioNumero: action.payload[1].DomicilioNumero,
+                        Barrio: {
+                            BarrioNombre: action.payload[1].Barrio.BarrioNombre,
+                            Municipio: {
+                                MunicipioNombre: action.payload[1].Municipio.MunicipioNombre,
+                            }
+                        }
+                    },
+                    OtUDomicilio: {
+                        OtFechaFinalizacion: null
+                    }
                 }, ...state.historialDomicilios]
             };
         }
@@ -98,10 +106,17 @@ export default (state, action) => {
                 registrado: true,
                 comprobante: action.payload[0],
                 historialServicios: [{
-                    ServicioNombre: action.payload[1].Servicio.ServicioNombre,
-                    FechaPedidoCambio: new Date().toISOString(),
-                    OtFechaFinalizacion: null,
-                    CambioServicioObservaciones: 'Esperando finalización de OT. Una vez finalizada, este pasará a ser el nuevo servicio del abonado'
+                    createdAt: new Date().toISOString(),
+                    CambioServicioObservaciones: 'Esperando finalización de OT. Una vez finalizada, este pasará a ser el nuevo servicio del abonado',
+                    Servicio: {
+                        ServicioNombre: action.payload[1].Servicio.ServicioNombre,
+                    },
+                    Onu: {
+                        OnuMac: ""
+                    },
+                    OtUServicio: {
+                        OtFechaFinalizacion: null
+                    }
                 }, ...state.historialServicios]
             };
         }
@@ -318,11 +333,22 @@ export default (state, action) => {
                 pagos: [...state.pagos]
         }
         case TYPES.CREAR_PAGO_ADELANTADO:
-            for(let i=0; i<=action.payload[1].PagoAdelantadoInfo.CantidadMesesAPagar-1; i++){
-                pago = state.pagos.find(pago => pago.PagoId === action.payload[1].MesesAPagar[i].PagoId);
-                pago.PagoSaldo = 0;
-                pago.PagoObservaciones = `Pago Adelantado desde: ${action.payload[1].MesesAPagar[0].PagoMes}/${action.payload[1].MesesAPagar[0].PagoAño} hasta: ${action.payload[1].MesesAPagar[action.payload[1].PagoAdelantadoInfo.CantidadMesesAPagar-1].PagoMes}/${action.payload[1].MesesAPagar[action.payload[1].PagoAdelantadoInfo.CantidadMesesAPagar-1].PagoAño}`;
-            } 
+            const pagoN     =  parseInt(action.payload[1].PagoAdelantadoInfo.CantidadMesesAPagar) - 1;
+            const desde     = action.payload[1].MesesAPagar[0].PagoMes + "/"
+                            + action.payload[1].MesesAPagar[0].PagoAño;
+            const hasta     = action.payload[1].MesesAPagar[pagoN].PagoMes + "/"
+                            + action.payload[1].MesesAPagar[pagoN].PagoAño;
+            const ids       = []
+
+            action.payload[1].MesesAPagar.forEach(e => ids.push(e.PagoId))
+
+            state.pagos.forEach(e => {
+                if(e && ids.includes(e.PagoId)) {
+                    e.PagoSaldo = 0;
+                    e.PagoObservaciones = `Pago adelantado desde ${desde} hasta ${hasta}`
+                }
+            });
+
             return {
                 ...state,
                 registrado: true,

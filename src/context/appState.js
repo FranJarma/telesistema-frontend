@@ -696,7 +696,7 @@ const AppState = props => {
         }
     }
 
-    const crearPagoAdelantado = async(pagoAdelantadoInfo, setModalPagoAdelantado) => {
+    const crearPagoAdelantado = async(pagoAdelantadoInfo) => {
         try {
             const respuesta = await clienteAxios.post('/api/pagos/createPagoAdelantado', pagoAdelantadoInfo);
             dispatch({
@@ -711,7 +711,6 @@ const AppState = props => {
             }
             else if(error.response.data.msg){
                 Toast(error.response.data.msg, 'warning');
-
             }
             else if(error.response.data.errors){
                 Toast(error.response.data.errors[0].msg, 'warning');
