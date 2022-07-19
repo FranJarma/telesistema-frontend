@@ -3,12 +3,11 @@ import AppContext from '../../../context/appContext';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import './../design/layout/styles/styles.css';
-import { Button, Card, CardContent, FormHelperText, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import { Link } from 'react-router-dom';
-import useStyles from '../Styles';
 import BotonesDatatable from '../design/components/BotonesDatatable';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import SpanVencimientoServicio from '../../../helpers/SpanVencimientoServicio';
@@ -34,6 +33,7 @@ const ListaAbonadosActivos = () => {
     const [AbonadoInfo, setAbonadoInfo] = useState({
         UserId: null,
         EstadoId: null,
+        OnuMac: null,
         CambioEstadoObservaciones: null,
         createdBy: null,
         updatedBy: null,
@@ -50,11 +50,13 @@ const ListaAbonadosActivos = () => {
                 EstadoId: 3,
                 UserId: data.UserId,
                 deletedBy: GetUserId(),
+                OnuMac: data.OnuAbonado ? data.OnuAbonado.OnuMac : null
             })
         }
         else {
             setAbonadoInfo({
-                UserId: null
+                UserId: null,
+                OnuMac: null
             })
         }
     }
@@ -84,7 +86,6 @@ const ListaAbonadosActivos = () => {
         traerAbonados(2, e.target.value);
     }
 
-    const styles = useStyles();
     const columnasAbonadosActivos = [
     {
         "name": "id",
@@ -233,7 +234,17 @@ const ListaAbonadosActivos = () => {
                 <Modal
                 abrirModal={modalDarDeBaja}
                 funcionCerrar={handleChangeModalDarDeBaja}
-                titulo={<Alert severity="error" icon={<i className="bx bx-user-x bx-sm"></i>}>Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>}
+                titulo={
+                AbonadoInfo.OnuMac !== null ?
+                <>
+                <Alert severity="info">
+                    - Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos.</b><br/>
+                    - El abonado tiene asignada una ONU, si usted lo da de baja, la ONU pasará a estar <b>disponible</b>.
+                </Alert>
+                </>
+                :
+                <Alert severity="info" icon={<i className="bx bx-user-x bx-sm"></i>}>Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>
+                }
                 botones={
                 <>
                 <Button onClick={()=>
@@ -241,7 +252,7 @@ const ListaAbonadosActivos = () => {
                     setModalDarDeBaja(false)}}
                     style={{backgroundColor: "#EF5350", color:"white"}}
                     variant="contained"
-                    >
+                >
                 Dar de baja</Button>
                 <Button onClick={handleChangeModalDarDeBaja}>Cancelar</Button></>}
                 formulario={
@@ -268,7 +279,7 @@ const ListaAbonadosActivos = () => {
                     loader={true}
                     columnas={columnasAbonadosActivos}
                     datos={abonados}
-                    expandedComponent={ExpandedComponent}
+                    // expandedComponent={ExpandedComponent}
                     paginacion={true}
                     buscar={true}/>
             </CardContent>

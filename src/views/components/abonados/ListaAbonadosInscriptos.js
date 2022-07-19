@@ -253,7 +253,7 @@ const columnasInscripcion = [
                 <Modal
                 abrirModal={modalDarDeBaja}
                 funcionCerrar={handleChangeModalDarDeBaja}
-                titulo={<Alert severity="error" icon={<i className="bx bx-user-x bx-sm"></i>}>Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>}
+                titulo={<Alert severity="info" icon={<i className="bx bx-user-x bx-sm"></i>}>Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>}
                 botones={
                 <>
                 <Button onClick={()=>
@@ -331,7 +331,7 @@ const columnasInscripcion = [
                     loader={true}
                     columnas={columnasAbonadosInscriptos}
                     datos={abonados}
-                    expandedComponent={ExpandedComponent}
+                    // expandedComponent={ExpandedComponent}
                     paginacion={true}
                     buscar={true}/>
                 </CardContent>

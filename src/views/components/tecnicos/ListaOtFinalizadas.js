@@ -90,7 +90,7 @@ const ListaOtFinalizadas = () => {
                     columnas={columnasOt}
                     paginacion={true}
                     buscar={true}
-                    expandedComponent={ExpandedComponent}
+                    // expandedComponent={ExpandedComponent}
                 />
             </CardContent>
         </Card>

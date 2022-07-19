@@ -115,7 +115,7 @@ const Users = () => {
                 <Modal
                 abrirModal={modalDarDeBaja}
                 funcionCerrar={handleChangeModalDarDeBaja}
-                titulo={<Alert severity="error" icon={<i className="bx bx-user-x bx-sm"></i>}>¿Está seguro que quiere dar de baja al usuario?</Alert>}
+                titulo={<Alert severity="info" icon={<i className="bx bx-user-x bx-sm"></i>}>¿Está seguro que quiere dar de baja al usuario?</Alert>}
                 botones={
                 <>
                 <Button onClick={()=>

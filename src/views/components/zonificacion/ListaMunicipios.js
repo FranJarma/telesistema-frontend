@@ -208,7 +208,7 @@ const ListaMunicipios = () => {
         <Modal
         abrirModal={ModalEliminarMunicipio}
         funcionCerrar={handleChangeModalEliminarMunicipio}
-        titulo={<Alert severity="error">¿Está seguro que quiere eliminar el municipio?</Alert>}
+        titulo={<Alert severity="info">¿Está seguro que quiere eliminar el municipio?</Alert>}
         botones={
             <>
             <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}

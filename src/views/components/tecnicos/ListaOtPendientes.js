@@ -24,7 +24,7 @@ const ListaOtPendientes = () => {
 
     useEffect(()=>{
         traerOrdenesDeTrabajo(5);
-        traerOnus(5);
+        traerOnus(7);
     },[])
 
     const [ModalImprimirOt, setModalImprimirOt] = useState(false);
@@ -416,7 +416,7 @@ const ListaOtPendientes = () => {
             <Modal
             abrirModal={ModalEliminarOt}
             funcionCerrar={handleChangeModalEliminarOt}
-            titulo={<Alert severity="error">¿Está seguro que quiere eliminar la orden de trabajo?</Alert>}
+            titulo={<Alert severity="info">¿Está seguro que quiere eliminar la orden de trabajo?</Alert>}
             botones={
                 <>
                 <Button variant="contained" color="secondary" onClick={()=>{}}>Eliminar</Button>

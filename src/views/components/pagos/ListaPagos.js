@@ -619,7 +619,7 @@ const ListaPagos = () => {
             <Modal
             abrirModal={ModalEliminarDetallePago}
             funcionCerrar={handleChangeModalEliminarDetallePago}
-            titulo={<Alert severity="error">¿Está seguro que quiere eliminar el pago realizado?</Alert>}
+            titulo={<Alert severity="info">¿Está seguro que quiere eliminar el pago realizado?</Alert>}
             botones={
                 <>
                 <Button variant="contained" color="secondary" onClick={()=>{eliminarDetallePago(PagoInfo, handleChangeModalEliminarDetallePago)}}>Eliminar</Button>

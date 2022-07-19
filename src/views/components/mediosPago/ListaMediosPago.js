@@ -196,7 +196,7 @@ const ListaMediosPago = () => {
         <Modal
         abrirModal={ModalEliminarMedioPago}
         funcionCerrar={handleChangeModalEliminarMedioPago}
-        titulo={<Alert severity="error">¿Está seguro que quiere eliminar el medio de pago?</Alert>}
+        titulo={<Alert severity="info">¿Está seguro que quiere eliminar el medio de pago?</Alert>}
         botones={
             <>
             <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}

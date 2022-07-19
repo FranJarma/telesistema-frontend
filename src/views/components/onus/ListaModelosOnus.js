@@ -148,7 +148,7 @@ const ListaModelosOnus = ({location}) => {
         <Modal
         abrirModal={ModalEliminarModeloOnu}
         funcionCerrar={handleChangeModalEliminarModeloOnu}
-        titulo={<Alert severity="error">¿Está seguro que quiere eliminar el modelo de ONU?</Alert>}
+        titulo={<Alert severity="info">¿Está seguro que quiere eliminar el modelo de ONU?</Alert>}
         botones={
             <>
             <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}

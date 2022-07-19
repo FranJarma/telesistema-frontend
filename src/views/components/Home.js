@@ -73,7 +73,7 @@ const Home = () => {
                         <Link style={{textDecoration: 'none'}} to="/ot-pendientes">
                             <Card className={styles.cartaEstadisticas}>
                                 <CardContent>
-                                    <Typography variant="h2"><i className="bx bx-line-chart up"></i>  Órdenes de trabajo asignadas</Typography>
+                                    <Typography variant="h2"><i className="bx bx-task"></i>  Órdenes de trabajo asignadas</Typography>
                                     <Typography className={styles.cantidad}>{ordenesDeTrabajoAgrupadas.map(ot => ot.Cantidad).reduce((prev, curr) => prev + curr, 0)}</Typography>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={ordenesDeTrabajoAgrupadas}>

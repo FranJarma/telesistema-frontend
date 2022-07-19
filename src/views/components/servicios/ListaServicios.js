@@ -234,7 +234,7 @@ const ListaServicios = () => {
         <Modal
         abrirModal={ModalEliminarServicio}
         funcionCerrar={handleChangeModalEliminarServicio}
-        titulo={<Alert severity="error">¿Está seguro que quiere eliminar el servicio?</Alert>}
+        titulo={<Alert severity="info">¿Está seguro que quiere eliminar el servicio?</Alert>}
         botones={
             <>
             <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}} onClick={()=>{eliminarServicio(ServicioInfo, handleChangeModalEliminarServicio)}}>Eliminar</Button>

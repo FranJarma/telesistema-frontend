@@ -32,7 +32,7 @@ const CambioServicio = () => {
         setMunicipioId(location.state.MunicipioId);
         traerTareas();
         traerServicios();
-        traerOnus(5);
+        traerOnus(7);
         traerServiciosAbonado(location.state.UserId);
         traerUsuariosPorRol(VARIABLES.ID_ROL_TECNICO);
         traerMediosPago();

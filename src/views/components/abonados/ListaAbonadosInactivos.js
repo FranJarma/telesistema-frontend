@@ -3,7 +3,7 @@ import AppContext from '../../../context/appContext';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import './../design/layout/styles/styles.css';
-import { Button, Card, CardContent, FormHelperText, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
@@ -15,23 +15,28 @@ import TooltipForTable from '../../../helpers/TooltipForTable';
 import SpanAlquiler from '../../../helpers/SpanAlquiler';
 import formatDocumento from '../../../helpers/FormatDocumento';
 import GetUserId from '../../../helpers/GetUserId';
+import SpanServicio from '../../../helpers/SpanServicio';
+import { Autocomplete } from '@mui/material';
 
 const ListaAbonadosInactivos = () => {
     const appContext = useContext(AppContext);
-    const { abonados, municipios, traerAbonados, traerMunicipiosPorProvincia, cambiarEstadoAbonado } = appContext;
+    const { onus, abonados, municipios, traerAbonados, traerMunicipiosPorProvincia, traerOnus, cambiarEstadoAbonado } = appContext;
     
     useEffect(() => {
         traerAbonados(3);
+        traerOnus(7);
         //10 para que traiga los de jujuy
         traerMunicipiosPorProvincia(10);
     },[]);
 
     const [municipioSeleccionadoId, setMunicipioSeleccionadoId] = useState(0);
     const [modalDarDeAlta, setModalDarDeAlta] = useState(false);
+    const [Onu, setOnu] = useState(null);
 
     const [AbonadoInfo, setAbonadoInfo] = useState({
         UserId: null,
         EstadoId: null,
+        OnuId: null,
         CambioEstadoObservaciones: null,
         createdBy: null,
         updatedBy: null,
@@ -46,7 +51,7 @@ const ListaAbonadosInactivos = () => {
             setAbonadoInfo({
                 ...AbonadoInfo,
                 UserId: data.UserId,
-                EstadoId: 1,
+                EstadoId: 2,
                 CambioEstadoFecha: new Date().toJSON(),
                 updatedBy: GetUserId()
             })
@@ -93,6 +98,12 @@ const ListaAbonadosInactivos = () => {
             "hide": "sm"
         },
         {
+            "name": <TooltipForTable name="Servicio" />,
+            "selector": row => <SpanServicio servicioId={row["ServicioAbonado"].ServicioId} servicioNombre={row["ServicioAbonado"].ServicioNombre} onuMac={row["OnuAbonado"] ? row["OnuAbonado"].OnuMac : ""}></SpanServicio>,
+            "hide": "sm",
+            "width": "300px"
+        },
+        {
             "name": <TooltipForTable name="Domicilio" />,
             "selector": row =>
             row["DomicilioAbonado"].EsAlquiler === 1 ?
@@ -126,7 +137,7 @@ const ListaAbonadosInactivos = () => {
                     </Link> 
                 </MenuItem>
                 <MenuItem>
-                    <Typography onClick={()=>handleChangeModalDarDeAlta(data)} style={{textDecoration: 'none', color: "darkgreen", cursor: "pointer"}}><i className='bx bx-user-check bx-xs'></i> Dar de alta</Typography>
+                    <Typography onClick={()=>handleChangeModalDarDeAlta(data)} style={{textDecoration: 'none', color: "darkgreen", cursor: "pointer"}}><i className='bx bx-plug'></i> Reconectar</Typography>
                 </MenuItem>
                 </>
             }/>
@@ -167,7 +178,7 @@ const ExpandedComponent = ({ data }) =>
                 <Modal
                 abrirModal={modalDarDeAlta}
                 funcionCerrar={handleChangeModalDarDeAlta}
-                titulo={<Alert severity="success" icon={<i className="bx bx-user-check bx-sm"></i>}>Si usted da de alta al abonado, pasará al listado de <b>Abonados Inscriptos</b></Alert>}
+                titulo={<Alert severity="info">Si usted reconecta el abonado, pasará al listado de <b>Abonados Inscriptos</b> y se creará una Orden de Trabajo, una vez finalizada dicha orden el abonado pasará al listado de <b>Abonados Activos</b>.</Alert>}
                 botones={
                 <>
                 <Button onClick={()=>
@@ -179,18 +190,42 @@ const ExpandedComponent = ({ data }) =>
                 <Button onClick={handleChangeModalDarDeAlta}>Cancelar</Button></>}
                 formulario={
                 <>
-                <TextField
-                label="Motivo de alta"
-                multiline
-                minRows={3}
-                autoFocus
-                variant="outlined"
-                name="CambioEstadoObservaciones"
-                value={CambioEstadoObservaciones}
-                fullWidth
-                onChange={onChangeInputEstadoObservaciones}
-                >
-                </TextField>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={12} lg={12}>
+                        <Autocomplete
+                        value={Onu}
+                        onChange={(_event, newOnu) => {
+                            if(newOnu) {
+                                setOnu(newOnu);
+                                setAbonadoInfo({
+                                    ...AbonadoInfo,
+                                    OnuId: newOnu.OnuId
+                                })
+                            }
+                        }}
+                        options={onus}
+                        noOptionsText={"No hay ONUS disponibles"}
+                        getOptionLabel={(option) => option.OnuMac}
+                        renderInput={(params) => <>
+                        <TextField {...params} variant ="outlined" fullWidth label="ONU"/>
+                        </>}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={12}>
+                        <TextField
+                        label="Motivo de reconexión"
+                        multiline
+                        minRows={3}
+                        variant="outlined"
+                        name="CambioEstadoObservaciones"
+                        value={CambioEstadoObservaciones}
+                        fullWidth
+                        onChange={onChangeInputEstadoObservaciones}
+                        >
+                        </TextField>
+                    </Grid>
+                </Grid>
+
                 </>}
                 >
                 </Modal>
@@ -198,7 +233,7 @@ const ExpandedComponent = ({ data }) =>
                     loader={true}
                     columnas={columnaAbonadosInactivos}
                     datos={abonados}
-                    expandedComponent={ExpandedComponent}
+                    // expandedComponent={ExpandedComponent}
                     paginacion={true}
                     buscar={true}/>
                 </CardContent>

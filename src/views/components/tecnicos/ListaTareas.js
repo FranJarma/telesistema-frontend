@@ -199,7 +199,7 @@ const ListaTiposTareas = () => {
         <Modal
         abrirModal={ModalEliminarTarea}
         funcionCerrar={handleChangeModalEliminarTarea}
-        titulo={<Alert severity="error">¿Está seguro que quiere eliminar la tarea?</Alert>}
+        titulo={<Alert severity="info">¿Está seguro que quiere eliminar la tarea?</Alert>}
         botones={
             <>
             <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}

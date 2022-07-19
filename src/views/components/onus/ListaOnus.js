@@ -210,7 +210,7 @@ const ListaOnus = ({location}) => {
         <Modal
         abrirModal={ModalEliminarOnu}
         funcionCerrar={handleChangeModalEliminarOnu}
-        titulo={<Alert severity="error">¿Está seguro que quiere eliminar la ONU?</Alert>}
+        titulo={<Alert severity="info">¿Está seguro que quiere eliminar la ONU?</Alert>}
         botones={
             <>
             <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}
