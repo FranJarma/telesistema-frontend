@@ -82,7 +82,7 @@ const ListaAbonadosInactivos = () => {
         },
         {
             "name": "Nombre Completo",
-            "selector": row => row["Apellido"] + ', ' + row["Nombre"],
+            "selector": row => row["NombreCompleto"],
             "wrap": true,
             "sortable": true
         },
@@ -105,7 +105,7 @@ const ListaAbonadosInactivos = () => {
         },
         {
             "name": "Usuario de baja",
-            "selector": row => row["ApellidoEliminado"] + ', ' + row["NombreEliminado"],
+            "selector": row => row["Deleted"].NombreCompletoBaja,
             "wrap": true,
             "sortable": true
         },
@@ -120,7 +120,7 @@ const ListaAbonadosInactivos = () => {
             <BotonesDatatable botones={
                 <>
                 <MenuItem>
-                    <Link to={`/historial-de-pagos/${data.AbonadoNumero}`} state={data} style={{textDecoration: 'none', color: "navy"}}>
+                    <Link to={`/historial-de-pagos/view/${data.AbonadoNumero}`} state={data} style={{textDecoration: 'none', color: "navy"}}>
                     <Typography style={{color: 'navy'}}>
                     <i className='bx bx-money bx-xs'></i> Pagos</Typography>
                     </Link> 
@@ -180,6 +180,9 @@ const ExpandedComponent = ({ data }) =>
                 formulario={
                 <>
                 <TextField
+                label="Motivo de alta"
+                multiline
+                minRows={3}
                 autoFocus
                 variant="outlined"
                 name="CambioEstadoObservaciones"
@@ -188,7 +191,6 @@ const ExpandedComponent = ({ data }) =>
                 onChange={onChangeInputEstadoObservaciones}
                 >
                 </TextField>
-                <FormHelperText>Ingrese motivo de alta</FormHelperText>
                 </>}
                 >
                 </Modal>

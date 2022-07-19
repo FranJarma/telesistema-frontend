@@ -5,8 +5,7 @@ import Modal from '../design/components/Modal';
 import AppContext from '../../../context/appContext';
 import { Alert, Autocomplete } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
-import GetUserId from './../../../helpers/GetUserId';
-import { red } from '@material-ui/core/colors';
+import GetUserId from '../../../helpers/GetUserId';
 
 const ListaMunicipios = () => {
     const appContext = useContext(AppContext);
@@ -212,7 +211,8 @@ const ListaMunicipios = () => {
         titulo={<Alert severity="error">¿Está seguro que quiere eliminar el municipio?</Alert>}
         botones={
             <>
-            <Button variant="contained" style={{backgroundColor: red[500]}} onClick={()=>{eliminarMunicipio(MunicipioInfo, handleChangeModalEliminarMunicipio)}}>Eliminar</Button>
+            <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}
+            onClick={()=>{eliminarMunicipio(MunicipioInfo, handleChangeModalEliminarMunicipio)}}>Eliminar</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalEliminarMunicipio}>Cancelar</Button>
             </>
         }

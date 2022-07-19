@@ -199,7 +199,9 @@ const ListaMediosPago = () => {
         titulo={<Alert severity="error">¿Está seguro que quiere eliminar el medio de pago?</Alert>}
         botones={
             <>
-            <Button variant="contained" color="secondary" onClick={()=>{eliminarMedioPago(MedioPagoInfo, handleChangeModalEliminarMedioPago)}}>Eliminar</Button>
+            <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}
+            onClick={()=>{eliminarMedioPago(MedioPagoInfo, handleChangeModalEliminarMedioPago)}}>
+            Eliminar</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalEliminarMedioPago}>Cancelar</Button>
             </>
         }

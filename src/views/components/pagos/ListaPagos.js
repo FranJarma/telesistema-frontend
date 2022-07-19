@@ -21,7 +21,7 @@ import onlyNumbers from './../../../helpers/OnlyNumbers';
 
 const ListaPagos = () => {
     const appContext = useContext(AppContext);
-    const { pagoAdelantado, pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
+    const { pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
     const location = useLocation();
     const [PagoAño, setPagoAño] = useState(new Date());
     const [ConceptoId, setConceptoId] = useState(null);
@@ -179,18 +179,18 @@ const ListaPagos = () => {
                     <>
                         <MenuItem>
                             <Typography onClick={()=>handleChangeModalDetallesPago(data)} style={{textDecoration: 'none', color: "navy", cursor: "pointer"}}><i className='bx bx-list-ol bx-xs'></i> Detalles</Typography></MenuItem>
-                        {data.PagoSaldo > 0 ?
-                        <>
-                            <MenuItem>
-                                <Typography onClick={()=>{handleChangeModalNuevoPago(data)}} style={{textDecoration: 'none', color: "navy", cursor: "pointer"}}><i className='bx bx-credit-card bx-xs'></i> Agregar Pago</Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <Typography onClick={()=>handleChangeModalRecargoPago(data)} style={{textDecoration: 'none', color: "darkorange", cursor: "pointer"}}><i className='bx bx-error-alt bx-xs'></i> Añadir recargo</Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <Typography onClick={()=>eliminarRecargo(data)} style={{textDecoration: 'none', color: "red", cursor: "pointer"}}><i className='bx bx-trash bx-xs'></i> Eliminar recargo</Typography>
-                            </MenuItem>
-                        </> :"" }
+                            {data.PagoSaldo > 0 && location.pathname.split('/')[2] !== 'view' ?
+                            <>
+                                <MenuItem>
+                                    <Typography onClick={()=>{handleChangeModalNuevoPago(data)}} style={{textDecoration: 'none', color: "navy", cursor: "pointer"}}><i className='bx bx-credit-card bx-xs'></i> Agregar Pago</Typography>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Typography onClick={()=>handleChangeModalRecargoPago(data)} style={{textDecoration: 'none', color: "darkorange", cursor: "pointer"}}><i className='bx bx-error-alt bx-xs'></i> Añadir recargo</Typography>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Typography onClick={()=>eliminarRecargo(data)} style={{textDecoration: 'none', color: "red", cursor: "pointer"}}><i className='bx bx-trash bx-xs'></i> Eliminar recargo</Typography>
+                                </MenuItem>
+                            </> :"" }
                     </>
                 }/>
 

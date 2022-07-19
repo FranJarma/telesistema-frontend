@@ -192,7 +192,7 @@ const ListaTiposTareas = () => {
             updatedBy: GetUserId()}, handleChangeModalTarea)
             : crearTarea({...TareaInfo,
             createdBy: GetUserId()}, handleChangeModalTarea)}}>{EditMode ? "Editar" : "Confirmar"}</Button>
-            <Button variant="text" color="inherit" >Cancelar</Button>
+            <Button onClick={handleChangeModalTarea} variant="text" color="inherit" >Cancelar</Button>
             </>
         }
         />
@@ -202,7 +202,8 @@ const ListaTiposTareas = () => {
         titulo={<Alert severity="error">¿Está seguro que quiere eliminar la tarea?</Alert>}
         botones={
             <>
-            <Button variant="contained" color="secondary" onClick={()=>{eliminarTarea({...TareaInfo, deletedAt: new Date(),
+            <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}
+            onClick={()=>{eliminarTarea({...TareaInfo, deletedAt: new Date(),
             deletedBy: GetUserId()}, handleChangeModalEliminarTarea)}}>Eliminar</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalEliminarTarea}>Cancelar</Button>
             </>

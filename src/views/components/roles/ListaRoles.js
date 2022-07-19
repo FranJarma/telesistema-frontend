@@ -9,6 +9,7 @@ import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import { Link } from 'react-router-dom';
 import BotonesDatatable from '../design/components/BotonesDatatable';
+import GetUserId from '../../../helpers/GetUserId';
 
 const Roles = () => {
     const appContext = useContext(AppContext);
@@ -32,7 +33,8 @@ const Roles = () => {
             setRoleInfo({
                 EstadoId: 3,
                 CambioEstadoFecha: new Date().toJSON(),
-                RoleId: data.RoleId
+                RoleId: data.RoleId,
+                deletedBy: GetUserId()
             })
         }
         else {

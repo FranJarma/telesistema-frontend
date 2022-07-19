@@ -247,7 +247,9 @@ const ListaAbonadosActivos = () => {
                 formulario={
                 <>
                 <TextField
-                className={styles.inputModal}
+                label="Motivo de baja"
+                multiline
+                minRows={3}
                 autoFocus
                 variant="outlined"
                 name="CambioEstadoObservaciones"
@@ -256,7 +258,6 @@ const ListaAbonadosActivos = () => {
                 onChange={onChangeInputEstadoObservaciones}
                 >
                 </TextField>
-                <FormHelperText>Ingrese motivo de baja</FormHelperText>
                 </>}
                 >
                 </Modal>

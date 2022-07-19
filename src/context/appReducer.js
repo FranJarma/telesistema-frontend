@@ -37,7 +37,7 @@ export default (state, action) => {
         case TYPES.ELIMINAR_USUARIO: {
             return {
                 ...state,
-                usuarios: state.usuarios.map(usuario => usuario.UserId === action.payload.UserId ? action.payload : usuario)
+                usuarios: state.usuarios.filter(usuario => usuario.UserId !== action.payload.UserId),
             };
         }
         case TYPES.LISTA_USUARIOS: {
@@ -51,6 +51,12 @@ export default (state, action) => {
                 ...state,
                 roles: action.payload
             }
+        }
+        case TYPES.ELIMINAR_ROL: {
+            return {
+                ...state,
+                roles: state.roles.filter(rol => rol.RoleId !== action.payload.RoleId),
+            };
         }
         case TYPES.LISTA_ROLES_USER: {
             return {
@@ -418,6 +424,12 @@ export default (state, action) => {
             return {
                 ...state,
                 ordenesDeTrabajo: action.payload
+            }
+        }
+        case TYPES.LISTA_OT_AGRUPADA: {
+            return {
+                ...state,
+                ordenesDeTrabajoAgrupadas: action.payload
             }
         }
         case TYPES.REGISTRAR_VISITA_OT:

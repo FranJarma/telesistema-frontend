@@ -7,7 +7,7 @@ import Footer from '../design/layout/Footer';
 import ListaBarrios from './ListaBarrios';
 import ListaMunicipios from './ListaMunicipios';
 
-const BarriosMunicipios = () => {
+const Zonificacion = () => {
     return (
     <>
     <div className="container">
@@ -36,4 +36,4 @@ const BarriosMunicipios = () => {
     );
 }
  
-export default BarriosMunicipios;
+export default Zonificacion;

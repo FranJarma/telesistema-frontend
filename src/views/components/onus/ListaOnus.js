@@ -213,7 +213,8 @@ const ListaOnus = ({location}) => {
         titulo={<Alert severity="error">¿Está seguro que quiere eliminar la ONU?</Alert>}
         botones={
             <>
-            <Button variant="contained" color="secondary" onClick={()=>{eliminarONU(OnuInfo, handleChangeModalEliminarOnu)}}>Eliminar</Button>
+            <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}}
+            onClick={()=>{eliminarONU(OnuInfo, handleChangeModalEliminarOnu)}}>Eliminar</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalEliminarOnu}>Cancelar</Button>
             </>
         }

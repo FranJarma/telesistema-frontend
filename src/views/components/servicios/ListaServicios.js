@@ -237,7 +237,7 @@ const ListaServicios = () => {
         titulo={<Alert severity="error">¿Está seguro que quiere eliminar el servicio?</Alert>}
         botones={
             <>
-            <Button variant="contained" color="secondary" onClick={()=>{eliminarServicio(ServicioInfo, handleChangeModalEliminarServicio)}}>Eliminar</Button>
+            <Button variant="contained" style={{backgroundColor: "#EF5350", color:"white"}} onClick={()=>{eliminarServicio(ServicioInfo, handleChangeModalEliminarServicio)}}>Eliminar</Button>
             <Button variant="text" color="inherit" onClick={handleChangeModalEliminarServicio}>Cancelar</Button>
             </>
         }

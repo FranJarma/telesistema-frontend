@@ -6,18 +6,17 @@ import useStyles from './Styles';
 import { Link } from 'react-router-dom';
 import AppContext from '../../context/appContext';
 import {CartesianGrid, BarChart, XAxis, YAxis, Tooltip, Legend, Bar, ResponsiveContainer} from 'recharts';
-import encontrarCoincidencias from '../../helpers/EncontrarCoincidencias';
 import GetRoles from '../../helpers/GetRoles';
 
 const Home = () => {
     const styles = useStyles();
     const appContext = useContext(AppContext);
-    const { traerMovimientosPorFecha, movimientos, ordenesDeTrabajo, traerOrdenesDeTrabajo, traerAbonados, abonados, traerBarriosPorMunicipio, barrios} = appContext;
-    let cantidadOrdenesDeTrabajo = encontrarCoincidencias(ordenesDeTrabajo, "OtResponsableEjecucion", "NombreResponsableEjecucion", "ApellidoResponsableEjecucion");
+    const { traerMovimientosPorFecha, movimientos, ordenesDeTrabajoAgrupadas,
+        traerOrdenesDeTrabajoAgrupadas, traerAbonados, abonados, traerBarriosPorMunicipio, barrios} = appContext;
 
     useEffect(()=> {
         traerMovimientosPorFecha(new Date(), 0, 'Todos');
-        traerOrdenesDeTrabajo(5);
+        traerOrdenesDeTrabajoAgrupadas(5);
         traerAbonados(2);
         traerBarriosPorMunicipio(0);
     }, [])
@@ -61,7 +60,7 @@ const Home = () => {
                         </Link>
                     </Grid>
                     <Grid item lg={6} md={6} xs={12}>
-                        <Link style={{textDecoration: 'none'}} to="/barrios-municipios">
+                        <Link style={{textDecoration: 'none'}} to="/zonificacion">
                             <Card className={styles.cartaEstadisticas}>
                                 <CardContent>
                                     <Typography variant="h2"><i className="bx bx-map"></i>  Barrios registrados</Typography>
@@ -75,12 +74,12 @@ const Home = () => {
                             <Card className={styles.cartaEstadisticas}>
                                 <CardContent>
                                     <Typography variant="h2"><i className="bx bx-line-chart up"></i>  Órdenes de trabajo asignadas</Typography>
-                                    <Typography className={styles.cantidad}>{ordenesDeTrabajo.length}</Typography>
+                                    <Typography className={styles.cantidad}>{ordenesDeTrabajoAgrupadas.map(ot => ot.Cantidad).reduce((prev, curr) => prev + curr, 0)}</Typography>
                                     <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={cantidadOrdenesDeTrabajo}>
+                                        <BarChart data={ordenesDeTrabajoAgrupadas}>
                                             <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="NombreResponsableEjecucion" />
-                                            <YAxis type="number" domain={[0, 10]} />
+                                            <XAxis dataKey="NombreCompletoTecnicoResponsable" />
+                                            <YAxis type="number" dataKey="Cantidad" domain={[0, 10]} />
                                             <Tooltip />
                                             <Legend />
                                             <Bar dataKey="Cantidad" label fill="#e3ac4d" />

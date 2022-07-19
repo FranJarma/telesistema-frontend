@@ -145,7 +145,7 @@ const Aside = () => {
               <SubMenu onClick={onClickMenuConfiguracion} open={subMenuConfiguracion} title="Configuración" icon={<i className="bx bx-brightness"></i>}>
                 <MenuItem icon={<i className="bx bx-money"></i>}>Medios de Pago<Link to="/medios-de-pago"></Link></MenuItem>
                 <MenuItem icon={<i className="bx bx-plug"></i>}>Servicios<Link to="/servicios"></Link></MenuItem>
-                <MenuItem icon={<i className="bx bx-map"></i>}>Barrios y Municipios<Link to="/barrios-municipios"></Link></MenuItem>
+                <MenuItem icon={<i className="bx bx-map"></i>}>Zonificación<Link to="/zonificacion"></Link></MenuItem>
                 <MenuItem icon={<i className="bx bx-broadcast"></i>}>Onus<Link to="/onus"></Link></MenuItem>
                 <MenuItem icon={<i className='bx bx-clipboard'></i>}>Tareas<Link to="/tareas"></Link></MenuItem>
               </SubMenu>

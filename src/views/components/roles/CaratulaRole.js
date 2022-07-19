@@ -144,7 +144,7 @@ const CaratulaRole = () => {
                         pagination={true}
                         selectableRows
                         selectableRowsComponent={Checkbox}
-                        selectableRowSelected={row => PermisosSeleccionados.find((permiso) => row.PermissionId === permiso.PermissionId)}>
+                        selectableRowSelected={row => PermisosSeleccionados.find((permiso) => permiso.PermissionId === row.PermissionId)}>
                     </DataTable>
                     </Card>
                 </TabPanel>

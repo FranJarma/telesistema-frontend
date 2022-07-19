@@ -14,7 +14,7 @@ import CambioServicio from './views/components/abonados/CambioServicio';
 import ListaAbonadosInactivos from './views/components/abonados/ListaAbonadosInactivos';
 import Cargando from './views/components/design/components/Cargando';
 import ListaAbonadosInscriptos from './views/components/abonados/ListaAbonadosInscriptos';
-import BarriosMunicipios from './views/components/barrios-municipios/BarriosMunicipios';
+import Zonificacion from './views/components/zonificacion/Zonificacion';
 import OnusModelosOnus from './views/components/onus/OnusModelosOnus';
 import ListaUsers from './views/components/users/ListaUsers';
 import ListaRoles from './views/components/roles/ListaRoles';
@@ -148,10 +148,10 @@ function App() {
               </Route>
 
               <Route exact
-              path="/barrios-municipios"
+              path="/zonificacion"
               element={
                 <AuthRoute roles={["Jefe", "Admin"]}>
-                  <BarriosMunicipios/>
+                  <Zonificacion/>
                 </AuthRoute>
               }>
               </Route>
@@ -352,6 +352,15 @@ function App() {
 
               <Route
               path="/historial-de-pagos/:AbonadoNumero"
+              element={
+                <AuthRoute roles={["Jefe", "Admin", "Mesa"]}>
+                  <ListaPagos/>
+                </AuthRoute>
+              }>
+              </Route>
+
+              <Route
+              path="/historial-de-pagos/view/:AbonadoNumero"
               element={
                 <AuthRoute roles={["Jefe", "Admin", "Mesa"]}>
                   <ListaPagos/>

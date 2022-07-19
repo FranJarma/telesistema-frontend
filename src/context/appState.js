@@ -45,6 +45,7 @@ const AppState = props => {
         tareas: [],
         tareaCambioDomicilio: [],
         ordenesDeTrabajo: [],
+        ordenesDeTrabajoAgrupadas: [],
         ordenesDeTrabajoAsignadas: [],
         movimientos: [],
         conceptos: [],
@@ -244,7 +245,7 @@ const AppState = props => {
         .then(resOk => {
             if (resOk.data)
                 dispatch({
-                    type: TYPES.ELIMINAR_USUARIO,
+                    type: TYPES.ELIMINAR_ROL,
                     payload: rol
                 })
                 Swal('Operación completa', resOk.data.msg);
@@ -1470,9 +1471,24 @@ const AppState = props => {
     //OT
     const traerOrdenesDeTrabajo = async (estadoId) => {
         try {
-            const resultado = await clienteAxios.get(`/api/ot/estado=${estadoId}`);
+            const resultado = await clienteAxios.get(`/api/ot/estado=${estadoId}&group=${false}`);
             dispatch({
                 type: TYPES.LISTA_OT,
+                payload: resultado.data
+            })
+        } catch (error) {
+            console.log(error);
+            if(error == VARIABLES.ERROR_AUTENTICACION || error == VARIABLES.ERROR_NETWORK) {
+                navigate("/");
+                window.location.reload();
+            };
+        }
+    }
+    const traerOrdenesDeTrabajoAgrupadas = async (estadoId) => {
+        try {
+            const resultado = await clienteAxios.get(`/api/ot/estado=${estadoId}&group=${true}`);
+            dispatch({
+                type: TYPES.LISTA_OT_AGRUPADA,
                 payload: resultado.data
             })
         } catch (error) {
@@ -1802,6 +1818,7 @@ const AppState = props => {
             detallesPago: state.detallesPago,
             tareas: state.tareas, tareaCambioDomicilio: state.tareaCambioDomicilio,
             ordenesDeTrabajo: state.ordenesDeTrabajo,
+            ordenesDeTrabajoAgrupadas: state.ordenesDeTrabajoAgrupadas,
             ordenesDeTrabajoAsignadas: state.ordenesDeTrabajoAsignadas,
             tecnicosOrdenDeTrabajo: state.tecnicosOrdenDeTrabajo,
             tareasOrdenDeTrabajo: state.tareasOrdenDeTrabajo,
@@ -1831,7 +1848,7 @@ const AppState = props => {
             traerPagosPorAbonado, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, traerDatosInscripcion, traerPagosMensualesPendientes,
             traerDetallesPago, eliminarDetallePago,
             traerTareas, traerTareaCambioDomicilio, crearTarea, modificarTarea, eliminarTarea,
-            traerOrdenesDeTrabajo, traerOrdenesDeTrabajoAsignadas, crearOrdenDeTrabajo, modificarOrdenDeTrabajo,
+            traerOrdenesDeTrabajo, traerOrdenesDeTrabajoAgrupadas, traerOrdenesDeTrabajoAsignadas, crearOrdenDeTrabajo, modificarOrdenDeTrabajo,
             finalizarOrdenDeTrabajo, registrarVisitaOrdenDeTrabajo, eliminarOrdenDeTrabajo,
             traerMovimientosPorFecha, crearMovimiento,
             traerConceptos,

@@ -88,6 +88,7 @@ export const EDITAR_TAREA   = 'EDITAR_TAREA';
 export const ELIMINAR_TAREA = 'ELIMINAR_TAREA';
 //OT
 export const LISTA_OT               = 'LISTA_OT';
+export const LISTA_OT_AGRUPADA      = 'LISTA_OT_AGRUPADA';
 export const LISTA_OT_ASIGNADAS     = 'LISTA_OT_ASIGNADAS';
 export const LISTA_TECNICOS_OT      = 'LISTA_TECNICOS_OT';
 export const LISTA_TAREAS_OT        = 'LISTA_TAREAS_OT';
