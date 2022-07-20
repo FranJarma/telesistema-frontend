@@ -113,7 +113,6 @@ const AppState = props => {
             navigate("/");
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const crearUsuario = async (usuario) => {
@@ -128,7 +127,6 @@ const AppState = props => {
                 navigate('/users');
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -153,7 +151,6 @@ const AppState = props => {
                 if (!desdePerfilUser) navigate('/users');
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -177,7 +174,6 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -202,7 +198,6 @@ const AppState = props => {
                 navigate('/users');
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -227,7 +222,6 @@ const AppState = props => {
                 navigate('/roles');
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -251,7 +245,6 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -273,7 +266,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerUsuariosPorRol = async (rolId) => {
@@ -285,7 +277,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerRoles = async (estadoId = 0) => {
@@ -297,7 +288,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerRolesPorUsuario = async (UserId) => {
@@ -309,7 +299,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerPermisos = async (estadoId = 0) => {
@@ -321,7 +310,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerPermisosPorRol = async (RoleId) => {
@@ -333,7 +321,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
 
@@ -348,7 +335,6 @@ const AppState = props => {
             Toast(VARIABLES.ABONADO_CREADO_CORRECTAMENTE, 'success');
 
         } catch (error) {
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -373,7 +359,6 @@ const AppState = props => {
                 navigate(-1);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -397,7 +382,6 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -421,7 +405,6 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -443,7 +426,6 @@ const AppState = props => {
             })
             Toast(VARIABLES.CAMBIO_DOMICILIO_CORRECTO, 'success');
         } catch (error) {
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -466,7 +448,6 @@ const AppState = props => {
             Toast(VARIABLES.CAMBIO_SERVICIO_CORRECTO, 'success');
 
         } catch (error) {
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -491,7 +472,6 @@ const AppState = props => {
                 navigate('/abonados-activos');
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -518,7 +498,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerAbonadosAtrasados = async (municipioId = 0) => {
@@ -530,7 +509,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerAbonado = async (UserId) => {
@@ -542,7 +520,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerDomiciliosAbonado = async (id) => {
@@ -554,7 +531,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     const traerServiciosAbonado = async (id) => {
@@ -566,7 +542,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     const traerPagosPorAbonado = async (UserId, Periodo = null, Concepto) => {
@@ -584,7 +559,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerFacturasPorAbonado = async (UserId, Periodo = null) => {
@@ -596,7 +570,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
 
@@ -617,7 +590,6 @@ const AppState = props => {
             }
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerDetallesPago = async (PagoId) => {
@@ -629,7 +601,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const eliminarDetallePago = async(detallePago, cerrarModal) => {
@@ -644,7 +615,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -667,7 +637,6 @@ const AppState = props => {
             })
             Toast(VARIABLES.PAGO_CREADO_CORRECTAMENTE, 'success');
         } catch (error) {
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -693,7 +662,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
 
@@ -706,7 +674,6 @@ const AppState = props => {
             })
             Toast(VARIABLES.PAGO_CREADO_CORRECTAMENTE, 'success');
         } catch (error) {
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!error.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -730,7 +697,6 @@ const AppState = props => {
                 setModalRecargo(false);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 console.log(err);
                 Toast('Error de conexión con el servidor', 'error');
@@ -755,7 +721,6 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 console.log(err);
                 Toast('Error de conexión con el servidor', 'error');
@@ -778,7 +743,6 @@ const AppState = props => {
                 payload: resultado.data
             })
         } catch (error) {
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     //BARRIOS
@@ -794,7 +758,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -821,7 +784,6 @@ const AppState = props => {
                 setMunicipioId(barrio.Municipio.MunicipioId);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -846,7 +808,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -869,7 +830,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     //CONDICIONES IVA
@@ -882,7 +842,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     //MUNICIPIOS
@@ -898,7 +857,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -925,7 +883,6 @@ const AppState = props => {
                 setProvinciaId(municipio.Provincia.ProvinciaId);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -950,7 +907,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -973,7 +929,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     const traerMunicipios = async () => {
@@ -985,7 +940,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     //PROVINCIAS
@@ -998,7 +952,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     //SERVICIOS
@@ -1011,7 +964,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     const crearServicio = async(servicio, cerrarModal) => {
@@ -1026,7 +978,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1051,7 +1002,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1076,7 +1026,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1099,7 +1048,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     const traerONUPorId = async (id) => {
@@ -1111,7 +1059,6 @@ const AppState = props => {
             });
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     };
     const crearONU = async(onu, cerrarModal) => {
@@ -1129,7 +1076,6 @@ const AppState = props => {
                 }, 1000);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1154,7 +1100,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1179,7 +1124,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1202,7 +1146,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const crearModeloONU = async(modeloONU, cerrarModal) => {
@@ -1217,7 +1160,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1242,7 +1184,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1267,7 +1208,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1290,7 +1230,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const crearMedioPago = async(medioPago, cerrarModal) => {
@@ -1305,7 +1244,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1330,7 +1268,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1355,7 +1292,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1378,7 +1314,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerTareaCambioDomicilio = async (servicioId) => {
@@ -1390,7 +1325,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const crearTarea = async(tarea, cerrarModal) => {
@@ -1405,7 +1339,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1430,7 +1363,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1455,7 +1387,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1478,10 +1409,10 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION || error == VARIABLES.ERROR_NETWORK) {
-                navigate("/");
-                window.location.reload();
-            };
+            // if(error == VARIABLES.ERROR_AUTENTICACION || error == VARIABLES.ERROR_NETWORK) {
+            //     navigate("/");
+            //     window.location.reload();
+            // };
         }
     }
     const traerOrdenesDeTrabajoAgrupadas = async (estadoId) => {
@@ -1493,10 +1424,10 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION || error == VARIABLES.ERROR_NETWORK) {
-                navigate("/");
-                window.location.reload();
-            };
+            // if(error == VARIABLES.ERROR_AUTENTICACION || error == VARIABLES.ERROR_NETWORK) {
+            //     navigate("/");
+            //     window.location.reload();
+            // };
         }
     }
     const traerOrdenesDeTrabajoAsignadas = async (tecnicoId, estadoId) => {
@@ -1508,7 +1439,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const crearOrdenDeTrabajo = async (ot) => {
@@ -1522,7 +1452,6 @@ const AppState = props => {
                 navigate('/ot-pendientes');
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1547,7 +1476,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1573,7 +1501,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1598,7 +1525,6 @@ const AppState = props => {
                 navigate('/ot-pendientes')
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1622,7 +1548,6 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 Toast('Error de conexión con el servidor', 'error');
             }
@@ -1648,7 +1573,6 @@ const AppState = props => {
                 window.location.reload();
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 console.log(err);
                 Toast('Error de conexión con el servidor', 'error');
@@ -1677,7 +1601,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const traerRecibosPorAbonado = async (UserId, Periodo= null) => {
@@ -1694,7 +1617,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     //conceptos de movimientos
@@ -1707,7 +1629,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     //spinner
@@ -1755,7 +1676,6 @@ const AppState = props => {
             })
         } catch (error) {
             console.log(error);
-            if(error == VARIABLES.ERROR_AUTENTICACION) navigate("/");
         }
     }
     const cerrarCaja = async (caja, cerrarModal) => {
@@ -1770,7 +1690,6 @@ const AppState = props => {
                 cerrarModal(true);
         })
         .catch(err => {
-            if(err == VARIABLES.ERROR_AUTENTICACION) navigate("/");
             if(!err.response){
                 console.log(err);
                 Toast('Error de conexión con el servidor', 'error');

@@ -137,7 +137,7 @@ const Aside = () => {
                 <MenuItem icon={<i className='bx bx-calendar-check'></i>}>OT Finalizadas<Link to="/ot-finalizadas"></Link></MenuItem>
                 <MenuItem icon={<i className='bx bx-user-pin'></i>}>Mis OT<Link to="/mis-ot"></Link></MenuItem>
               </SubMenu>
-              <MenuItem icon={<i className="bx bx-calculator"></i>}>Cierre de caja<Link to="/cierre-de-caja"></Link></MenuItem>
+              <MenuItem icon={<i className="bx bx-calculator"></i>}>Cierre de Caja<Link to="/cierre-de-caja"></Link></MenuItem>
               {/* <MenuItem icon={<i className="bx bxs-report"></i>}>Reportes<Link to="/reportes"></Link></MenuItem> */}
               <SubMenu onClick={onClickMenuUsuarios} open={SubMenuUsuarios} title="Usuarios" icon={<i className="bx bx-group"></i>}>
                 <MenuItem icon={<i className='bx bx-user'></i>}>Usuarios<Link to="/users"></Link></MenuItem>
