@@ -9,7 +9,6 @@ import Datatable from '../design/components/Datatable';
 import { Alert, Autocomplete } from '@material-ui/lab';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
 import convertirAFecha from '../../../helpers/ConvertirAFecha';
-import convertirAHora from '../../../helpers/ConvertirAHora';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import TooltipForTable from '../../../helpers/TooltipForTable';
 import * as VARIABLES from './../../../types/variables';
@@ -18,17 +17,19 @@ import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
 import ComprobanteButton from '../design/components/ComprobanteButton';
 import onlyNumbers from '../../../helpers/OnlyNumbers';
+import DesdeHasta from './../../../helpers/DesdeHasta';
 
 const CambioDomicilio = () => {
     const appContext = useContext(AppContext);
     const { barrios, historialDomicilios, mediosPago, municipios, provincias, usuarios,
     ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerDomiciliosAbonado, traerMunicipiosPorProvincia,
     traerOrdenesDeTrabajoAsignadas, traerProvincias, cambioDomicilioAbonado, traerTareaCambioDomicilio, traerUsuariosPorRol,
-    traerMediosPago, tareaCambioDomicilio, registrado, comprobante } = appContext;
+    traerMediosPago, tareaCambioDomicilio, registrado, comprobante, errores, unsetErrors } = appContext;
 
     const location = useLocation();
     //Observables
     useEffect(() => {
+        unsetErrors();
         traerDomiciliosAbonado(location.state.UserId);
         traerTareaCambioDomicilio(location.state.ServicioId);
         traerProvincias();
@@ -147,7 +148,11 @@ const CambioDomicilio = () => {
         },
         {
             "name": <TooltipForTable name="Domicilio" />,
-            "selector": row => row["Domicilio"].DomicilioCalle + ' ' + row["Domicilio"].DomicilioNumero +  ", B° " + row["Domicilio"].Barrio.BarrioNombre + ' ' +  row["Domicilio"].Barrio.Municipio.MunicipioNombre,
+            "selector": row =>
+            <DesdeHasta
+            desde={row["AbonadoUserDomicilio"] ? row["AbonadoUserDomicilio"].DomicilioAbonado.DomicilioCompleto: ""}
+            hasta={row["NuevoDomicilioAbonado"].DomicilioCompleto}
+            ></DesdeHasta>,
             "wrap": true,
             "sortable": true
         },
@@ -203,7 +208,7 @@ const CambioDomicilio = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto + " B°" + row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre + ", " + row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
         }  
     ]
     const ExpandedComponent = ({ data }) =>
@@ -231,12 +236,14 @@ const CambioDomicilio = () => {
         </CardHeader>
         <CardContent>
             <Datatable
-            loader={true}
-            expandedComponent={ExpandedComponent}
-            datos={historialDomicilios}
-            columnas={columnasDomicilios}
-            paginacion={true}
-            buscar={true}/>
+                loader={true}
+                expandedComponent={ExpandedComponent}
+                datos={historialDomicilios}
+                columnas={columnasDomicilios}
+                paginacion={true}
+                buscar={true}
+                listado={'HISTORIAL_DOMICILIOS'}
+            />
             <FormHelperText>Los domicilios están ordenados por fecha más reciente</FormHelperText>
             <br/>
         </CardContent>
@@ -280,6 +287,8 @@ const CambioDomicilio = () => {
                     </Grid>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "Municipio") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "Municipio") ? errores.find(e => e.param === "Municipio").msg : ""}
                         variant = "outlined"
                         onChange={handleChangeMunicipioSeleccionado}
                         value={Municipio}
@@ -301,11 +310,16 @@ const CambioDomicilio = () => {
                         options={barrios}
                         noOptionsText="No se encontraron barrios"
                         getOptionLabel={(option) => option.BarrioNombre}
-                        renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Barrios"/>}
+                        renderInput={(params) => <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Barrio") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Barrio") ? errores.find(e => e.param === "Barrio").msg : ""}
+                            {...params} variant = "outlined" fullWidth label="Barrios"/>}
                         />
                     </Grid>
                     <Grid item xs={12} md={6} lg={6} xl={6}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "DomicilioCalle") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "DomicilioCalle") ? errores.find(e => e.param === "DomicilioCalle").msg : ""}
                         variant = "outlined"
                         value={DomicilioCalle}
                         name="DomicilioCalle"
@@ -316,6 +330,8 @@ const CambioDomicilio = () => {
                     </Grid>
                     <Grid item xs={12} md={3} lg={3} xl={3}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "DomicilioNumero") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "DomicilioNumero") ? errores.find(e => e.param === "DomicilioNumero").msg : ""}
                         onKeyPress={(e) => {onlyNumbers(e)}}
                         variant = "outlined"
                         value={DomicilioNumero}
@@ -348,6 +364,8 @@ const CambioDomicilio = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={6} lg={6} xl={6}>
                         <DatePicker
+                        error={errores.length > 0 && errores.find(e => e.param === "OtFechaPrevistaVisita") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "OtFechaPrevistaVisita") ? errores.find(e => e.param === "OtFechaPrevistaVisita").msg : ""}
                         inputVariant="outlined"
                         value={OtFechaPrevistaVisita}
                         onChange={(OtFechaPrevistaVisita)=> {
@@ -372,7 +390,10 @@ const CambioDomicilio = () => {
                         options={usuarios}
                         noOptionsText="No se encontraron técnicos"
                         getOptionLabel={(option) => option.Nombre +", "+ option.Apellido}
-                        renderInput={(params) => <TextField {...params} variant ="outlined" fullWidth label="Técnico encargado de ejecución"/>}
+                        renderInput={(params) => <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Tecnico") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Tecnico") ? errores.find(e => e.param === "Tecnico").msg : ""}
+                            {...params} variant ="outlined" fullWidth label="Técnico encargado de ejecución"/>}
                     />
                     </Grid>
                     { Tecnico !== null?
@@ -439,6 +460,8 @@ const CambioDomicilio = () => {
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={12} lg={12} xl={12}>
                             <TextField
+                                error={errores.length > 0 && errores.find(e => e.param === "MedioPago") ? true : false}
+                                helperText={errores.length > 0 && errores.find(e => e.param === "MedioPago") ? errores.find(e => e.param === "MedioPago").msg : ""}
                                 variant = "outlined"
                                 value={MedioPago}
                                 onChange={handleChangeMedioPagoSeleccionado}

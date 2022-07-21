@@ -114,7 +114,8 @@ const Roles = () => {
                     columnas={columnasRoles}
                     datos={roles}
                     paginacion={true}
-                    buscar={true}>
+                    buscar={true}
+                    listado={'ROLES'}>
                 </Datatable>
             </CardContent>
         </Card>

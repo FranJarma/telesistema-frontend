@@ -430,16 +430,7 @@ const AppState = props => {
             })
             Toast(VARIABLES.CAMBIO_DOMICILIO_CORRECTO, 'success');
         } catch (error) {
-            if(!error.response){
-                Toast('Error de conexión con el servidor', 'error');
-            }
-            else if(error.response.data.msg){
-                Toast(error.response.data.msg, 'warning');
-
-            }
-            else if(error.response.data.errors){
-                Toast(error.response.data.errors[0].msg, 'warning');
-            }
+            handleErrors(error);
         }
     }
     const cambioServicioAbonado = async(servicio) => {
@@ -452,16 +443,7 @@ const AppState = props => {
             Toast(VARIABLES.CAMBIO_SERVICIO_CORRECTO, 'success');
 
         } catch (error) {
-            if(!error.response){
-                Toast('Error de conexión con el servidor', 'error');
-            }
-            else if(error.response.data.msg){
-                Toast(error.response.data.msg, 'warning');
-
-            }
-            else if(error.response.data.errors){
-                Toast(error.response.data.errors[0].msg, 'warning');
-            }
+            handleErrors(error);
         }
     }
     const cambioTitularidadAbonado = async(abonado) => {

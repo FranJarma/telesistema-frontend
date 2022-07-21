@@ -234,7 +234,7 @@ const ListaPagos = () => {
         },
         {
             "name": "Registrado por ",
-            "selector": row =>row["Registro"].Apellido + ', ' + row["Registro"].Nombre,
+            "selector": row =>row["Registro"].NombreCompleto,
             "wrap": true,
             "sortable": true,
         },
@@ -322,12 +322,13 @@ const ListaPagos = () => {
                                 </Grid>
                             </Grid>
                             <Datatable
-                            loader={true}
-                            columnas={columnasPagos}
-                            datos={pagos}
-                            paginacion={true}
-                            buscar={true}
-                            paginacionPorDefecto={15}
+                                loader={true}
+                                columnas={columnasPagos}
+                                datos={pagos}
+                                paginacion={true}
+                                buscar={true}
+                                paginacionPorDefecto={15}
+                                listado={'PAGOS'}
                             />
                             </CardContent>
                         </Card>
@@ -364,6 +365,7 @@ const ListaPagos = () => {
                                     columnas={columnasPagosPendientes}
                                     datos={pagosPendientes}
                                     paginacion
+                                    listado={'PAGOS'}
                                 />
                                 </CardContent>
                             </Card>
@@ -603,10 +605,12 @@ const ListaPagos = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} sm={12} lg={12}>
                     <Datatable
-                    columnas={columnasDetallesPagos}
-                    datos={detallesPago}
-                    loader
-                    buscar/>
+                        columnas={columnasDetallesPagos}
+                        datos={detallesPago}
+                        loader
+                        buscar
+                        listado={'DETALLES_PAGOS'}
+                    />
                     <br/>
                     <hr/>
                     <Typography variant="h2">Total pagado en el mes: ${ detallesPago.map(item => item.DetallePagoMonto).reduce((prev, curr) => prev + curr, 0)}</Typography>

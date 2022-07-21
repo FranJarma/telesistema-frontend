@@ -19,16 +19,18 @@ import convertirAHora from '../../../helpers/ConvertirAHora';
 import GetFullName from './../../../helpers/GetFullName';
 import GetUserId from './../../../helpers/GetUserId';
 import ComprobanteButton from '../design/components/ComprobanteButton';
+import DesdeHasta from './../../../helpers/DesdeHasta';
 
 const CambioServicio = () => {
     const appContext = useContext(AppContext);
     const { historialServicios, mediosPago, ordenesDeTrabajoAsignadas, servicios, usuarios, cambioServicioAbonado, traerTareas, traerServicios, traerServiciosAbonado, traerOnus, traerONUPorId,
-    traerUsuariosPorRol, traerOrdenesDeTrabajoAsignadas, traerMediosPago, registrado, comprobante } = appContext;
+    traerUsuariosPorRol, traerOrdenesDeTrabajoAsignadas, traerMediosPago, registrado, comprobante, errores, unsetErrors } = appContext;
 
     const location = useLocation();
     const styles = useStyles();
     //Observables
     useEffect(() => {
+        unsetErrors();
         setMunicipioId(location.state.MunicipioId);
         traerTareas();
         traerServicios();
@@ -110,7 +112,11 @@ const CambioServicio = () => {
         },
         {
             "name": "Servicio",
-            "selector": row =>row["Onu"].OnuMac ? row["Servicio"].ServicioNombre + ' | ' + "MAC Onu:" + ' ' + row["Onu"].OnuMac : row["Servicio"].ServicioNombre,
+            "selector": row =>
+            <DesdeHasta
+            desde={row["AbonadoUserServicio"].ServicioAbonado.ServicioNombre}
+            hasta={row["NuevoServicioAbonado"].ServicioNombre}
+            ></DesdeHasta>,
             "wrap": true,
             "sortable": true
         },
@@ -165,7 +171,7 @@ const CambioServicio = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto + " B°" + row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre + ", " + row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
         }    
     ]
     const ExpandedComponent = ({ data }) =>
@@ -185,12 +191,14 @@ const CambioServicio = () => {
         </CardHeader>
         <CardContent>
             <Datatable
-            loader={true}
-            expandedComponent={ExpandedComponent}
-            datos={historialServicios}
-            columnas={columnasServicios}
-            paginacion={true}
-            buscar={true}/>
+                loader={true}
+                expandedComponent={ExpandedComponent}
+                datos={historialServicios}
+                columnas={columnasServicios}
+                paginacion={true}
+                buscar={true}
+                listado={'HISTORIAL_SERVICIOS'}
+            />
             <FormHelperText>Los servicios están ordenados por fecha más reciente</FormHelperText>
             <br/>
         </CardContent>
@@ -239,6 +247,8 @@ const CambioServicio = () => {
             <Grid container spacing={3}>
                 <Grid item xs={6} md={6} lg={6} xl={6}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Servicio") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Servicio") ? errores.find(e => e.param === "Servicio").msg : ""}
                     variant="outlined"
                     onChange={handleChangeServicioSeleccionado}
                     value={Servicio}
@@ -258,6 +268,8 @@ const CambioServicio = () => {
                     <>
                     <Grid item xs={6} md={6} lg={6} xl={6}>
                     <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "MedioPago") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "MedioPago") ? errores.find(e => e.param === "MedioPago").msg : ""}
                         variant = "outlined"
                         value={MedioPago}
                         onChange={handleChangeMedioPagoSeleccionado}
@@ -318,6 +330,8 @@ const CambioServicio = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={6} md={6} lg={6} xl={6}>
                         <DatePicker
+                            error={errores.length > 0 && errores.find(e => e.param === "OtFechaPrevistaVisita") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "OtFechaPrevistaVisita") ? errores.find(e => e.param === "OtFechaPrevistaVisita").msg : ""}
                             inputVariant="outlined"
                             value={OtFechaPrevistaVisita}
                             onChange={(fecha)=>setOtFechaPrevistaVisita(fecha)}
@@ -329,6 +343,8 @@ const CambioServicio = () => {
                     </Grid>
                     <Grid item xs={12} md={6} lg={6} xl={6}>
                     <Autocomplete
+                        error={errores.length > 0 && errores.find(e => e.param === "Tecnico") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "Tecnico") ? errores.find(e => e.param === "Tecnico").msg : ""}
                         value={Tecnico}
                         onChange={(_event, newTecnico) => {
                             if(newTecnico){

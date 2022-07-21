@@ -128,9 +128,6 @@ const ListaOtPendientes = () => {
             "wrap": true,
             "sortable": true,
             "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
-            +` B° ${row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre} ${row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre}`,
-            // !row["DomicilioCalleCambio"] ? row["DomicilioCalle"] + " " + row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"] :
-            // <DesdeHasta title1="Domicilio Viejo" title2="Domicilio Nuevo" proposito={"Cambio de Domicilio"} desde={row["DomicilioCalle"] + " " +  row["DomicilioNumero"] + ", B° " + row["BarrioNombre"] + " " + row["MunicipioNombre"]} hasta={row["DomicilioCalleCambio"] + " " +  row["DomicilioNumeroCambio"] + ", B° " + row["BarrioNombreCambio"] + " " + row["MunicipioNombreCambio"]}></DesdeHasta>
         },
         {
             "name": "Servicio",
@@ -138,8 +135,6 @@ const ListaOtPendientes = () => {
             "wrap": true,
             "sortable": true,
             "selector": row => row["AbonadoOt"].ServicioAbonado.ServicioNombre
-        //     !row["NuevoServicioId"] ? row["ServicioViejo"]:
-        //     <DesdeHasta title1="Servicio Viejo" title2="Servicio Nuevo" proposito={"Cambio de Servicio"} desde={row["ServicioViejo"]} hasta={row["ServicioNuevo"]}></DesdeHasta>
         },
         {
             "name": <TooltipForTable name="Fecha de Emisión"/>,

@@ -11,6 +11,8 @@ import GetUserId from './../../../helpers/GetUserId';
 
 import { Alert } from '@material-ui/lab';
 import BotonesDatatable from '../design/components/BotonesDatatable';
+import TooltipForTable from '../../../helpers/TooltipForTable';
+import convertirAFecha from '../../../helpers/ConvertirAFecha';
 
 const ListaMisOt = () => {
     const appContext = useContext(AppContext);
@@ -80,19 +82,25 @@ const ListaMisOt = () => {
             "name": "Abonado",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["ApellidoAbonado"] + ", " + row["NombreAbonado"]
+            "selector": row => row["AbonadoOt"].NombreCompletoAbonado
         },
         {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["DomicilioCalle"] + ', ' + row["DomicilioNumero"] + ' | ' +  "Barrio " + row["BarrioNombre"] + ' | ' +  row["MunicipioNombre"],
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
         },
         {
             "name": "Monto",
             "wrap": true,
             "sortable": true,
-            "selector": row => "$ " + row["Monto"]
+            "selector": row => row["OtMonto"]  ? "$ " + row["OtMonto"] : "$ 0"
+        },
+        {
+            "name": <TooltipForTable name="Fecha prevista de visita"/>,
+            "wrap": true,
+            "sortable": true,
+            "selector": row => convertirAFecha(row["OtFechaPrevistaVisita"])
         },
         {
             "name": "Observaciones",
@@ -134,6 +142,7 @@ const ListaMisOt = () => {
                     columnas={columnasMisOt}
                     paginacion={true}
                     buscar={true}
+                    listado={'MIS_OT'}
                 />
             </CardContent>
         </Card>

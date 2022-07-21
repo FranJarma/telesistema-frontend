@@ -125,10 +125,8 @@ const ListaAbonadosInscriptos = () => {
         "name": <TooltipForTable name="Domicilio" />,
         "selector": row =>
         row["DomicilioAbonado"].EsAlquiler === 1 ?
-        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
-        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
-        : row["DomicilioAbonado"].DomicilioCompleto
-        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
+        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto}/>
+        : row["DomicilioAbonado"].DomicilioCompleto,
         "wrap": true,
         "sortable": true
     },
@@ -331,9 +329,10 @@ const columnasInscripcion = [
                     loader={true}
                     columnas={columnasAbonadosInscriptos}
                     datos={abonados}
-                    // expandedComponent={ExpandedComponent}
                     paginacion={true}
-                    buscar={true}/>
+                    buscar={true}
+                    listado={"ABONADOS_INSCRIPTOS"}
+                />
                 </CardContent>
         </Card>
         </main>

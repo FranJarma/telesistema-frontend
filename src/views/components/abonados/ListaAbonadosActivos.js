@@ -106,10 +106,8 @@ const ListaAbonadosActivos = () => {
         "name": <TooltipForTable name="Domicilio" />,
         "selector": row =>
         row["DomicilioAbonado"].EsAlquiler === 1 ?
-        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
-        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
-        : row["DomicilioAbonado"].DomicilioCompleto
-        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
+        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto}/>
+        : row["DomicilioAbonado"].DomicilioCompleto,
         "wrap": true,
         "sortable": true
     },
@@ -179,12 +177,6 @@ const ListaAbonadosActivos = () => {
         }/>
     }
 ]
-    const ExpandedComponent = ({ data }) =>
-    <>
-        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-home"></i> Domicilio: {data.DomicilioCalle} {data.DomicilioNumero} | Barrio {data.BarrioNombre} | {data.MunicipioNombre}</Typography>
-        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-id-card"></i> DNI: {data.Documento}</Typography>
-        <Typography style={{fontWeight: 'bold'}} variant="h6"><i className="bx bx-plug"></i> Servicio: {data.ServicioNombre}</Typography>
-    </>;
     return (
         <>
         <div className="container">
@@ -279,9 +271,10 @@ const ListaAbonadosActivos = () => {
                     loader={true}
                     columnas={columnasAbonadosActivos}
                     datos={abonados}
-                    // expandedComponent={ExpandedComponent}
                     paginacion={true}
-                    buscar={true}/>
+                    buscar={true}
+                    listado={"ABONADOS_ACTIVOS"}
+                />
             </CardContent>
         </Card>
         </main>

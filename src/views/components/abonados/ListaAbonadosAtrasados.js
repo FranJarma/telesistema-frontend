@@ -53,10 +53,8 @@ const ListaAbonadosAtrasados = () => {
         "name": <TooltipForTable name="Domicilio" />,
         "selector": row =>
         row["DomicilioAbonado"].EsAlquiler === 1 ?
-        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto
-        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`}/>
-        : row["DomicilioAbonado"].DomicilioCompleto
-        +` B° ${row["DomicilioAbonado"].Barrio.BarrioNombre} ${row["DomicilioAbonado"].Barrio.Municipio.MunicipioNombre}`,
+        <SpanAlquiler domicilio={row["DomicilioAbonado"].DomicilioCompleto}/>
+        : row["DomicilioAbonado"].DomicilioCompleto,
         "wrap": true,
         "sortable": true
     },
@@ -96,7 +94,9 @@ const ExpandedComponent = ({ data }) =>
                     expandedComponent={ExpandedComponent}
                     datos={abonados}
                     paginacion={true}
-                    buscar={true}/>
+                    buscar={true}
+                    listado={"ABONADOS_ATRASADOS"}
+                />
             </CardContent>
         </Card>
         </main>

@@ -236,7 +236,7 @@ const CaratulaAbonado = () => {
             "name": "Domicilio",
             "wrap": true,
             "sortable": true,
-            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto + " B°" + row["AbonadoOt"].DomicilioAbonado.Barrio.BarrioNombre + ", " + row["AbonadoOt"].DomicilioAbonado.Barrio.Municipio.MunicipioNombre
+            "selector": row => row["AbonadoOt"].DomicilioAbonado.DomicilioCompleto
         }    
     ]
     return ( 
