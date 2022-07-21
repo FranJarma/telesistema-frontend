@@ -10,7 +10,8 @@ const Login = () => {
     const styles = useStyles();
     const navigate = useNavigate();
     const appContext = useContext(AppContext);
-    const { usuarioAutenticado, iniciarSesion } = appContext;
+    const { errores, usuarioAutenticado, iniciarSesion } = appContext;
+    console.log(errores);
     const [AuthInfo, setAuthInfo] = useState({
       NombreUsuario: '',
       Contraseña: ''
@@ -47,6 +48,8 @@ const Login = () => {
                 <Grid container spacing = {3}>
                     <Grid item xs={12} lg={12} sm={12} md={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "NombreUsuario") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "NombreUsuario") ? errores.find(e => e.param === "NombreUsuario").msg : ""}
                     color='secondary'
                     autoFocus
                     fullWidth
@@ -67,6 +70,8 @@ const Login = () => {
                     </Grid>
                     <Grid item xs={12} lg={12} sm={12} md={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Contraseña") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Contraseña") ? errores.find(e => e.param === "Contraseña").msg : ""}
                     color='secondary'
                     fullWidth
                     label="Contraseña"

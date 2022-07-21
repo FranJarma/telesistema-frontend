@@ -56,10 +56,40 @@ const AppState = props => {
         cajas: {},
         facturas: [],
         recibos: [],
+        errores: [],
         comprobante: {}
     }
     let navigate = useNavigate();
     const [state, dispatch] = useReducer(AppReducer, initialState);
+
+    const setErrors = (errors) => {
+        dispatch({
+            type: TYPES.SET_ERRORES,
+            payload: errors
+        });
+    }
+
+    const unsetErrors = () => {
+        dispatch({
+            type: TYPES.UNSET_ERRORES
+        });
+    }
+
+    const handleErrors = (error) => {
+        if(!error.response){
+            Toast('Hubo un error. Comúniquese con el administrador.', 'error');
+        }
+
+        if(error.response.status === 401) cerrarSesion();
+
+        if(error.response.data.msg){
+            Toast(error.response.data.msg, 'warning');
+        }
+
+        if(error.response.data.errors){
+            setErrors(error.response.data.errors);
+        }
+    }
     //AUTH
     //retorna el usuario autenticado, nos servirá tanto al momento del registro como del logueo
     const obtenerUsuarioAutenticado = async ()=>{
@@ -77,7 +107,7 @@ const AppState = props => {
                 payload: respuesta.data
             });
         } catch (error) {
-            console.log(error);
+            handleErrors(error);
             dispatch({
                 type: TYPES.CERRAR_SESION
             });
@@ -94,15 +124,7 @@ const AppState = props => {
             })
             obtenerUsuarioAutenticado();
         } catch (error) {
-            if(!error.response){
-                Toast('Error de conexión con el servidor', 'error');
-            }
-            else if(error.response.data.msg){
-                Toast(error.response.data.msg, 'warning');
-            }
-            else if(error.response.data.errors){
-                Toast(error.response.data.errors[0].msg, 'warning');
-            }
+            handleErrors(error);
         }
     }
     const cerrarSesion = () => {
@@ -126,17 +148,8 @@ const AppState = props => {
                 Swal('Operación completa', resOk.data.msg);
                 navigate('/users');
         })
-        .catch(err => {
-            if(!err.response){
-                Toast('Error de conexión con el servidor', 'error');
-            }
-            else if(err.response.data.msg){
-                Toast(err.response.data.msg, 'warning');
-
-            }
-            else if(err.response.data.errors){
-                Toast(err.response.data.errors[0].msg, 'warning');
-            }
+        .catch(error => {
+            handleErrors(error);
         })
     }
     const modificarUsuario = async (usuario, desdePerfilUser) => {
@@ -335,16 +348,7 @@ const AppState = props => {
             Toast(VARIABLES.ABONADO_CREADO_CORRECTAMENTE, 'success');
 
         } catch (error) {
-            if(!error.response){
-                Toast('Error de conexión con el servidor', 'error');
-            }
-            else if(error.response.data.msg){
-                Toast(error.response.data.msg, 'warning');
-
-            }
-            else if(error.response.data.errors){
-                Toast(error.response.data.errors[0].msg, 'warning');
-            }
+            handleErrors(error);
         }
     }
     const modificarAbonado = async (abonado) => {
@@ -497,7 +501,7 @@ const AppState = props => {
                 payload: resultado.data
             })
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
         }
     }
     const traerAbonadosAtrasados = async (municipioId = 0) => {
@@ -1751,7 +1755,8 @@ const AppState = props => {
             recibos: state.recibos,
             registrado: state.registrado,
             comprobante: state.comprobante,
-            iniciarSesion, cerrarSesion, obtenerUsuarioAutenticado, traerUsuarios, traerUsuariosPorRol, crearUsuario, modificarUsuario, eliminarUsuario,
+            errores: state.errores,
+            setErrors, unsetErrors, iniciarSesion, cerrarSesion, obtenerUsuarioAutenticado, traerUsuarios, traerUsuariosPorRol, crearUsuario, modificarUsuario, eliminarUsuario,
             traerRoles, traerRolesPorUsuario, crearRol, modificarRol, eliminarRol,
             traerPermisos, traerPermisosPorRol,
             traerAbonados, traerAbonadosAtrasados, traerAbonado, traerDomiciliosAbonado, traerServiciosAbonado, crearAbonado, modificarAbonado, cambioTitularidadAbonado,

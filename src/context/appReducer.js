@@ -4,6 +4,18 @@ export default (state, action) => {
     let pago = null;
     let ot = null;
     switch (action.type) {
+        case TYPES.SET_ERRORES:
+            return {
+                ...state,
+                errores: action.payload
+            }
+        
+        case TYPES.UNSET_ERRORES:
+            return {
+                ...state,
+                errores: []
+            }
+
         case TYPES.LOGIN_EXITOSO:
             localStorage.setItem('token',action.payload.token);
             return {

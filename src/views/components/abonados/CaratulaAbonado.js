@@ -19,10 +19,10 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const CaratulaAbonado = () => {
     const appContext = useContext(AppContext);
-    const { barrios, condicionesIva, municipios, servicios, provincias, usuarios,
+    const { errores, barrios, condicionesIva, municipios, servicios, provincias, usuarios,
     mediosPago, ordenesDeTrabajoAsignadas, traerBarriosPorMunicipio, traerCondicionesIva,
     traerMunicipiosPorProvincia, traerServicios, traerProvincias, crearAbonado, modificarAbonado,
-    traerMediosPago, traerOrdenesDeTrabajoAsignadas, traerUsuariosPorRol, registrado, comprobante } = appContext;
+    traerMediosPago, traerOrdenesDeTrabajoAsignadas, traerUsuariosPorRol, unsetErrors, registrado, comprobante } = appContext;
     
     const location = useLocation();
     const params = useParams();
@@ -119,6 +119,7 @@ const CaratulaAbonado = () => {
         setServicio(null);
     }
     useEffect(() => {
+        unsetErrors();
         traerProvincias();
         traerMunicipiosPorProvincia(ProvinciaId);
         //traerBarriosPorMunicipio(Municipio);
@@ -261,6 +262,8 @@ const CaratulaAbonado = () => {
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Nombre") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Nombre") ? errores.find(e => e.param === "Nombre").msg : ""}
                             autoFocus
                             variant="outlined"
                             value={Nombre}
@@ -272,6 +275,8 @@ const CaratulaAbonado = () => {
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Apellido") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Apellido") ? errores.find(e => e.param === "Apellido").msg : ""}
                             variant="outlined"
                             value={Apellido}
                             name="Apellido"
@@ -282,6 +287,8 @@ const CaratulaAbonado = () => {
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Documento") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Documento") ? errores.find(e => e.param === "Documento").msg : ""}
                             onChange={onInputChange}
                             value={Documento}
                             onKeyPress={(e) => {onlyNumbers(e)}}
@@ -294,6 +301,8 @@ const CaratulaAbonado = () => {
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Cuit") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Cuit") ? errores.find(e => e.param === "Cuit").msg : ""}
                             onChange={onInputChange}
                             value={Cuit}
                             onKeyPress={(e) => {onlyNumbers(e)}}
@@ -306,6 +315,8 @@ const CaratulaAbonado = () => {
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "CondicionIvaId") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "CondicionIvaId") ? errores.find(e => e.param === "CondicionIvaId").msg : ""}
                             variant="outlined"
                             value={CondicionIvaId}
                             onChange={handleChangeCondicionIVASeleccionado}
@@ -331,6 +342,8 @@ const CaratulaAbonado = () => {
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <KeyboardDatePicker
+                            error={errores.length > 0 && errores.find(e => e.param === "FechaNacimiento") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "FechaNacimiento") ? errores.find(e => e.param === "FechaNacimiento").msg : ""}
                             inputVariant="outlined"
                             value={FechaNacimiento}
                             format="dd/MM/yyyy"
@@ -363,6 +376,8 @@ const CaratulaAbonado = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
                         <TextField
+                         error={errores.length > 0 && errores.find(e => e.param === "ProvinciaId") ? true : false}
+                         helperText={errores.length > 0 && errores.find(e => e.param === "ProvinciaId") ? errores.find(e => e.param === "ProvinciaId").msg : ""} 
                         variant = {location.state ? "filled" : "outlined"}
                         disabled = {location.state ? true : false}
                         value={location.state ? location.state.DomicilioAbonado.Barrio.Municipio.Provincia.ProvinciaNombre : ProvinciaId}
@@ -377,6 +392,8 @@ const CaratulaAbonado = () => {
                     </Grid>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "MunicipioId") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "MunicipioId") ? errores.find(e => e.param === "MunicipioId").msg : ""}
                         variant = "outlined"
                         onChange={handleChangeMunicipioSeleccionado}
                         value={MunicipioId}
@@ -399,11 +416,19 @@ const CaratulaAbonado = () => {
                         options={barrios}
                         noOptionsText="No se encontraron barrios"
                         getOptionLabel={(option) => option.BarrioNombre}
-                        renderInput={(params) => <TextField {...params} value={Barrio.BarrioId} variant = "outlined" fullWidth label="Barrios"/>}
+                        renderInput={(params) =>
+                            <TextField
+                                error={errores.length > 0 && errores.find(e => e.param === "Barrio.BarrioId") ? true : false}
+                                helperText={errores.length > 0 && errores.find(e => e.param === "Barrio.BarrioId") ? errores.find(e => e.param === "Barrio.BarrioId").msg : ""}
+                                {...params} variant ="outlined" fullWidth label="Barrio"
+                            />
+                        }
                     />
                     </Grid>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "DomicilioCalle") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "DomicilioCalle") ? errores.find(e => e.param === "DomicilioCalle").msg : ""}
                         variant = "outlined"
                         value={DomicilioCalle}
                         name="DomicilioCalle"
@@ -414,6 +439,8 @@ const CaratulaAbonado = () => {
                     </Grid>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "DomicilioNumero") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "DomicilioNumero") ? errores.find(e => e.param === "DomicilioNumero").msg : ""}
                         variant = "outlined"
                         value={DomicilioNumero}
                         name="DomicilioNumero"
@@ -453,6 +480,8 @@ const CaratulaAbonado = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={6} lg={6} xl={6}>
                         <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "Servicio") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "Servicio") ? errores.find(e => e.param === "Servicio").msg : ""}
                         variant = {location.state ? "filled" : "outlined"}
                         disabled = {location.state ? true : false}
                         value={location.state ? location.state.ServicioAbonado.ServicioNombre : Servicio !== null ? Servicio : ""}
@@ -471,6 +500,8 @@ const CaratulaAbonado = () => {
                     <>
                     <Grid item xs={12} md={6} lg={6} xl={6}>
                     <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "MedioPago") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "MedioPago") ? errores.find(e => e.param === "MedioPago").msg : ""}
                         variant = "outlined"
                         value={MedioPago}
                         onChange={handleChangeMedioPagoSeleccionado}
@@ -553,8 +584,15 @@ const CaratulaAbonado = () => {
                         options={usuarios}
                         noOptionsText="No se encontraron técnicos"
                         getOptionLabel={(option) => option.Nombre +", "+ option.Apellido}
-                        renderInput={(params) => <TextField {...params} variant ="outlined" fullWidth label="Técnico encargado de ejecución"/>}
+                        renderInput={(params) =>
+                            <TextField
+                                error={errores.length > 0 && errores.find(e => e.param === "Tecnico") ? true : false}
+                                helperText={errores.length > 0 && errores.find(e => e.param === "Tecnico") ? errores.find(e => e.param === "Tecnico").msg : ""}
+                                {...params} variant ="outlined" fullWidth label="Técnico encargado de ejecución"
+                            />
+                        }
                         />
+                        
                     </Grid>
                     : ""}
                     { Tecnico !== null && !location.state ?
@@ -575,7 +613,9 @@ const CaratulaAbonado = () => {
                     {!location.state ?
                     <>
                     <Grid item xs={12} md={4} lg={4} xl={4}>
-                        <DatePicker 
+                        <DatePicker
+                        error={errores.length > 0 && errores.find(e => e.param === "OtFechaPrevistaVisita") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "OtFechaPrevistaVisita") ? errores.find(e => e.param === "OtFechaPrevistaVisita").msg : ""} 
                         disabled = {location.state ? true : false}
                         inputVariant={location.state ? "filled" : "outlined"}
                         value={OtFechaPrevistaVisita}

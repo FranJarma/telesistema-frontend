@@ -27,7 +27,7 @@ import ListaMovimientos from './views/components/caja/ListaMovimientos';
 import ListaMediosPago from './views/components/mediosPago/ListaMediosPago';
 import ListaAbonadosAtrasados from './views/components/abonados/ListaAbonadosAtrasados';
 import { AuthRoute } from './routes/AuthRoute';
-import NotFound404 from './views/components/NotFound404';
+import HttpStatus from './views/components/HttpStatus';
 
 //revisamos si tenemos un token
 const token = localStorage.getItem('token');
@@ -430,7 +430,7 @@ function App() {
 
               <Route path="*"
               element={
-                <NotFound404/>
+                <HttpStatus numero={404} titulo={'No se encontró el recurso'} mensaje={'El recurso ha sido movido o no existe.'}/>
               }>
               </Route>
               

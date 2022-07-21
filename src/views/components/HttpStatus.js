@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Error401 = () => {
+const HttpStatus = ({numero, titulo, mensaje}) => {
     const [counter, setCounter] = useState(3);
     let navigate = useNavigate();
     useEffect(() => {
@@ -16,13 +16,13 @@ const Error401 = () => {
 
     return (
         <>
-        <section className="error-401">
-            <h1>401</h1>
-            <h2>No autorizado</h2>
-            <p>Usted no tiene permisos suficientes para acceder a este recurso. Volviendo a home en... {counter}</p>
+        <section className="error">
+            <h1>{numero}</h1>
+            <h2>{titulo}</h2>
+            <p>{mensaje}. Volviendo a home en... {counter}</p>
         </section>
         </>
     );
 }
  
-export default Error401;
+export default HttpStatus;
