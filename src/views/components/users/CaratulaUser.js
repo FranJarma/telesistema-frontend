@@ -4,14 +4,15 @@ import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
 import { Button, Card, CardContent, FormControlLabel, Grid, FormGroup, Switch, TextField, Typography, Checkbox} from '@material-ui/core'; 
 import { useLocation } from 'react-router-dom';
-import DataTable from 'react-data-table-component';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import GetUserId from './../../../helpers/GetUserId';
 import onlyNumbers from '../../../helpers/OnlyNumbers';
+import Datatable from '../design/components/Datatable';
+import { FormHelperText } from '@mui/material';
 
 const CaratulaUser = () => {
     const appContext = useContext(AppContext);
-    const { roles, rolesUser, traerRoles, traerRolesPorUsuario, crearUsuario, modificarUsuario } = appContext;
+    const { errores, unsetErrors, roles, rolesUser, traerRoles, traerRolesPorUsuario, crearUsuario, modificarUsuario } = appContext;
     const location = useLocation();
     const [UserInfo, setUserInfo] = useState({
         UserIdLogueado: GetUserId(),
@@ -40,10 +41,10 @@ const CaratulaUser = () => {
     }
 
     const handleChangeTabRoles = (e) => {
-        if(!ModalAsignarRoles && location.state && PrimerRender) {
-            setRolesSeleccionados(rolesUser);
-            setPrimerRender(false);
-        }
+        // if(!ModalAsignarRoles && location.state && PrimerRender) {
+        //     setRolesSeleccionados(rolesUser);
+        //     setPrimerRender(false);
+        // }
         setModalAsignarRoles(!ModalAsignarRoles);
     }
     const onInputChange = (e) => {
@@ -56,6 +57,7 @@ const CaratulaUser = () => {
     
     useEffect(()=> {
         traerRoles();
+        unsetErrors();
         if(location.state){
             traerRolesPorUsuario(location.state.UserId);
             setUserInfo({
@@ -144,6 +146,8 @@ const CaratulaUser = () => {
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Nombre") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Nombre") ? errores.find(e => e.param === "Nombre").msg : ""}
                             autoFocus
                             variant="outlined"
                             value={Nombre}
@@ -155,6 +159,8 @@ const CaratulaUser = () => {
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} xl={6}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Apellido") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Apellido") ? errores.find(e => e.param === "Apellido").msg : ""}
                             variant="outlined"
                             value={Apellido}
                             name="Apellido"
@@ -165,6 +171,8 @@ const CaratulaUser = () => {
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Documento") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Documento") ? errores.find(e => e.param === "Documento").msg : ""}
                             variant="outlined"
                             value={Documento}
                             name="Documento"
@@ -177,6 +185,8 @@ const CaratulaUser = () => {
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Email") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Email") ? errores.find(e => e.param === "Email").msg : ""}
                             variant="outlined"
                             value={Email}
                             name="Email"
@@ -199,6 +209,8 @@ const CaratulaUser = () => {
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "NombreUsuario") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "NombreUsuario") ? errores.find(e => e.param === "NombreUsuario").msg : ""}
                             disabled= {location.state ? true : false}
                             variant={location.state ? "filled": "outlined"}
                             value={NombreUsuario}
@@ -210,6 +222,8 @@ const CaratulaUser = () => {
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "Contraseña") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "Contraseña") ? errores.find(e => e.param === "Contraseña").msg : ""}
                             variant="outlined"
                             value={Contraseña}
                             name="Contraseña"
@@ -222,6 +236,8 @@ const CaratulaUser = () => {
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "RContraseña") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "RContraseña") ? errores.find(e => e.param === "RContraseña").msg : ""}
                             variant="outlined"
                             value={RContraseña}
                             name="RContraseña"
@@ -254,15 +270,18 @@ const CaratulaUser = () => {
                 </TabPanel>
                 <TabPanel>
                     <Card>
-                    <DataTable
-                        columns={columnasRoles}
-                        data={roles}
-                        onSelectedRowsChange={row => setRolesSeleccionados(row.selectedRows)}
-                        selectableRows
-                        selectableRowsComponent={Checkbox}
-                        selectableRowSelected={row => RolesSeleccionados.find((rol) => rol.RoleId === row.RoleId)}>
-                    </DataTable>
-                    </Card>
+                        <Datatable
+                            columnas={columnasRoles}
+                            datos={roles}
+                            paginacion={true}
+                            buscar={true}
+                            seleccionable={true}
+                            fnSeleccionable={row => setRolesSeleccionados(row.selectedRows)}
+                            filaSeleccionada={row => RolesSeleccionados.find((rol) => rol.RoleId === row.RoleId)}
+                            listado={'ROLES'}
+                        />
+                        </Card>
+                    <FormHelperText style={{color: '#f44336'}}>{errores.length > 0 && errores.find(e => e.param === "RolesSeleccionados") ? errores.find(e => e.param === "RolesSeleccionados").msg : ""}</FormHelperText>
                 </TabPanel>
             </Tabs>
         </CardContent>

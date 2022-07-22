@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, CardHeader, Checkbox, Chip, FormControl, FormControlLabel, Grid,  MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Checkbox, Chip, FormControl, FormControlLabel, Grid,  MenuItem, TextField, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import Datatable from '../design/components/Datatable';
 import Aside from '../design/layout/Aside';
@@ -21,7 +21,7 @@ import onlyNumbers from './../../../helpers/OnlyNumbers';
 
 const ListaPagos = () => {
     const appContext = useContext(AppContext);
-    const { pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
+    const { unsetErrors, errores, pagos, pagosPendientes, pagosPendientesTop, detallesPago, mediosPago, conceptos, crearPago, crearPagoAdelantado, agregarRecargo, eliminarRecargo, eliminarDetallePago, traerPagosPorAbonado, traerDetallesPago, traerMediosPago, traerConceptos, traerPagosMensualesPendientes, cargando, mostrarSpinner, comprobante, registrado} = appContext;
     const location = useLocation();
     const [PagoAño, setPagoAño] = useState(new Date());
     const [ConceptoId, setConceptoId] = useState(null);
@@ -102,10 +102,11 @@ const ListaPagos = () => {
             traerPagosMensualesPendientes(location.state.UserId, 1);
         }
         else{
-            setCantidadMesesAPagar(null)
+            setCantidadMesesAPagar(null);
+            unsetErrors();
         }
     }
-    const handleChangeModalNuevoPago = (data, edit = false) => {
+    const handleChangeModalNuevoPago = (data) => {
         setModalNuevoPago(!ModalNuevoPago);
         setPagoInfo({
             ...data,
@@ -115,10 +116,12 @@ const ListaPagos = () => {
             createdAt: new Date(),
             createdBy: GetUserId()
         });
+        if(!ModalNuevoPago) unsetErrors();
     }
     const handleChangeModalRecargoPago = (data) => {
         setPagoInfo({...data, updatedBy: GetUserId()});
         setModalRecargo(!ModalRecargo);
+        if(!ModalRecargo) unsetErrors();
 
     }
     const handleChangeModalDetallesPago = (data) => {
@@ -177,8 +180,7 @@ const ListaPagos = () => {
             cell: (data) =>
                 <BotonesDatatable botones={
                     <>
-                        <MenuItem>
-                            <Typography onClick={()=>handleChangeModalDetallesPago(data)} style={{textDecoration: 'none', color: "navy", cursor: "pointer"}}><i className='bx bx-list-ol bx-xs'></i> Detalles</Typography></MenuItem>
+                        {data.PagoSaldo !== (data.PagoTotal + data.PagoRecargo) ? <MenuItem><Typography onClick={()=>handleChangeModalDetallesPago(data)} style={{textDecoration: 'none', color: "navy", cursor: "pointer"}}><i className='bx bx-list-ol bx-xs'></i> Detalles</Typography></MenuItem> : ""}
                             {data.PagoSaldo > 0 && location.pathname.split('/')[2] !== 'view' ?
                             <>
                                 <MenuItem>
@@ -376,10 +378,12 @@ const ListaPagos = () => {
                                 <CardContent>
                                 <Typography variant="h2"> Seleccione los meses a pagar y el medio de pago</Typography>   
                                     <TextField
+                                        error={errores.length > 0 && errores.find(e => e.param === "PagoAdelantadoInfo.CantidadMesesAPagar") ? true : false}
+                                        helperText={errores.length > 0 && errores.find(e => e.param === "PagoAdelantadoInfo.CantidadMesesAPagar") ? errores.find(e => e.param === "PagoAdelantadoInfo.CantidadMesesAPagar").msg : ""}
                                         variant="outlined"
                                         label="Cantidad de meses a pagar"
                                         value={CantidadMesesAPagar}
-                                        name="CantidcadMesesAPagar"
+                                        name="CantidadMesesAPagar"
                                         fullWidth
                                         select
                                         onChange={handleChangeMesesAPagar}
@@ -393,6 +397,8 @@ const ListaPagos = () => {
                                         ))}
                                     </TextField>
                                     <TextField
+                                        error={errores.length > 0 && errores.find(e => e.param === "PagoAdelantadoInfo.MedioPagoId") ? true : false}
+                                        helperText={errores.length > 0 && errores.find(e => e.param === "PagoAdelantadoInfo.MedioPagoId") ? errores.find(e => e.param === "PagoAdelantadoInfo.MedioPagoId").msg : ""}
                                         style={{marginTop: 25}}
                                         variant="outlined"
                                         label="Medio de Pago"
@@ -511,6 +517,8 @@ const ListaPagos = () => {
                 </Grid>
                 <Grid item xs={6} md={6} sm={6} lg={6}>
                     <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "MedioPagoId") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "MedioPagoId") ? errores.find(e => e.param === "MedioPagoId").msg : ""}
                         variant="outlined"
                         label="Medio de Pago"
                         value={MedioPagoId}
@@ -578,6 +586,8 @@ const ListaPagos = () => {
                     </Alert>
                     <br/>
                     <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "PagoRecargo") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "PagoRecargo") ? errores.find(e => e.param === "PagoRecargo").msg : ""}
                         onKeyPress={(e) => {onlyNumbers(e)}}
                         name="PagoRecargo"
                         fullWidth

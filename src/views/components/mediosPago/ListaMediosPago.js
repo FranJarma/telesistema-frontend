@@ -12,7 +12,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaMediosPago = () => {
     const appContext = useContext(AppContext);
-    const { mediosPago, traerMediosPago, crearMedioPago, modificarMedioPago, eliminarMedioPago } = appContext;
+    const { errores, mediosPago, traerMediosPago, crearMedioPago, modificarMedioPago, eliminarMedioPago } = appContext;
     useEffect(()=>{
         traerMediosPago();
     },[]);
@@ -134,6 +134,8 @@ const ListaMediosPago = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "MedioPagoNombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "MedioPagoNombre") ? errores.find(e => e.param === "MedioPagoNombre").msg : ""}
                     color="primary"
                     autoFocus
                     variant="outlined"

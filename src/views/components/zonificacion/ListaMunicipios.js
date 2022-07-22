@@ -9,7 +9,7 @@ import GetUserId from '../../../helpers/GetUserId';
 
 const ListaMunicipios = () => {
     const appContext = useContext(AppContext);
-    const { municipios, provincias, traerProvincias, traerMunicipiosPorProvincia, crearMunicipio, modificarMunicipio, eliminarMunicipio } = appContext;
+    const { errores, municipios, provincias, traerProvincias, traerMunicipiosPorProvincia, crearMunicipio, modificarMunicipio, eliminarMunicipio } = appContext;
     
     useEffect(()=>{
         traerProvincias();
@@ -149,6 +149,8 @@ const ListaMunicipios = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "MunicipioNombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "MunicipioNombre") ? errores.find(e => e.param === "MunicipioNombre").msg : ""}
                     color="primary"
                     autoFocus
                     variant="outlined"
@@ -172,6 +174,8 @@ const ListaMunicipios = () => {
                 </Grid>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "MunicipioCodigoPostal") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "MunicipioCodigoPostal") ? errores.find(e => e.param === "MunicipioCodigoPostal").msg : ""}
                     color="primary"
                     variant="outlined"
                     label="Código postal"
@@ -190,7 +194,9 @@ const ListaMunicipios = () => {
                         options={provincias}
                         noOptionsText="No se encontraron provincias"
                         getOptionLabel={(option) => option.ProvinciaNombre}
-                        renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Provincia"/>}
+                        renderInput={(params) => <TextField error={errores.length > 0 && errores.find(e => e.param === "Provincia.ProvinciaId") ? true : false}
+                                                            helperText={errores.length > 0 && errores.find(e => e.param === "Provincia.ProvinciaId") ? errores.find(e => e.param === "Provincia.ProvinciaId").msg : ""}
+                                                            {...params} variant = "outlined" fullWidth label="Provincia"/>}
                     />
                 </Grid>
             </Grid>

@@ -12,7 +12,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaServicios = () => {
     const appContext = useContext(AppContext);
-    const { servicios, traerServicios, crearServicio, modificarServicio, eliminarServicio } = appContext;
+    const { errores, servicios, traerServicios, crearServicio, modificarServicio, eliminarServicio } = appContext;
     useEffect(()=>{
         traerServicios();
     },[]);
@@ -147,6 +147,8 @@ const ListaServicios = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "ServicioNombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "ServicioNombre") ? errores.find(e => e.param === "ServicioNombre").msg : ""}
                     color="primary"
                     autoFocus
                     variant="outlined"
@@ -159,6 +161,8 @@ const ListaServicios = () => {
                 </Grid>
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "ServicioPrecioUnitario") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "ServicioPrecioUnitario") ? errores.find(e => e.param === "ServicioPrecioUnitario").msg : ""}
                     color="primary"
                     onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
@@ -171,6 +175,8 @@ const ListaServicios = () => {
                 </Grid>
                 <Grid item xs={12} md={4} sm={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "ServicioInscripcion") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "ServicioInscripcion") ? errores.find(e => e.param === "ServicioInscripcion").msg : ""}
                     color="primary"
                     onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"

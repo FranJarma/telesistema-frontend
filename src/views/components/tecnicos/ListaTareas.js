@@ -12,7 +12,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaTiposTareas = () => {
     const appContext = useContext(AppContext);
-    const { tareas, traerTareas, crearTarea, modificarTarea, eliminarTarea } = appContext;
+    const { errores, tareas, traerTareas, crearTarea, modificarTarea, eliminarTarea } = appContext;
 
     useEffect(()=>{
         traerTareas();
@@ -135,6 +135,8 @@ const ListaTiposTareas = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "TareaNombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "TareaNombre") ? errores.find(e => e.param === "TareaNombre").msg : ""}
                     color="primary"
                     autoFocus
                     variant="outlined"
@@ -147,6 +149,8 @@ const ListaTiposTareas = () => {
                 </Grid>
                 <Grid item xs={6} md={6} sm={6} xl={6}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "TareaPrecioUnitario") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "TareaPrecioUnitario") ? errores.find(e => e.param === "TareaPrecioUnitario").msg : ""}
                     color="primary"
                     onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
@@ -159,6 +163,8 @@ const ListaTiposTareas = () => {
                 </Grid>
                 <Grid item xs={6} md={6} sm={6} xl={6}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "TareaPrecioOt") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "TareaPrecioOt") ? errores.find(e => e.param === "TareaPrecioOt").msg : ""}
                     color="primary"
                     onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"

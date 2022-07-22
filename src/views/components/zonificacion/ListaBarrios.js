@@ -9,7 +9,7 @@ import GetUserId from '../../../helpers/GetUserId';
 
 const ListaBarrios = () => {
     const appContext = useContext(AppContext);
-    const { barrios, municipios, traerBarriosPorMunicipio, traerMunicipiosPorProvincia, crearBarrio, modificarBarrio, eliminarBarrio } = appContext;
+    const { errores, barrios, municipios, traerBarriosPorMunicipio, traerMunicipiosPorProvincia, crearBarrio, modificarBarrio, eliminarBarrio } = appContext;
     useEffect(()=>{
         traerMunicipiosPorProvincia(10);
         traerBarriosPorMunicipio(0);
@@ -136,6 +136,8 @@ const ListaBarrios = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "BarrioNombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "BarrioNombre") ? errores.find(e => e.param === "BarrioNombre").msg : ""}
                     color="primary"
                     autoFocus
                     variant="outlined"
@@ -155,7 +157,9 @@ const ListaBarrios = () => {
                     options={municipios}
                     noOptionsText="No se encontraron municipios"
                     getOptionLabel={(option) => option.MunicipioNombre}
-                    renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Municipio"/>}
+                    renderInput={(params) => <TextField error={errores.length > 0 && errores.find(e => e.param === "Municipio.MunicipioId") ? true : false}
+                                                        helperText={errores.length > 0 && errores.find(e => e.param === "Municipio.MunicipioId") ? errores.find(e => e.param === "Municipio.MunicipioId").msg : ""}
+                                                        {...params} variant = "outlined" fullWidth label="Municipio"/>}
                     />
                 </Grid>
             </Grid>

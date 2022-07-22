@@ -19,7 +19,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaMovimientos = () => {
     const appContext = useContext(AppContext);
-    const { cajas, mediosPago, movimientos, municipios, conceptos, usuarios, traerMediosPago, traerMovimientosPorFecha, traerConceptos, traerMunicipiosPorProvincia, crearMovimiento, traerUsuariosPorRol, traerCaja, cerrarCaja, cargando, mostrarSpinner} = appContext;
+    const { errores, caja, mediosPago, movimientos, municipios, conceptos, usuarios, traerMediosPago, traerMovimientosPorFecha, traerConceptos, traerMunicipiosPorProvincia, crearMovimiento, traerUsuariosPorRol, traerCaja, cerrarCaja, cargando, mostrarSpinner} = appContext;
     const location = useLocation();
 
     const [MovimientoCantidad, setMovimientoCantidad] = useState({
@@ -52,11 +52,12 @@ const ListaMovimientos = () => {
     const [MedioPagoId, setMedioPagoId] = useState(1);
 
     const [CajaInfo, setCajaInfo] = useState({
-        CajaDia: new Date().getDate(),
-        CajaMes: new Date().getMonth() + 1,
-        CajaAño: new Date().getFullYear(),
+        CajaDia: null,
+        CajaMes: null,
+        CajaAño: null,
         UserIdCierre: GetUserId(),
-        CajaCerradaFullName: GetFullName(),
+        CajaCerradaFullName: null,
+        CajaCerradaFecha: null,
         UserIdRecibe: null,
         CajaRecibeFullName: null,
         CajaPesos: null,
@@ -120,7 +121,8 @@ const ListaMovimientos = () => {
         traerMunicipiosPorProvincia(10);
         traerMovimientosPorFecha(diaMovimiento, Municipio, Turno); //traemos los movimientos del dia de TODOS los municipios
         traerConceptos();;
-        traerCaja();
+        traerCaja(Municipio, diaMovimiento, Turno);
+        if(caja) setCajaInfo({...caja});
     },[]);
 
     const columnasMovimientos = [
@@ -146,12 +148,12 @@ const ListaMovimientos = () => {
         },
         {
             "name": "Quién cargo movimiento",
-            "selector": row => row["MovimientoRegistro"].Apellido + ", " +row["MovimientoRegistro"].Nombre,
+            "selector": row => row["MovimientoRegistro"].NombreCompleto,
             "wrap": true
         },
         {
             "name": "Abonado",
-            "selector": row => row["MovimientoAbonado"] ? row["MovimientoAbonado"].Apellido + ", " +row["MovimientoAbonado"].Nombre : "-",
+            "selector": row => row["MovimientoAbonado"] ? row["MovimientoAbonado"].NombreCompleto : "-",
             "wrap": true
         },
         {
@@ -168,13 +170,13 @@ const ListaMovimientos = () => {
         <Typography variant="h6">Cierre de caja del día : {diaMovimiento.toLocaleDateString()} - Turno: {Turno}</Typography><br/>
         <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
-            {Object.entries(cajas).length > 0 && Turno !== "Todos" && Municipio !== 0 && !cargando ?
+            {caja && Turno !== "Todos" && Municipio !== 0 && !cargando ?
                 <Card>
                     <CardContent>
                     <Chip style={{backgroundColor: "red", color: "white", marginBottom: 25}} label="LA CAJA SE ENCUENTRA CERRADA"></Chip>
-                        <Typography variant="h6"><b>Recibida por:</b> {cajas.uCierre.CajaCerradaFullName}</Typography>
-                        <Typography variant="h6"><b>Cerrada por:</b> {cajas.uRecibe.CajaRecibeFullName}</Typography>
-                        <Typography variant="h6"><b>Fecha y hora de cierre:</b> {convertirAFecha(cajas.CajaCerradaFecha)}-{convertirAHora(cajas.CajaCerradaFecha)}</Typography>
+                        <Typography variant="h6"><b>Recibida por:</b> {caja.uCierre.CajaCerradaFullName}</Typography>
+                        <Typography variant="h6"><b>Cerrada por:</b> {caja.uRecibe.CajaRecibeFullName}</Typography>
+                        <Typography variant="h6"><b>Fecha y hora de cierre:</b> {convertirAFecha(caja.CajaCerradaFecha)}-{convertirAHora(caja.CajaCerradaFecha)}</Typography>
                     </CardContent>
                 </Card>
             : !cargando?
@@ -189,7 +191,7 @@ const ListaMovimientos = () => {
             <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Card>
                 <CardContent>
-                    {(Municipio !== 0 && Turno !== "Todos") ?
+                    {(!caja && Municipio !== 0 && Turno !== "Todos") ?
                     <CardHeader
                         action={
                         <>
@@ -266,6 +268,7 @@ const ListaMovimientos = () => {
                         columnas={columnasMovimientos}
                         paginacion={true}
                         buscar={true}
+                        listado={'MOVIMIENTOS'}
                     />
                 <div style={{display: 'flex'}}>
                     <i style={{color: 'green', fontWeight: 'bold', marginTop: 3}} className='bx bx-up-arrow-alt'></i><Typography variant="h6" style={{color: 'green'}}> Total de Ingresos: ${movimientos.filter(item => item.MovimientoCantidad > 0).map(item => item.MovimientoCantidad).reduce((prev, curr) => prev + curr, 0)}</Typography>
@@ -337,11 +340,16 @@ const ListaMovimientos = () => {
                     options={conceptos}
                     noOptionsText="No se encontraron conceptos"
                     getOptionLabel={(option) => option.MovimientoConceptoNombre}
-                    renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Concepto"/>}
+                    renderInput={(params) => <TextField
+                        error={errores.length > 0 && errores.find(e => e.param === "MovimientoConcepto") ? true : false}
+                        helperText={errores.length > 0 && errores.find(e => e.param === "MovimientoConcepto") ? errores.find(e => e.param === "MovimientoConcepto").msg : ""}
+                        {...params} variant = "outlined" fullWidth label="Concepto"/>}
                 />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
                 <TextField
+                error={errores.length > 0 && errores.find(e => e.param === "MovimientoCantidad.MovimientoPesos") ? true : false}
+                helperText={errores.length > 0 && errores.find(e => e.param === "MovimientoCantidad.MovimientoPesos") ? errores.find(e => e.param === "MovimientoCantidad.MovimientoPesos").msg : ""}
                 onKeyPress={(e) => {onlyNumbers(e)}}
                 inputProps={{
                     maxLength: 8
@@ -389,7 +397,6 @@ const ListaMovimientos = () => {
             </>
         }
         formulario={
-            Object.entries(cajas).length > 0 && Municipio !== null && Turno !== null ?
         <>
             <Card>
                 <CardContent>
@@ -445,7 +452,10 @@ const ListaMovimientos = () => {
                             options={usuarios}
                             noOptionsText="No se encontraron usuarios que puedan recibir caja"
                             getOptionLabel={(option) => option.Apellido + ", " + option.Nombre}
-                            renderInput={(params) => <TextField {...params} variant = "outlined" fullWidth label="Usuario que recibe la caja"/>}
+                            renderInput={(params) => <TextField
+                                error={errores.length > 0 && errores.find(e => e.param === "UserIdRecibe") ? true : false}
+                                helperText={errores.length > 0 && errores.find(e => e.param === "UserIdRecibe") ? errores.find(e => e.param === "UserIdRecibe").msg : ""}
+                                {...params} variant = "outlined" fullWidth label="Usuario que recibe la caja"/>}
                             />
                         </Grid>
                         <Grid item xs={12} md={4} lg={4} xl={4}>
@@ -468,6 +478,8 @@ const ListaMovimientos = () => {
                         </Grid>
                         <Grid item xs={6} md={4} lg={4} xl={4}>
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "CajaPesos") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "CajaPesos") ? errores.find(e => e.param === "CajaPesos").msg : ""}
                             onKeyPress={(e) => {onlyNumbers(e)}}
                             variant="outlined"
                             value={CajaPesos}
@@ -524,7 +536,7 @@ const ListaMovimientos = () => {
                 </Grid>
                 </CardContent>
             </Card>
-        </>:""}
+        </>}
         ></Modal>
         </main>
         <Footer/>

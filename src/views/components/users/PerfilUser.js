@@ -10,7 +10,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const PerfilUser = () => {
     const appContext = useContext(AppContext);
-    const { modificarUsuario } = appContext;
+    const { errores, modificarUsuario } = appContext;
     const location = useLocation();
 
     const [UserInfo, setUserInfo] = useState({
@@ -79,6 +79,8 @@ const PerfilUser = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={6} xl={6}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Nombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Nombre") ? errores.find(e => e.param === "Nombre").msg : ""}
                     autoFocus
                     variant="outlined"
                     value={Nombre}
@@ -90,6 +92,8 @@ const PerfilUser = () => {
                 </Grid>
                 <Grid item xs={12} md={6} lg={6} xl={6}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Apellido") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Apellido") ? errores.find(e => e.param === "Apellido").msg : ""}
                     variant="outlined"
                     value={Apellido}
                     name="Apellido"
@@ -100,6 +104,8 @@ const PerfilUser = () => {
                 </Grid>
                 <Grid item xs={12} md={4} lg={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Documento") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Documento") ? errores.find(e => e.param === "Documento").msg : ""}
                     variant="outlined"
                     value={Documento}
                     name="Documento"
@@ -112,6 +118,8 @@ const PerfilUser = () => {
                 </Grid>
                 <Grid item xs={12} md={4} lg={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Email") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Email") ? errores.find(e => e.param === "Email").msg : ""}
                     variant="outlined"
                     value={Email}
                     name="Email"
@@ -134,6 +142,8 @@ const PerfilUser = () => {
                 </Grid>
                 <Grid item xs={12} md={4} lg={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "NombreUsuario") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "NombreUsuario") ? errores.find(e => e.param === "NombreUsuario").msg : ""}
                     disabled= {location.state ? true : false}
                     variant={location.state ? "filled": "outlined"}
                     value={NombreUsuario}
@@ -145,6 +155,8 @@ const PerfilUser = () => {
                 </Grid>
                 <Grid item xs={12} md={4} lg={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Contraseña") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Contraseña") ? errores.find(e => e.param === "Contraseña").msg : ""}
                     variant="outlined"
                     value={Contraseña}
                     name="Contraseña"
@@ -157,6 +169,8 @@ const PerfilUser = () => {
                 </Grid>
                 <Grid item xs={12} md={4} lg={4} xl={4}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "RContraseña") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "RContraseña") ? errores.find(e => e.param === "RContraseña").msg : ""}
                     variant="outlined"
                     value={RContraseña}
                     name="RContraseña"

@@ -6,10 +6,11 @@ import { Button, Card, CardContent, Grid, TextField, Typography} from '@material
 import { useLocation } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Datatable from '../design/components/Datatable';
+import { FormHelperText } from '@mui/material';
 
 const CaratulaRole = () => {
     const appContext = useContext(AppContext);
-    const { permisos, permisosRol, traerPermisos, traerPermisosPorRol, crearRol, modificarRol } = appContext;
+    const { errores, unsetErrors, permisos, permisosRol, traerPermisos, traerPermisosPorRol, crearRol, modificarRol } = appContext;
     const location = useLocation();
     const [RoleInfo, setRoleInfo] = useState({
         RoleId: null,
@@ -37,6 +38,7 @@ const CaratulaRole = () => {
     
     useEffect(()=> {
         traerPermisos();
+        unsetErrors();
         if(location.state){
             traerPermisosPorRol(location.state.RoleId);
             setRoleInfo({
@@ -103,6 +105,8 @@ const CaratulaRole = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={6} lg={6} xl={6}>
                                 <TextField
+                                error={errores.length > 0 && errores.find(e => e.param === "RoleName") ? true : false}
+                                helperText={errores.length > 0 && errores.find(e => e.param === "RoleName") ? errores.find(e => e.param === "RoleName").msg : ""}
                                 autoFocus
                                 variant="outlined"
                                 value={RoleName}
@@ -146,6 +150,7 @@ const CaratulaRole = () => {
                             filaSeleccionada={row => PermisosSeleccionados.find((permiso) => permiso.PermissionId === row.PermissionId)}
                         />
                     </Card>
+                    <FormHelperText style={{color: '#f44336'}}>{errores.length > 0 && errores.find(e => e.param === "PermisosSeleccionados") ? errores.find(e => e.param === "PermisosSeleccionados").msg : ""}</FormHelperText>
                 </TabPanel>
             </Tabs>
     </CardContent>

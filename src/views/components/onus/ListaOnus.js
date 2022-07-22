@@ -11,7 +11,7 @@ import onlyNumbers from '../../../helpers/OnlyNumbers';
 
 const ListaOnus = ({location}) => {
     const appContext = useContext(AppContext);
-    const { onus, traerOnus, modelosONU, traerModelosONU, servicios, traerServicios, crearONU, modificarONU, eliminarONU } = appContext;
+    const { errores, onus, traerOnus, modelosONU, traerModelosONU, servicios, traerServicios, crearONU, modificarONU, eliminarONU } = appContext;
     useEffect(()=>{
         //para abrir el modal directamente cuando se quiere dar de alta una ONU desde otra vista 
         location.state ? setModalOnu(true) : setModalOnu(false);
@@ -139,6 +139,8 @@ const ListaOnus = ({location}) => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "OnuSerie") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "OnuSerie") ? errores.find(e => e.param === "OnuSerie").msg : ""}
                     color="primary"
                     autoFocus
                     variant="outlined"
@@ -156,6 +158,8 @@ const ListaOnus = ({location}) => {
                     value={OnuMac}>
                         {()=> 
                             <TextField
+                            error={errores.length > 0 && errores.find(e => e.param === "OnuMac") ? true : false}
+                            helperText={errores.length > 0 && errores.find(e => e.param === "OnuMac") ? errores.find(e => e.param === "OnuMac").msg : ""}        
                             color="primary"
                             variant="outlined"
                             label="MAC"
@@ -166,6 +170,8 @@ const ListaOnus = ({location}) => {
                 </Grid>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "Servicio.ServicioId") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "Servicio.ServicioId") ? errores.find(e => e.param === "Servicio.ServicioId").msg : ""}
                     color="primary"
                     onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"
@@ -184,6 +190,8 @@ const ListaOnus = ({location}) => {
                 </Grid>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "ModeloOnu.ModeloOnuId") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "ModeloOnu.ModeloOnuId") ? errores.find(e => e.param === "ModeloOnu.ModeloOnuId").msg : ""}
                     color="primary"
                     onKeyPress={(e) => {onlyNumbers(e)}}
                     variant="outlined"

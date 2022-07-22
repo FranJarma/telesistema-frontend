@@ -135,6 +135,16 @@ const filtrosDatatable = (listado, datos, textoFiltrado) => {
         );
     }
 
+    if(listado === 'MOVIMIENTOS') {
+        filtro = datos.filter(item =>
+            (item.MovimientoRegistro.NombreCompleto && item.MovimientoRegistro.NombreCompleto.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        ||  (item.MovimientoAbonado.NombreCompleto && item.MovimientoAbonado.NombreCompleto.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        ||  (item.createdAt && item.createdAt.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        ||  (item.MovimientoMedioPago.MovimientoMedioPagoNombre && item.MedioPago.MedioPagoNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        ||  (item.MovimientoConcepto.MovimientoConceptoNombre && item.MovimientoConcepto.MovimientoConceptoNombre.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        );
+    }
+
     if(listado === 'USUARIOS') {
         filtro = datos.filter(item =>
             (item.NombreUsuario && item.NombreUsuario.toLowerCase().includes(textoFiltrado.toLowerCase()))

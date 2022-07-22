@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AppContext from './appContext';
 import AppReducer from './appReducer';
 import clienteAxios from '../config/axios';
@@ -53,13 +53,14 @@ const AppState = props => {
         descargando: false,
         registrado: false,
         mensaje: '',
-        cajas: {},
+        caja: {},
         facturas: [],
         recibos: [],
         errores: [],
         comprobante: {}
     }
     let navigate = useNavigate();
+    let location = useLocation();
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
     //ERRORES
@@ -78,14 +79,14 @@ const AppState = props => {
     }
 
     const handleErrors = (error) => {
-        handleErrors(error);
+        console.log(error);
         if(!error.response){
             Toast('Hubo un error. Comúniquese con el administrador.', 'error');
         }
 
         if(error.response.status === 401) cerrarSesion();
 
-        if(error.response.data.msg){
+        if(error.response.data.msg && location.pathname !== "/home"){
             Toast(error.response.data.msg, 'warning');
         }
 
@@ -555,7 +556,7 @@ const AppState = props => {
     const traerPagosMensualesPendientes = async (UserId, Concepto, top = 0) => {
         try {
             const resultado = await clienteAxios.get(`/api/pagos/UserId=${UserId}&Concepto=${Concepto}&top=${top}`);
-            if(top > 0) {
+            if(parseInt(top) === 0) {
                 dispatch({
                     type: TYPES.LISTA_PAGOS_PENDIENTES_ABONADO,
                     payload: resultado.data
@@ -1362,7 +1363,7 @@ const AppState = props => {
             cargando: state.cargando,
             descargando: state.descargando,
             mensaje: state.mensaje,
-            cajas: state.cajas,
+            caja: state.caja,
             facturas: state.facturas,
             recibos: state.recibos,
             registrado: state.registrado,

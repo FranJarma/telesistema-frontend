@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Grid, MenuItem, TextField, Typography } from '@material-ui/core';
 import Datatable from '../design/components/Datatable';
 import Modal from '../design/components/Modal';
 import AppContext from '../../../context/appContext';
@@ -9,7 +9,7 @@ import GetUserId from './../../../helpers/GetUserId';
 
 const ListaModelosOnus = ({location}) => {
     const appContext = useContext(AppContext);
-    const { modelosONU, traerModelosONU, crearModeloONU, modificarModeloONU, eliminarModeloONU } = appContext;
+    const { errores, modelosONU, traerModelosONU, crearModeloONU, modificarModeloONU, eliminarModeloONU } = appContext;
     useEffect(()=>{
         //para abrir el modal directamente cuando se quiere dar de alta una ONU desde otra vista 
         location.state ? setModalModeloOnu(true) : setModalModeloOnu(false);
@@ -115,6 +115,8 @@ const ListaModelosOnus = ({location}) => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} sm={12} xl={12}>
                     <TextField
+                    error={errores.length > 0 && errores.find(e => e.param === "ModeloOnuNombre") ? true : false}
+                    helperText={errores.length > 0 && errores.find(e => e.param === "ModeloOnuNombre") ? errores.find(e => e.param === "ModeloOnuNombre").msg : ""}                    
                     color="primary"
                     autoFocus
                     variant="outlined"
