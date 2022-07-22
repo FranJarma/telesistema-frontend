@@ -246,6 +246,7 @@ const ListaOtPendientes = () => {
                     columnas={columnasOt}
                     paginacion={true}
                     buscar={true}
+                    listado={'OT_PENDIENTES'}
                 />
             </CardContent>
         </Card>

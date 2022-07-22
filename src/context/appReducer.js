@@ -185,7 +185,7 @@ export default (state, action) => {
                 ...state,
                 barrios: [action.payload, ...state.barrios],
         }
-        case TYPES.EDITAR_BARRIO:
+        case TYPES.MODIFICAR_BARRIO:
             return {
                 ...state,
                 barrios: state.barrios.map(barrio => barrio.BarrioId === action.payload.BarrioId ? action.payload : barrio),
@@ -210,7 +210,7 @@ export default (state, action) => {
                 ...state,
                 municipios: [action.payload, ...state.municipios],
         }
-        case TYPES.EDITAR_MUNICIPIO:
+        case TYPES.MODIFICAR_MUNICIPIO:
             return {
                 ...state,
                 municipios: state.municipios.map(servicio => servicio.MunicipioId === action.payload.MunicipioId ? action.payload : servicio),
@@ -235,7 +235,7 @@ export default (state, action) => {
                 ...state,
                 servicios: [action.payload, ...state.servicios],
         }
-        case TYPES.EDITAR_SERVICIO:
+        case TYPES.MODIFICAR_SERVICIO:
             return {
                 ...state,
                 servicios: state.servicios.map(servicio => servicio.ServicioId === action.payload.ServicioId ? action.payload : servicio),
@@ -260,7 +260,7 @@ export default (state, action) => {
                 ...state,
                 onus: [action.payload, ...state.onus],
         }
-        case TYPES.EDITAR_ONU:
+        case TYPES.MODIFICAR_ONU:
             return {
                 ...state,
                 onus: state.onus.map(onu => onu.OnuId === action.payload.OnuId ? action.payload : onu),
@@ -280,7 +280,7 @@ export default (state, action) => {
                 ...state,
                 modelosONU: [action.payload, ...state.modelosONU],
         }
-        case TYPES.EDITAR_MODELO_ONU:
+        case TYPES.MODIFICAR_MODELO_ONU:
             return {
                 ...state,
                 modelosONU: state.modelosONU.map(modeloONU => modeloONU.ModeloOnuId === action.payload.ModeloOnuId ? action.payload : modeloONU),
@@ -300,7 +300,7 @@ export default (state, action) => {
                 ...state,
                 mediosPago: [action.payload, ...state.mediosPago],
         }
-        case TYPES.EDITAR_MEDIO_DE_PAGO:
+        case TYPES.MODIFICAR_MEDIO_DE_PAGO:
             return {
                 ...state,
                 mediosPago: state.mediosPago.map(medioPago => medioPago.MedioPagoId === action.payload.MedioPagoId ? action.payload : medioPago),
@@ -422,7 +422,7 @@ export default (state, action) => {
                 ...state,
                 tareas: [action.payload, ...state.tareas],
         }
-        case TYPES.EDITAR_TAREA:
+        case TYPES.MODIFICAR_TAREA:
             return {
                 ...state,
                 tareas: state.tareas.map(tarea => tarea.TareaId === action.payload.TareaId ? action.payload : tarea),
@@ -431,7 +431,13 @@ export default (state, action) => {
             return {
                 ...state,
                 tareas: state.tareas.filter(tarea => tarea.TareaId !== action.payload.TareaId),
-        } 
+        }
+        case TYPES.ELIMINAR_OT: {
+            return {
+                ...state,
+                ordenesDeTrabajo: state.ordenesDeTrabajo.filter(ot => ot.OtId !== action.payload.OtId),
+            };
+        }
         case TYPES.LISTA_OT: {
             return {
                 ...state,

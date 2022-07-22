@@ -282,7 +282,7 @@ const ListaMovimientos = () => {
         botones={
             <>
             <Button
-            onClick={() => crearMovimiento({MovimientoCantidad: MovimientoCantidad, MovimientoConcepto: MovimientoConcepto, Municipio, MedioPagoId, createdBy: GetUserId()})}
+            onClick={() => crearMovimiento({MovimientoCantidad: MovimientoCantidad, MovimientoConcepto: MovimientoConcepto, Municipio, MedioPagoId, createdBy: GetUserId()}, handleChangeModalMovimiento)}
             variant="contained"
             color="primary">Registrar</Button>
             <Button onClick={handleChangeModalMovimiento}>Cancelar</Button>

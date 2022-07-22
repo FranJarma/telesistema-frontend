@@ -192,13 +192,13 @@ const columnasInscripcion = [
     },
     {
         "name": "Registrado por ",
-        "selector": row =>row.Registro.Apellido + ', ' + row.Registro.Nombre,
+        "selector": row =>row["Registro"].NombreCompleto,
         "wrap": true,
         "sortable": true,
     },
     {
         "name": "Forma de pago",
-        "selector": row => row.MedioPago.MedioPagoNombre,
+        "selector": row => row["MedioPago"].MedioPagoNombre,
         "wrap": true,
         "sortable": true,
     },
@@ -251,7 +251,7 @@ const columnasInscripcion = [
                 <Modal
                 abrirModal={modalDarDeBaja}
                 funcionCerrar={handleChangeModalDarDeBaja}
-                titulo={<Alert severity="info" icon={<i className="bx bx-user-x bx-sm"></i>}>Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>}
+                titulo={<Alert severity="info">Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>}
                 botones={
                 <>
                 <Button onClick={()=>
@@ -265,16 +265,17 @@ const columnasInscripcion = [
                 formulario={
                 <>
                 <TextField
-                className={styles.inputModal}
-                autoFocus
-                variant="outlined"
-                name="CambioEstadoObservaciones"
-                value={CambioEstadoObservaciones}
-                fullWidth
-                onChange={onChangeInputEstadoObservaciones}
+                    label="Motivo de baja"
+                    multiline
+                    minRows={3}
+                    autoFocus
+                    variant="outlined"
+                    name="CambioEstadoObservaciones"
+                    value={CambioEstadoObservaciones}
+                    fullWidth
+                    onChange={onChangeInputEstadoObservaciones}
                 >
                 </TextField>
-                <FormHelperText>Ingrese motivo de baja</FormHelperText>
                 </>}
                 >
                 </Modal>
@@ -317,7 +318,8 @@ const columnasInscripcion = [
                 <>
                 <Datatable
                 datos={detallesInscripcion}
-                columnas={columnasInscripcion}></Datatable>
+                columnas={columnasInscripcion}
+                listado={'DETALLES_PAGO'}></Datatable>
                 <Typography variant="h2"><b>Precio total de inscripción:</b> ${inscripcion.PagoTotal}</Typography>
                 <Typography variant="h2"><b>Saldo restante:</b> ${inscripcion.PagoSaldo}{inscripcion.PagoSaldo > 0 ? <Button style={{float: 'right'}} variant="contained" color="secondary">Pagar saldo restante</Button>:""}</Typography>
                 </>

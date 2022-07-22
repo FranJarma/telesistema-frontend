@@ -2,11 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import AppContext from '../../../context/appContext';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
-import { Button, Card, CardContent, Checkbox, Grid, TextField, Typography} from '@material-ui/core'; 
+import { Button, Card, CardContent, Grid, TextField, Typography} from '@material-ui/core'; 
 import { useLocation } from 'react-router-dom';
-import DataTable from 'react-data-table-component';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import paginacionOpciones from '../design/components/PaginacionOpciones';
 import Datatable from '../design/components/Datatable';
 
 const CaratulaRole = () => {

@@ -235,7 +235,7 @@ const ListaAbonadosActivos = () => {
                 </Alert>
                 </>
                 :
-                <Alert severity="info" icon={<i className="bx bx-user-x bx-sm"></i>}>Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>
+                <Alert severity="info">Si usted da de baja al abonado, pasará al listado de <b>Abonados Inactivos</b></Alert>
                 }
                 botones={
                 <>
@@ -250,16 +250,16 @@ const ListaAbonadosActivos = () => {
                 formulario={
                 <>
                 <TextField
-                label="Motivo de baja"
-                multiline
-                minRows={3}
-                autoFocus
-                variant="outlined"
-                name="CambioEstadoObservaciones"
-                value={CambioEstadoObservaciones}
-                fullWidth
-                onChange={onChangeInputEstadoObservaciones}
-                >
+                    label="Motivo de baja"
+                    multiline
+                    minRows={3}
+                    autoFocus
+                    variant="outlined"
+                    name="CambioEstadoObservaciones"
+                    value={CambioEstadoObservaciones}
+                    fullWidth
+                    onChange={onChangeInputEstadoObservaciones}
+                    >
                 </TextField>
                 </>}
                 >

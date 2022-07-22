@@ -125,7 +125,7 @@ const filtrosDatatable = (listado, datos, textoFiltrado) => {
         );
     }
 
-    if(listado === 'DETALLES_PAGOS') {
+    if(listado === 'DETALLES_PAGO') {
         filtro = datos.filter(item =>
             (item.DetallePagoMonto && item.DetallePagoMonto.toString().includes(textoFiltrado.toLowerCase()))
         ||  (item.createdAt && item.createdAt.toLowerCase().includes(textoFiltrado.toLowerCase()))

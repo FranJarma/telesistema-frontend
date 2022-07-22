@@ -609,7 +609,7 @@ const ListaPagos = () => {
                         datos={detallesPago}
                         loader
                         buscar
-                        listado={'DETALLES_PAGOS'}
+                        listado={'DETALLES_PAGO'}
                     />
                     <br/>
                     <hr/>
