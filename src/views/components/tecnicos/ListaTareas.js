@@ -123,6 +123,7 @@ const ListaTiposTareas = () => {
                     columnas={columnasTareas}
                     paginacion={true}
                     buscar={true}
+                    listado={'TAREAS'}
                 />
             </CardContent>
         </Card>

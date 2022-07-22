@@ -53,7 +53,7 @@ const Users = () => {
     },
     {
         "name": "Nombre Completo",
-        "selector": row => row["Apellido"] + ', ' + row["Nombre"],
+        "selector": row => row["NombreCompleto"],
         "wrap": true,
         "sortable": true
     },
@@ -77,7 +77,7 @@ const Users = () => {
     },
     {
         "name": "Estado",
-        "selector": row =>row["EstadoAbonado"].EstadoNombre,
+        "selector": row =>row["EstadoUser"].EstadoNombre,
         "wrap": true,
         "sortable": true
     },
@@ -133,7 +133,9 @@ const Users = () => {
                     columnas={columnasUsers}
                     datos={usuarios}
                     paginacion={true}
-                    buscar={true}>
+                    buscar={true}
+                    listado={'USUARIOS'}
+                    >
                 </Datatable>
             </CardContent>
         </Card>

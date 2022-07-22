@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import paginacionOpciones from '../design/components/PaginacionOpciones';
+import Datatable from '../design/components/Datatable';
 
 const CaratulaRole = () => {
     const appContext = useContext(AppContext);
@@ -136,16 +137,16 @@ const CaratulaRole = () => {
                 </TabPanel>
                 <TabPanel>
                     <Card>
-                    <DataTable
-                        columns={columnasPermisos}
-                        data={permisos}
-                        onSelectedRowsChange={row => setPermisosSeleccionados(row.selectedRows)}
-                        paginationComponentOptions={paginacionOpciones}
-                        pagination={true}
-                        selectableRows
-                        selectableRowsComponent={Checkbox}
-                        selectableRowSelected={row => PermisosSeleccionados.find((permiso) => permiso.PermissionId === row.PermissionId)}>
-                    </DataTable>
+                        <Datatable
+                            columnas={columnasPermisos}
+                            datos={permisos}
+                            buscar={true}
+                            listado={'PERMISOS'}
+                            seleccionable={true}
+                            paginacion={true}
+                            fnSeleccionable={row => setPermisosSeleccionados(row.selectedRows)}
+                            filaSeleccionada={row => PermisosSeleccionados.find((permiso) => permiso.PermissionId === row.PermissionId)}
+                        />
                     </Card>
                 </TabPanel>
             </Tabs>

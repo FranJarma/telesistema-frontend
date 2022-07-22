@@ -135,6 +135,7 @@ const ListaServicios = () => {
                     columnas={columnasServicios}
                     paginacion={true}
                     buscar={true}
+                    listado={'SERVICIOS'}
                 />
             </CardContent>
         </Card>

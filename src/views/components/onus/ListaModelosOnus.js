@@ -103,6 +103,7 @@ const ListaModelosOnus = ({location}) => {
                     columnas={columnasModelosONUS}
                     paginacion={true}
                     buscar={true}
+                    listado={'MODELOS_ONU'}
                 />
             </CardContent>
         </Card>

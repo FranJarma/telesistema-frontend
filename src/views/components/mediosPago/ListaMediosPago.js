@@ -84,7 +84,7 @@ const ListaMediosPago = () => {
         },
         {
             "name": "Interés",
-            "selector": row => row["MedioPagoInteres"] ? row["MedioPagoInteres"] +"%" : "No tiene",
+            "selector": row => row["MedioPagoInteres"] ? row["MedioPagoInteres"] +"%" : "-",
             "wrap": true,
             "sortable": true
         },
@@ -122,6 +122,7 @@ const ListaMediosPago = () => {
                     columnas={columnasMedioPago}
                     paginacion={true}
                     buscar={true}
+                    listado={'MEDIOS_PAGO'}
                 />
             </CardContent>
         </Card>

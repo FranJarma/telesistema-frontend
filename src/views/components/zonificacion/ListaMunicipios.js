@@ -137,6 +137,7 @@ const ListaMunicipios = () => {
                     columnas={columnasMunicipios}
                     paginacion={true}
                     buscar={true}
+                    listado={'MUNICIPIOS'}
                 />
             </CardContent>
         </Card>

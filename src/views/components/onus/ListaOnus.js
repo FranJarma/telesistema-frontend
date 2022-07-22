@@ -127,6 +127,7 @@ const ListaOnus = ({location}) => {
                     columnas={columnasONUS}
                     paginacion={true}
                     buscar={true}
+                    listado={'ONUS'}
                 />
             </CardContent>
         </Card>

@@ -124,6 +124,7 @@ const ListaBarrios = () => {
                     columnas={columnasBarrios}
                     paginacion={true}
                     buscar={true}
+                    listado={'BARRIOS'}
                 />
             </CardContent>
         </Card>
