@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AppContext from './appContext';
 import AppReducer from './appReducer';
@@ -17,6 +17,7 @@ const AppState = props => {
         usuarioAutenticado: false,
         push: false,
         mostrarSpinner: false,
+        textoFiltrado: '',
         usuarios: [],
         roles: [],
         rolesUser: [],
@@ -62,6 +63,15 @@ const AppState = props => {
     let navigate = useNavigate();
     let location = useLocation();
     const [state, dispatch] = useReducer(AppReducer, initialState);
+
+    //BUSCADOR DATATABLE
+
+    const setTextoFiltrado = (texto) => {
+        dispatch({
+            type: TYPES.SET_TEXTO_FILTRADO,
+            payload: texto
+        })
+    };
 
     //ERRORES
 
@@ -1326,6 +1336,7 @@ const AppState = props => {
             token: state.token,
             usuario: state.usuario,
             usuarioAutenticado: state.usuarioAutenticado,
+            textoFiltrado: state.textoFiltrado,
             push: state.push,
             usuarios: state.usuarios,
             roles: state.roles,
@@ -1369,7 +1380,7 @@ const AppState = props => {
             registrado: state.registrado,
             comprobante: state.comprobante,
             errores: state.errores,
-            setErrors, unsetErrors, iniciarSesion, cerrarSesion, obtenerUsuarioAutenticado, traerUsuarios, traerUsuariosPorRol, crearUsuario, modificarUsuario, eliminarUsuario,
+            setErrors, setTextoFiltrado, unsetErrors, iniciarSesion, cerrarSesion, obtenerUsuarioAutenticado, traerUsuarios, traerUsuariosPorRol, crearUsuario, modificarUsuario, eliminarUsuario,
             traerRoles, traerRolesPorUsuario, crearRol, modificarRol, eliminarRol,
             traerPermisos, traerPermisosPorRol,
             traerAbonados, traerAbonadosAtrasados, traerAbonado, traerDomiciliosAbonado, traerServiciosAbonado, crearAbonado, modificarAbonado, cambioTitularidadAbonado,

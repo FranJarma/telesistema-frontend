@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import AppContext from '../../../context/appContext';
 import Aside from '../design/layout/Aside';
 import Footer from '../design/layout/Footer';
-import { Button, Card, CardContent, FormControlLabel, Grid, FormGroup, Switch, TextField, Typography, Checkbox} from '@material-ui/core'; 
+import { Button, Card, CardContent, FormControlLabel, FormHelperText, Grid, FormGroup, Switch, TextField, Typography, Box, Checkbox} from '@material-ui/core'; 
 import { useLocation } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import GetUserId from './../../../helpers/GetUserId';
 import onlyNumbers from '../../../helpers/OnlyNumbers';
-import Datatable from '../design/components/Datatable';
-import { FormHelperText } from '@mui/material';
+import DataTable from 'react-data-table-component';
+import { noSeEncontraronRegistros, paginacionOpciones } from '../design/components/DatatableHelpers';
+import Spinner from '../design/components/Spinner';
+import Buscador from '../design/components/Buscador';
+import filtrosDatatable from './../../../views/components/design/components/FiltrosDatatable';
 
 const CaratulaUser = () => {
     const appContext = useContext(AppContext);
-    const { errores, unsetErrors, roles, rolesUser, traerRoles, traerRolesPorUsuario, crearUsuario, modificarUsuario } = appContext;
+    const { cargando, errores, unsetErrors, roles, rolesUser, traerRoles, traerRolesPorUsuario, crearUsuario, modificarUsuario } = appContext;
     const location = useLocation();
+    const [textoFiltrado, setTextoFiltrado] = useState('');
     const [UserInfo, setUserInfo] = useState({
         UserIdLogueado: GetUserId(),
         UserId: null,
@@ -26,7 +30,6 @@ const CaratulaUser = () => {
         Contraseña: null,
         RContraseña: null
     });
-    const [PrimerRender, setPrimerRender] = useState(true);
     const [EstaBloqueado, setEstaBloqueado] = useState(0);
     const [EsUsuarioDePrueba, setEsUsuarioDePrueba] = useState(0);
     const [ModalAsignarRoles, setModalAsignarRoles] = useState(false);
@@ -41,12 +44,9 @@ const CaratulaUser = () => {
     }
 
     const handleChangeTabRoles = (e) => {
-        // if(!ModalAsignarRoles && location.state && PrimerRender) {
-        //     setRolesSeleccionados(rolesUser);
-        //     setPrimerRender(false);
-        // }
         setModalAsignarRoles(!ModalAsignarRoles);
     }
+    
     const onInputChange = (e) => {
         setUserInfo({
             ...UserInfo,
@@ -55,9 +55,10 @@ const CaratulaUser = () => {
     }
     const { UserId, Nombre, Apellido, Documento, Email, Telefono, NombreUsuario, Contraseña, RContraseña} = UserInfo;
     
+
     useEffect(()=> {
-        traerRoles();
         unsetErrors();
+        traerRoles();
         if(location.state){
             traerRolesPorUsuario(location.state.UserId);
             setUserInfo({
@@ -107,7 +108,8 @@ const CaratulaUser = () => {
                 RolesSeleccionados
             });
         }
-    }
+    };
+
     const columnasRoles= [
         {
             selector: row => row['RoleId'],
@@ -123,8 +125,16 @@ const CaratulaUser = () => {
             selector: row => row['RoleDescription'],
             name: 'Descripcion',
             wrap: true
-        },
-]
+        }
+    ];
+
+    // let filtro = filtrosDatatable('ROLES', roles, textoFiltrado);
+    let filtro = useMemo(()=> {
+        return roles.filter(item =>
+            (item.RoleName && item.RoleName.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        ||  (item.RoleDescription && item.RoleDescription.toLowerCase().includes(textoFiltrado.toLowerCase()))
+        );
+    },[textoFiltrado])
 
     return ( 
     <>
@@ -132,7 +142,7 @@ const CaratulaUser = () => {
     <Aside/>
     <main>
     <form onSubmit={onSubmitUsuario}>
-    <Typography variant="h6">{location.state ? `Editar usuario: ${location.state.Apellido},  ${location.state.Nombre}` : "Registrar usuario"}</Typography><br/>
+    <Typography variant="h6">{location.state ? `Editar usuario: ${location.state.NombreCompleto}` : "Registrar usuario"}</Typography><br/>
     <Card>
         <CardContent>
             <Tabs>
@@ -270,17 +280,26 @@ const CaratulaUser = () => {
                 </TabPanel>
                 <TabPanel>
                     <Card>
-                        <Datatable
-                            columnas={columnasRoles}
-                            datos={roles}
-                            paginacion={true}
-                            buscar={true}
-                            seleccionable={true}
-                            fnSeleccionable={row => setRolesSeleccionados(row.selectedRows)}
-                            filaSeleccionada={row => RolesSeleccionados.find((rol) => rol.RoleId === row.RoleId)}
-                            listado={'ROLES'}
-                        />
-                        </Card>
+                    <DataTable
+                        columns={columnasRoles}
+                        data={filtro ? filtro : roles}
+                        dense
+                        highlightOnHover
+                        noDataComponent={noSeEncontraronRegistros}
+                        onSelectedRowsChange={row => setRolesSeleccionados(row.selectedRows)}
+                        pagination
+                        paginationComponentOptions={paginacionOpciones}
+                        pointerOnHover
+                        progressComponent={<Spinner/>}
+                        progressPending={cargando}
+                        selectableRows
+                        selectableRowsComponent={Checkbox}
+                        selectableRowSelected={row => rolesUser.find((rol) => rol.RoleId === row.RoleId)}
+                        striped
+                        subHeader
+                        subHeaderComponent={<Buscador onFiltrar={e => setTextoFiltrado(e.target.value)} textoFiltrado={textoFiltrado} />}
+                    />
+                    </Card>
                     <FormHelperText style={{color: '#f44336'}}>{errores.length > 0 && errores.find(e => e.param === "RolesSeleccionados") ? errores.find(e => e.param === "RolesSeleccionados").msg : ""}</FormHelperText>
                 </TabPanel>
             </Tabs>

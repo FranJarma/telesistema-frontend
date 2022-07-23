@@ -4,6 +4,11 @@ export default (state, action) => {
     let pago = null;
     let ot = null;
     switch (action.type) {
+        case TYPES.SET_TEXTO_FILTRADO:
+            return {
+                ...state,
+                textoFiltrado: action.payload
+            }
         case TYPES.SET_ERRORES:
             return {
                 ...state,

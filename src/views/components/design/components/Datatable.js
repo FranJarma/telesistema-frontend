@@ -5,7 +5,7 @@ import Buscador from './Buscador';
 import Checkbox from '@material-ui/core/Checkbox';
 import filtrosDatatable from './FiltrosDatatable';
 
-const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, paginacionPorDefecto, buscar, seleccionable, fnSeleccionable, filaSeleccionada, listado}) => {
+const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, paginacionPorDefecto, buscar, seleccionable, preSeleccionado, callbackFilasSelecionadas, listado}) => {
     //state y effect para spinner
     const [cargando, setCargando] = useState(true);
 
@@ -31,29 +31,29 @@ const Datatable = ({loader, columnas, datos, expandedComponent, paginacion, pagi
     return (
         <DataTable
             columns={columnas}
+            data={filtro !== "" ? filtro : datos}
+            dense
             expandableRows = {expandedComponent ? true : false}
             expandableRowsComponent={expandedComponent ? expandedComponent : ''}
-            data={filtro !== "" ? filtro : datos}
             highlightOnHover
             noDataComponent="No se encontraron registros"
+            onSelectedRowsChange={callbackFilasSelecionadas}
             pagination = {paginacion ? true : false}
             paginationComponentOptions={paginacion ? paginacionOpciones : ""}
+            paginationPerPage={paginacionPorDefecto ? paginacionPorDefecto : 10}
             pointerOnHover
             progressComponent={<Spinner/>}
             progressPending={loader ? cargando : false}
             selectableRows={seleccionable ? true : false}
-            onSelectedRowsChange={fnSeleccionable}
-            selectableRowSelected={filaSeleccionada}
+            selectableRowSelected={preSeleccionado ? preSeleccionado : ""}
             selectableRowsComponent={Checkbox}
+            striped
             subHeader = {buscar ? true : false}
-            paginationPerPage={paginacionPorDefecto ? paginacionPorDefecto : 10}
             subHeaderComponent={
                 buscar ? 
                 <Buscador onFiltrar={e => setTextoFiltrado(e.target.value)} textoFiltrado={textoFiltrado}/>
                 : ""
             }
-            striped
-            dense
         >
         </DataTable>
     );
